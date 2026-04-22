@@ -143,14 +143,11 @@ const testimonials = [
 ];
 
 const clients = [
-  { name: "MEIL" },
-  { name: "LARSEN & TOUBRO" },
-  { name: "STL" },
-  {
-    name: "BlueDrop Enviro",
-    image: "64d812bd29723b2830b09dc4fcfc4dd5ae8d3617.png",
-  },
-  { name: "HMDA", image: "ad842a5a75ee7f550bae96a0466f08a74642c68b.png" },
+  { name: "MEIL", src: "/images/clients/meil.png", width: 220, height: 78 },
+  { name: "LARSEN & TOUBRO", src: "/images/clients/larsen-toubro.png", width: 220, height: 72 },
+  { name: "STL", src: "/images/clients/stl.png", width: 140, height: 64 },
+  { name: "BlueDrop Enviro", src: "/images/clients/bluedrop-enviro.png", width: 148, height: 74 },
+  { name: "HMDA", src: "/images/clients/hmda.png", width: 154, height: 74 },
 ];
 
 const certifications = [
@@ -915,49 +912,18 @@ function HappyClients() {
           </h2>
 
           <div className="mt-9 flex w-full items-center justify-between gap-10 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            <div className="flex h-[44px] min-w-[136px] flex-none items-center gap-2">
-              <span className="grid h-[20px] w-[20px] place-items-center rounded-[3px] bg-[#a8a8a8] font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[9px] font-bold leading-none text-white">
-                M
-              </span>
-              <span className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[52px] font-bold leading-none text-[#9b9b9b]">
-                meil
-              </span>
-            </div>
-
-            <div className="flex h-[44px] min-w-[198px] flex-none items-center gap-2">
-              <span className="grid size-[22px] place-items-center rounded-full border-2 border-[#006AB9] text-[9px] font-bold italic leading-none text-[#006AB9]">
-                LT
-              </span>
-              <span className="text-center font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[19px] font-semibold uppercase italic leading-none text-[#241F20]">
-                Larsen &amp; Toubro
-              </span>
-            </div>
-
-            <div className="flex h-[44px] min-w-[92px] flex-none items-center justify-center">
-              <span className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[48px] font-bold leading-none text-[#1B47C4]">
-                STL
-              </span>
-            </div>
-
-            <div className="relative h-[44px] w-[120px] min-w-[120px] flex-none">
-              <Image
-                alt="BlueDrop Enviro Private Limited"
-                className="object-contain"
-                fill
-                sizes="120px"
-                src={`${asset}64d812bd29723b2830b09dc4fcfc4dd5ae8d3617.png`}
-              />
-            </div>
-
-            <div className="relative h-[44px] w-[128px] min-w-[128px] flex-none">
-              <Image
-                alt="HMDA Growing Global"
-                className="object-contain"
-                fill
-                sizes="128px"
-                src={`${asset}ad842a5a75ee7f550bae96a0466f08a74642c68b.png`}
-              />
-            </div>
+            {clients.map((client) => (
+              <div className="flex h-[78px] min-w-[130px] flex-none items-center justify-center" key={client.name}>
+                <Image
+                  alt={client.name}
+                  className="h-auto w-auto object-contain"
+                  height={client.height}
+                  sizes={`${client.width}px`}
+                  src={client.src}
+                  width={client.width}
+                />
+              </div>
+            ))}
           </div>
         </aside>
       </div>
