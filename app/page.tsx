@@ -892,9 +892,9 @@ function Testimonials() {
                     {testimonial.name[0]}
                   </span>
                   <div>
-                    <h3 className="font-['Roboto',Arial,Helvetica,sans-serif] text-[20px] font-semibold leading-6 tracking-normal text-[#111113]">
+                    <p className="font-['Roboto',Arial,Helvetica,sans-serif] text-[20px] font-semibold leading-6 tracking-normal text-[#111113]">
                       {testimonial.name}
-                    </h3>
+                    </p>
                     <p className="mt-1 font-['Roboto',Arial,Helvetica,sans-serif] text-[14px] font-semibold leading-6 tracking-normal text-[#9a9a9a]">
                       {testimonial.location}
                     </p>
@@ -983,6 +983,7 @@ function Footer() {
     ["Products", "Brochure", "Blog", "Videos"],
     ["sales@autocracymachinery.com", "+91 87904 73345"],
   ];
+  const footerHeadings = ["Company", "Resources", "Contact"];
 
   return (
     <footer className="bg-[var(--ink)] pb-12 pt-24 text-white sm:pt-28">
@@ -1015,28 +1016,28 @@ function Footer() {
           <div className="mt-6 flex items-center gap-6 text-[var(--brand-yellow)]">
             <a
               aria-label="LinkedIn"
-              className="transition hover:opacity-80"
+              className="grid h-5 w-5 place-items-center transition hover:opacity-80"
               href="#"
             >
               <Icon className="size-5" name="linkedin" />
             </a>
             <a
               aria-label="YouTube"
-              className="transition hover:opacity-80"
+              className="grid h-5 w-5 place-items-center transition hover:opacity-80"
               href="#"
             >
               <Icon className="size-5" name="youtube" />
             </a>
             <a
               aria-label="Twitter"
-              className="transition hover:opacity-80"
+              className="grid h-5 w-5 place-items-center transition hover:opacity-80"
               href="#"
             >
               <Icon className="size-5" name="twitter" />
             </a>
             <a
               aria-label="Facebook"
-              className="transition hover:opacity-80"
+              className="grid h-5 w-5 place-items-center transition hover:opacity-80"
               href="#"
             >
               <Icon className="size-5" name="facebook" />
@@ -1053,21 +1054,26 @@ function Footer() {
         </div>
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 lg:gap-10">
           {footerMenus.map((links, columnIndex) => (
-            <ul
-              className="space-y-3 font-['Roboto',Arial,Helvetica,sans-serif] text-[12px] font-normal leading-[1.5] tracking-normal text-white/90"
+            <div
+              className="font-['Roboto',Arial,Helvetica,sans-serif] text-[12px] font-normal leading-[1.5] tracking-normal text-white/90"
               key={`footer-col-${columnIndex + 1}`}
             >
-              {links.map((link) => (
-                <li key={link}>
-                  <a
-                    className="transition hover:text-[var(--brand-yellow)]"
-                    href="#"
-                  >
-                    {link}
-                  </a>
-                </li>
-              ))}
-            </ul>
+              <h3 className="mb-3 text-[13px] font-semibold uppercase tracking-[0.04em] text-white">
+                {footerHeadings[columnIndex]}
+              </h3>
+              <ul className="space-y-3">
+                {links.map((link) => (
+                  <li key={link}>
+                    <a
+                      className="transition hover:text-[var(--brand-yellow)]"
+                      href="#"
+                    >
+                      {link}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           ))}
         </div>
       </div>
