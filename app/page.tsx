@@ -1002,8 +1002,6 @@ function Footer() {
       "Contact us",
       "Hire on rent",
       "Find a dealer",
-      "Privacy Policy",
-      "Terms & Conditions",
     ],
     ["Products", "Brochure", "Blog", "Videos"],
     ["sales@autocracymachinery.com", "+91 87904 73345"],
@@ -1015,56 +1013,64 @@ function Footer() {
         <div>
           <a
             aria-label="Autocracy Machinery home"
-            className="inline-flex items-center gap-2"
+            className="inline-flex items-end gap-2"
             href="#"
           >
             <Image
-              alt="Autocracy icon"
-              className="h-auto w-[44px]"
-              height={52}
-              src="/footer-logo-icon.png"
+              alt="Autocracy brand mark"
+              className="h-[40px] w-[44px]"
+              height={40}
+              src="/footer-logo-mark.png"
               width={44}
             />
             <Image
               alt="Autocracy Machinery"
-              className="h-auto w-[184px]"
-              height={35}
-              src="/footer-logo-wordmark.png"
-              width={184}
+              className="h-auto w-[170px]"
+              height={39}
+              src="/footer-logo-combined.png"
+              width={170}
             />
           </a>
           <p className="mt-8 max-w-[430px] font-['Roboto',Arial,Helvetica,sans-serif] text-[12px] font-normal leading-[1.5] tracking-normal text-white/85">
             Autocracy Machinery is a trading style of Aceautocracy Machinery
             Pvt. Limited, a company incorporated in India.
           </p>
-          <div className="mt-6 flex items-center gap-4 text-[var(--brand-yellow)]">
+          <div className="mt-6 flex items-center gap-6 text-[var(--brand-yellow)]">
             <a
               aria-label="LinkedIn"
               className="transition hover:opacity-80"
               href="#"
             >
-              <Icon className="size-7" name="linkedin" />
+              <Icon className="size-5" name="linkedin" />
             </a>
             <a
               aria-label="YouTube"
               className="transition hover:opacity-80"
               href="#"
             >
-              <Icon className="size-7" name="youtube" />
+              <Icon className="size-5" name="youtube" />
             </a>
             <a
               aria-label="Twitter"
               className="transition hover:opacity-80"
               href="#"
             >
-              <Icon className="size-7" name="twitter" />
+              <Icon className="size-5" name="twitter" />
             </a>
             <a
               aria-label="Facebook"
               className="transition hover:opacity-80"
               href="#"
             >
-              <Icon className="size-7" name="facebook" />
+              <Icon className="size-5" name="facebook" />
+            </a>
+          </div>
+          <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3 font-['Roboto',Arial,Helvetica,sans-serif] text-[12px] font-normal leading-[1.5] tracking-normal text-white/95">
+            <a className="transition hover:text-[var(--brand-yellow)]" href="#">
+              Privacy Policy
+            </a>
+            <a className="transition hover:text-[var(--brand-yellow)]" href="#">
+              Terms &amp; Conditions
             </a>
           </div>
         </div>
