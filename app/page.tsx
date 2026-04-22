@@ -29,8 +29,8 @@ const industries = [
     image: "032f1530adf57211e22495cccd59ff0a6d6be4d0.png",
   },
   {
-    title: "Construction",
-    image: "17685258b73f41282e6007005b6d9a993a08de26.png",
+    title: "Water Management",
+    image: "9b6af6ec8958651a036927ec24ff6cab560236ef.png",
   },
 ];
 
@@ -198,6 +198,11 @@ const awards = [
     title: "IEDRA Excellence Award",
     image: "e01088c2bc9dc1e016102c3d92b7aa506b5fe0d8.png",
   },
+];
+
+const awardsGallery = [
+  "6b849aac67e51dd6efd614142f26a669baad2aef.png",
+  "1712120617244.jpg",
 ];
 
 const stories = [
@@ -689,17 +694,23 @@ function Awards() {
         <div className="mt-14 grid items-end gap-8 sm:mt-20 sm:gap-10 lg:mt-28 lg:gap-12 lg:grid-cols-[minmax(420px,0.9fr)_1fr]">
           <div className="min-w-0">
             <div className="relative h-[220px] overflow-hidden bg-[#f2f2f2] sm:h-[247px] lg:h-[247px]">
-              <Image
-                alt="Autocracy Machinery founder meeting the Prime Minister of India at a startup event"
-                className="object-cover"
-                fill
-                sizes="(min-width: 1024px) 40vw, 100vw"
-                src={`${asset}6b849aac67e51dd6efd614142f26a669baad2aef.png`}
-              />
-              <span className="absolute left-0 top-0 size-10 border-l-2 border-t-2 border-[var(--brand-yellow)]" />
-              <span className="absolute right-0 top-0 size-10 border-r-2 border-t-2 border-[var(--brand-yellow)]" />
-              <span className="absolute bottom-0 left-0 size-10 border-b-2 border-l-2 border-[var(--brand-yellow)]" />
-              <span className="absolute bottom-0 right-0 size-10 border-b-2 border-r-2 border-[var(--brand-yellow)]" />
+              <div className="awards-photo-scroll h-full">
+                {awardsGallery.map((photo) => (
+                  <div className="awards-photo-slide relative h-full" key={photo}>
+                    <Image
+                      alt="Autocracy Machinery founder meeting the Prime Minister of India at a startup event"
+                      className="object-cover"
+                      fill
+                      sizes="(min-width: 1024px) 40vw, 100vw"
+                      src={`${asset}${photo}`}
+                    />
+                  </div>
+                ))}
+              </div>
+              <span className="pointer-events-none absolute left-0 top-0 size-10 border-l-2 border-t-2 border-[var(--brand-yellow)]" />
+              <span className="pointer-events-none absolute right-0 top-0 size-10 border-r-2 border-t-2 border-[var(--brand-yellow)]" />
+              <span className="pointer-events-none absolute bottom-0 left-0 size-10 border-b-2 border-l-2 border-[var(--brand-yellow)]" />
+              <span className="pointer-events-none absolute bottom-0 right-0 size-10 border-b-2 border-r-2 border-[var(--brand-yellow)]" />
             </div>
             <div className="mt-7 flex justify-center gap-2">
               <span className="size-3 bg-[#4b4b4b]" />

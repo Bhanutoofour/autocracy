@@ -140,6 +140,23 @@ a {
   scroll-snap-align: start;
 }
 
+.awards-photo-scroll {
+  display: flex;
+  height: 100%;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.awards-photo-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.awards-photo-slide {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+}
+
 .testimonial-scroll {
   display: flex;
   gap: 16px;
