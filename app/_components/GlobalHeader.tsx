@@ -18,11 +18,6 @@ type ProductCard = {
   image: string;
 };
 
-type ProductCategory = {
-  label: string;
-  productLabels: string[];
-};
-
 function Logo() {
   return (
     <a
@@ -185,7 +180,9 @@ function ProductMenuCard({
         <div className="relative h-[41px] w-[78px] shrink-0">
           <Image alt={card.label} className="object-contain" fill sizes="86px" src={card.image} />
         </div>
-        <span className="line-clamp-2 max-w-[112px] font-['Roboto',Arial,Helvetica,sans-serif] text-[16px] font-medium leading-[120%] text-[#0a0a0b]">
+        <span
+          className="line-clamp-2 max-w-[160px] align-middle font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[16px] font-bold leading-[120%] tracking-[0] text-[#0A0A0B]"
+        >
           {card.label}
         </span>
       </div>
@@ -222,46 +219,11 @@ const MENU_PRODUCTS: ProductCard[] = PRODUCTS.map((label) => ({
   image: PRODUCT_IMAGE_MAP[label] ?? "/home-assets/imports/Final-1/282576ad5e8a2a7d8bdf398187b6cfa2059de92a.png",
 }));
 
-const PRODUCT_CATEGORIES: ProductCategory[] = [
-  { label: "All Products", productLabels: [...PRODUCTS] },
-  {
-    label: "Telecommunication and OFC",
-    productLabels: ["Trenchers", "Walk Behind Trencher", "Post Hole Digger", "Attachments"],
-  },
-  {
-    label: "Solar and Wind Energy",
-    productLabels: ["Wheel Trencher", "Post Hole Digger", "Sand Filler"],
-  },
-  {
-    label: "Water Body Cleaning",
-    productLabels: ["Aquatic Weed Harvester", "Amphibious Excavator", "Floating Pontoon"],
-  },
-  {
-    label: "Agriculture",
-    productLabels: ["Trenchers", "Attachments", "Agricultural Attachments"],
-  },
-  {
-    label: "Civil Engineering",
-    productLabels: ["Pole Stacker", "Sand Filler"],
-  },
-  {
-    label: "Landscaping",
-    productLabels: ["Walk Behind Trencher", "Landscaping Equipment", "Attachments"],
-  },
-  {
-    label: "Construction",
-    productLabels: ["Trenchers", "Wheel Trencher", "Sand Filler", "Post Hole Digger"],
-  },
-];
-
 export default function GlobalHeader() {
   const [activeMenu, setActiveMenu] = useState<MenuKey>(null);
   const [activeIndustry, setActiveIndustry] = useState<(typeof INDUSTRIES)[number]>(
     "OFC Telecommunications",
   );
-  const [activeProductCategory, setActiveProductCategory] =
-    useState<string>("All Products");
-  const [activeProductCard, setActiveProductCard] = useState<string | null>(null);
 
   const industryProducts = useMemo(() => {
     const labels = INDUSTRY_TO_PRODUCTS[activeIndustry];
@@ -269,15 +231,6 @@ export default function GlobalHeader() {
       .map((label) => MENU_PRODUCTS.find((item) => item.label === label))
       .filter((item): item is ProductCard => Boolean(item));
   }, [activeIndustry]);
-
-  const productsByCategory = useMemo(() => {
-    const category =
-      PRODUCT_CATEGORIES.find((item) => item.label === activeProductCategory) ??
-      PRODUCT_CATEGORIES[0];
-    return category.productLabels
-      .map((label) => MENU_PRODUCTS.find((item) => item.label === label))
-      .filter((item): item is ProductCard => Boolean(item));
-  }, [activeProductCategory]);
 
   const navLinks = [
     { label: "About Us", href: "/about-us" },
@@ -328,10 +281,7 @@ export default function GlobalHeader() {
                 className={`${navItemClass} ${
                   activeMenu === "products" ? "text-[#b88900]" : "hover:text-[#b88900]"
                 }`}
-                onMouseEnter={() => {
-                  setActiveMenu("products");
-                  setActiveProductCategory("All Products");
-                }}
+                onMouseEnter={() => setActiveMenu("products")}
                 onClick={() => setActiveMenu((prev) => (prev === "products" ? null : "products"))}
                 type="button"
               >
@@ -372,15 +322,15 @@ export default function GlobalHeader() {
         </div>
 
         {activeMenu === "industries" ? (
-          <div className="border-t border-black/10 bg-[#efefef]">
+          <div className="border-t border-black/10 bg-white">
             <div className="site-container py-6">
               <div className="grid grid-cols-[470px_1fr] gap-4">
                 <div className="space-y-1">
                   {INDUSTRIES.map((industry) => (
                     <button
-                      className={`flex w-full items-center justify-between border-l-[3px] px-5 py-2.5 text-left font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[17px] leading-6 transition ${
+                      className={`flex w-full items-center justify-between border-l-[3px] px-5 py-2.5 text-left font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[18px] leading-[20px] tracking-[0] transition ${
                         activeIndustry === industry
-                          ? "border-[var(--brand-yellow)] font-semibold text-[#111113]"
+                          ? "border-[var(--brand-yellow)] font-bold text-[#111113]"
                           : "border-transparent font-normal text-[#2b2b2e] hover:border-black/20"
                       }`}
                       key={industry}
@@ -408,45 +358,16 @@ export default function GlobalHeader() {
         ) : null}
 
         {activeMenu === "products" ? (
-          <div className="border-t border-black/10 bg-[#efefef]">
+          <div className="border-t border-black/10 bg-white">
             <div className="site-container py-6">
-              <div className="grid grid-cols-[320px_1fr] gap-4">
-                <div className="flex w-[320px] flex-col">
-                  {PRODUCT_CATEGORIES.map((category) => {
-                    const isActive = activeProductCategory === category.label;
-                    return (
-                      <button
-                        className={`flex h-12 items-center justify-between border-l-2 bg-white px-4 text-left font-['Roboto',Arial,Helvetica,sans-serif] text-[18px] leading-5 text-[#01060a] ${
-                          isActive
-                            ? "border-[var(--brand-yellow)] font-bold"
-                            : "border-transparent font-normal"
-                        }`}
-                        key={category.label}
-                        onMouseEnter={() => setActiveProductCategory(category.label)}
-                        type="button"
-                      >
-                        <span>{category.label}</span>
-                        <Icon className="size-5 text-[#0d0d0f]" name="arrow-right" />
-                      </button>
-                    );
-                  })}
-                </div>
-                <div className="grid max-w-[712px] auto-rows-[78px] content-start grid-cols-3 gap-2">
-                  {productsByCategory.map((card) => (
-                    <div
-                      className="h-[78px]"
-                      key={`product-${activeProductCategory}-${card.label}`}
-                      onMouseEnter={() => setActiveProductCard(card.label)}
-                      onMouseLeave={() => setActiveProductCard(null)}
-                    >
-                      <ProductMenuCard
-                        active={activeProductCard === card.label}
-                        card={card}
-                        href={productToHref(card.label)}
-                      />
-                    </div>
-                  ))}
-                </div>
+              <div className="grid auto-rows-[78px] grid-cols-4 gap-2">
+                {MENU_PRODUCTS.map((card) => (
+                  <ProductMenuCard
+                    card={card}
+                    href={productToHref(card.label)}
+                    key={`product-grid-${card.label}`}
+                  />
+                ))}
               </div>
             </div>
           </div>
