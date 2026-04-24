@@ -1,8 +1,19 @@
 import Image from "next/image";
+import CountrySwitcherButton from "./_components/CountrySwitcherButton";
+import LocationGate from "./_components/LocationGate";
+import GlobalHeader from "./_components/GlobalHeader";
+import HomeProductsSection from "./_components/HomeProductsSection";
+import { titleToSlug } from "@/utils/slug";
+import { getActiveIndustries } from "@/actions/industryAction";
+import { getActiveProducts } from "@/actions/productAction";
+import {
+  AnimatedAwardsSection,
+  AnimatedTestimonialsSection,
+} from "./_components/HomeAnimatedSections";
 
 const asset = "/home-assets/imports/Final-1/";
 
-const industries = [
+const fallbackIndustries = [
   {
     title: "Agriculture",
     image: "7f60e1c3df8e63febda1944bedd2854950affd6e.png",
@@ -34,7 +45,7 @@ const industries = [
   },
 ];
 
-const products = [
+const fallbackProducts = [
   { name: "Trenchers", image: "282576ad5e8a2a7d8bdf398187b6cfa2059de92a.png" },
   {
     name: "Wheel Trenchers",
@@ -81,6 +92,9 @@ const products = [
     image: "9b6af6ec8958651a036927ec24ff6cab560236ef.png",
   },
 ];
+
+const industryHref = (industryTitle: string) =>
+  `/industries/${titleToSlug(industryTitle)}`;
 
 const strengths = [
   {
@@ -239,7 +253,7 @@ function Logo() {
     <a
       aria-label="Autocracy Machinery home"
       className="block w-[168px] sm:w-[190px]"
-      href="#"
+      href="/"
     >
       <Image
         alt="Autocracy Machinery"
@@ -387,12 +401,12 @@ function Icon({
 
 function Header() {
   const nav = [
-    "Industries",
-    "Products",
-    "Company",
-    "About Us",
-    "Blogs",
-    "Contact Us",
+    { label: "Industries", href: "/#industries" },
+    { label: "Products", href: "/#products" },
+    { label: "Company", href: "/about-us" },
+    { label: "About Us", href: "/about-us" },
+    { label: "Blogs", href: "/#stories" },
+    { label: "Contact Us", href: "/contact-us" },
   ];
 
   return (
@@ -407,14 +421,11 @@ function Header() {
               <Icon className="size-4" name="phone" />
               Call +91 87904 73345
             </a>
-            <a className="hidden items-center gap-2 md:flex" href="#">
+            <a className="hidden items-center gap-2 md:flex" href="/find-a-dealer">
               <Icon className="size-4" name="search" />
               Find a dealer
             </a>
-            <button className="flex items-center gap-1 uppercase" type="button">
-              EN
-              <Icon className="size-4" name="chevron" />
-            </button>
+            <CountrySwitcherButton />
           </div>
         </div>
       </div>
@@ -425,11 +436,11 @@ function Header() {
           {nav.map((item) => (
             <a
               className="flex h-6 items-center justify-center gap-1 text-center transition hover:text-[#b88900]"
-              href="#"
-              key={item}
+              href={item.href}
+              key={item.label}
             >
-              {item}
-              {["Industries", "Products", "Company"].includes(item) ? (
+              {item.label}
+              {["Industries", "Products", "Company"].includes(item.label) ? (
                 <Icon className="size-4" name="chevron" />
               ) : null}
             </a>
@@ -438,7 +449,7 @@ function Header() {
         <div className="hidden items-center gap-3 lg:flex">
           <a
             className="flex h-10 items-center justify-center gap-2 border border-[var(--ink)] px-4 text-center font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-semibold uppercase leading-5 tracking-normal text-[#0a0a0b] transition hover:bg-black/5"
-            href="#"
+            href="/brochure"
           >
             <Icon className="size-5" name="download" />
             Brochure
@@ -463,10 +474,10 @@ function Header() {
               {nav.map((item) => (
                 <a
                   className="px-3 py-3 transition hover:bg-[var(--brand-yellow)]"
-                  href="#"
-                  key={item}
+                  href={item.href}
+                  key={item.label}
                 >
-                  {item}
+                  {item.label}
                 </a>
               ))}
             </nav>
@@ -502,7 +513,7 @@ function Hero() {
           </p>
           <a
             className="flex h-11 w-[132px] items-center justify-center bg-[var(--brand-yellow)] px-4 text-center font-['Roboto',Arial,Helvetica,sans-serif] text-[16px] font-semibold uppercase leading-5 tracking-normal text-[#0a0a0b] transition hover:brightness-95 lg:h-[60px] lg:w-[204px]"
-            href="#contact"
+            href="/contact-us"
           >
             Get a quote
           </a>
@@ -521,7 +532,18 @@ function Hero() {
   );
 }
 
-function Industries() {
+function IndustriesSection({
+  industries,
+}: {
+  industries: { title: string; image: string }[];
+}) {
+  const resolveIndustryImage = (image: string) => {
+    if (image.startsWith("http://") || image.startsWith("https://") || image.startsWith("/")) {
+      return image;
+    }
+    return `${asset}${image}`;
+  };
+
   return (
     <section className="bg-white py-16 lg:py-20" id="industries">
       <div className="site-container">
@@ -537,7 +559,7 @@ function Industries() {
           {industries.map((industry, index) => (
             <a
               className="group relative block h-[180px] overflow-hidden rounded-lg bg-[#312e33] sm:h-[250px]"
-              href="#"
+              href={industryHref(industry.title)}
               key={`${industry.title}-${index}`}
             >
               <Image
@@ -545,7 +567,7 @@ function Industries() {
                 className="object-cover transition duration-500 group-hover:scale-105"
                 fill
                 sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
-                src={`${asset}${industry.image}`}
+                src={resolveIndustryImage(industry.image)}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-black/5" />
               <h3 className="absolute inset-x-0 bottom-0 p-5 align-bottom font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-semibold leading-[1.2] tracking-normal text-white">
@@ -557,70 +579,11 @@ function Industries() {
         <div className="mt-10 flex justify-center">
           <a
             className="button-gold-text figma-button bg-[var(--ink)]"
-            href="#contact"
+            href="/industries"
             style={{ color: "#f9c300" }}
           >
             View all industries
           </a>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Products() {
-  return (
-    <section className="bg-[var(--section-gray)] py-14" id="products">
-      <div className="site-container">
-        <div className="mb-9 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-          <h2 className="figma-heading">Our Products lineups</h2>
-          <div className="flex flex-wrap items-center gap-3 sm:gap-5">
-            <a
-              className="flex h-12 w-full items-center justify-center border border-[var(--ink)] px-5 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-base font-bold uppercase text-[#0a0a0b] sm:h-[62px] sm:min-w-[234px] sm:w-auto sm:px-7 sm:text-lg"
-              href="#"
-            >
-              View all products
-            </a>
-            <button
-              aria-label="Previous product"
-              className="grid size-11 place-items-center border border-black/25 bg-[var(--ink)] font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-semibold leading-none text-[var(--brand-yellow)] sm:size-[52px]"
-              type="button"
-            >
-              {"\u2190"}
-            </button>
-            <button
-              aria-label="Next product"
-              className="grid size-11 place-items-center border border-[var(--ink)] bg-[var(--ink)] font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-semibold leading-none text-[var(--brand-yellow)] sm:size-[52px]"
-              type="button"
-            >
-              {"\u2192"}
-            </button>
-          </div>
-        </div>
-        <div className="product-scroll">
-          {products.map((product) => (
-            <article
-              className="product-card group flex h-[340px] flex-col justify-between bg-white px-6 pb-8 pt-8"
-              key={`${product.name}-${product.image}`}
-            >
-              <div className="relative h-[210px] overflow-hidden">
-                <Image
-                  alt={product.name}
-                  className="object-contain transition duration-500 group-hover:scale-105"
-                  fill
-                  sizes="(min-width: 1024px) 20vw, (min-width: 768px) 31vw, 78vw"
-                  src={`${asset}${product.image}`}
-                />
-              </div>
-              <h3 className="mx-auto flex min-h-[54px] max-w-[230px] items-center justify-center text-center align-middle font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[22px] font-semibold uppercase leading-[1.2] tracking-normal text-[#111113]">
-                {product.name}
-              </h3>
-            </article>
-          ))}
-        </div>
-        <div className="mx-auto mt-12 flex w-[300px] max-w-full">
-          <span className="h-1 w-[80px] bg-[var(--ink)]" />
-          <span className="h-1 flex-1 bg-white" />
         </div>
       </div>
     </section>
@@ -651,106 +614,6 @@ function Strengths() {
               </p>
             </article>
           ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Awards() {
-  return (
-    <section className="bg-white py-16 lg:py-20" id="awards">
-      <div className="site-container">
-        <div className="mx-auto max-w-[980px] text-center">
-          <p className="mb-6 text-[14px] font-normal uppercase leading-none tracking-[0.7em] text-[#243245] sm:mb-9 sm:text-[18px] sm:tracking-[1.15em]">
-            Awards
-          </p>
-          <div className="relative mx-auto max-w-[900px] px-4 sm:px-8 lg:px-12">
-            <span
-              aria-hidden="true"
-              className="absolute left-0 top-1/2 hidden -translate-y-1/2 text-[84px] font-bold leading-none text-[var(--brand-yellow)] lg:block"
-            >
-              {"{"}
-            </span>
-            <h2 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[28px] font-bold leading-[1.2] tracking-normal text-[#0a0a0b] sm:text-[34px] lg:text-[40px]">
-              We&apos;ve Been Recognized for Disrupting
-              <br className="hidden lg:block" />
-              the Industrial Game
-            </h2>
-            <span
-              aria-hidden="true"
-              className="absolute right-0 top-1/2 hidden -translate-y-1/2 text-[84px] font-bold leading-none text-[var(--brand-yellow)] lg:block"
-            >
-              {"}"}
-            </span>
-          </div>
-          <p className="mx-auto mt-6 max-w-[820px] text-[16px] font-normal leading-[1.5] text-[#20242a] sm:mt-8 sm:text-[18px] sm:leading-[1.45]">
-            From national startup honors to innovation awards, our journey is
-            backed by the best celebrating bold ideas, breakthrough impact, and
-            entrepreneurial excellence.
-          </p>
-        </div>
-
-        <div className="mt-14 grid items-end gap-8 sm:mt-20 sm:gap-10 lg:mt-28 lg:gap-12 lg:grid-cols-[minmax(420px,0.9fr)_1fr]">
-          <div className="min-w-0">
-            <div className="relative h-[220px] overflow-hidden bg-[#f2f2f2] sm:h-[247px] lg:h-[247px]">
-              <div className="awards-photo-scroll h-full">
-                {awardsGallery.map((photo) => (
-                  <div className="awards-photo-slide relative h-full" key={photo}>
-                    <Image
-                      alt="Autocracy Machinery founder meeting the Prime Minister of India at a startup event"
-                      className="object-cover"
-                      fill
-                      sizes="(min-width: 1024px) 40vw, 100vw"
-                      src={`${asset}${photo}`}
-                    />
-                  </div>
-                ))}
-              </div>
-              <span className="pointer-events-none absolute left-0 top-0 size-10 border-l-2 border-t-2 border-[var(--brand-yellow)]" />
-              <span className="pointer-events-none absolute right-0 top-0 size-10 border-r-2 border-t-2 border-[var(--brand-yellow)]" />
-              <span className="pointer-events-none absolute bottom-0 left-0 size-10 border-b-2 border-l-2 border-[var(--brand-yellow)]" />
-              <span className="pointer-events-none absolute bottom-0 right-0 size-10 border-b-2 border-r-2 border-[var(--brand-yellow)]" />
-            </div>
-            <div className="mt-7 flex justify-center gap-2">
-              <span className="size-3 bg-[#4b4b4b]" />
-              <span className="size-3 bg-[#d7d7d7]" />
-            </div>
-          </div>
-
-          <div className="min-w-0 overflow-hidden">
-            <div className="awards-scroll">
-              {awards.map((award) => (
-                <article
-                  className="award-card flex h-[178px] flex-col items-center justify-end border-r border-[#e7e7e7] bg-white px-8 pb-5 text-center"
-                  key={award.title}
-                >
-                  <div className="relative mb-7 h-[72px] w-[150px]">
-                    <Image
-                      alt={award.title}
-                      className="object-contain"
-                      fill
-                      sizes="150px"
-                      src={`${asset}${award.image}`}
-                    />
-                  </div>
-                  <h3 className="max-w-[180px] font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-bold leading-[1.25] text-[#111113]">
-                    {award.title}
-                  </h3>
-                </article>
-              ))}
-            </div>
-            <div className="mt-7 flex justify-center gap-2">
-              {[0, 1, 2, 3, 4, 5].map((dot) => (
-                <span
-                  className={
-                    dot === 2 ? "size-3 bg-[#8f8f8f]" : "size-3 bg-[#d7d7d7]"
-                  }
-                  key={dot}
-                />
-              ))}
-            </div>
-          </div>
         </div>
       </div>
     </section>
@@ -831,82 +694,12 @@ function Stories() {
               </p>
               <a
                 className="mt-auto text-[16px] font-medium leading-5 text-[#2f64b7]"
-                href="#"
+                href="/about-us"
               >
                 Read More
               </a>
             </article>
           ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Testimonials() {
-  return (
-    <section className="bg-[var(--section-gray)] py-16 lg:py-[72px]">
-      <div className="site-container">
-        <div className="mb-10 flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
-          <div>
-            <h2 className="text-left font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[32px] font-bold leading-[1.05] tracking-normal text-[#0a0a0b] sm:text-[40px]">
-              Customer Testimonial
-            </h2>
-            <p className="mt-5 max-w-[620px] text-[16px] font-normal leading-[1.5] text-[#20242a]">
-              Autocracy Machinery is trusted by fast-growth companies.
-              Here&apos;s what they have to say about us.
-            </p>
-          </div>
-          <div className="hidden gap-4 lg:flex">
-            <button
-              aria-label="Previous testimonial"
-              className="grid size-11 place-items-center border border-[#d0d0d0] bg-[#f7f7f7] font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-semibold leading-none text-[#b5b5b5]"
-              type="button"
-            >
-              {"\u2190"}
-            </button>
-            <button
-              aria-label="Next testimonial"
-              className="grid size-11 place-items-center border border-[var(--ink)] bg-white font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-semibold leading-none text-[#0a0a0b]"
-              type="button"
-            >
-              {"\u2192"}
-            </button>
-          </div>
-        </div>
-        <div className="mt-10 min-w-0 overflow-hidden">
-          <div className="testimonial-scroll">
-            {testimonials.map((testimonial) => (
-              <article
-                className="testimonial-card flex min-h-[366px] flex-col bg-white px-7 py-7 lg:px-8"
-                key={`${testimonial.name}-${testimonial.location}`}
-              >
-                <div className="mb-7 text-[88px] font-black leading-[0.45] text-[var(--brand-yellow)]">
-                  &quot;
-                </div>
-                <p className="font-['Roboto',Arial,Helvetica,sans-serif] text-[16px] font-normal leading-6 tracking-normal text-[#1f2024]">
-                  {testimonial.quote}
-                </p>
-                <div className="mt-auto flex items-center gap-4 pt-10">
-                  <span className="grid size-[54px] place-items-center rounded-full bg-[#ececec] text-[22px] font-bold text-[#5f5f5f]">
-                    {testimonial.name[0]}
-                  </span>
-                  <div>
-                    <p className="font-['Roboto',Arial,Helvetica,sans-serif] text-[20px] font-semibold leading-6 tracking-normal text-[#111113]">
-                      {testimonial.name}
-                    </p>
-                    <p className="mt-1 font-['Roboto',Arial,Helvetica,sans-serif] text-[14px] font-semibold leading-6 tracking-normal text-[#9a9a9a]">
-                      {testimonial.location}
-                    </p>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-          <div className="mx-auto mt-12 flex w-[270px] max-w-full lg:mx-0">
-            <span className="h-1 w-[84px] bg-[var(--ink)]" />
-            <span className="h-1 flex-1 bg-white" />
-          </div>
         </div>
       </div>
     </section>
@@ -984,6 +777,23 @@ function Footer() {
     ["sales@autocracymachinery.com", "+91 87904 73345"],
   ];
   const footerHeadings = ["Company", "Resources", "Contact"];
+  const resolveFooterHref = (link: string) => {
+    const map: Record<string, string> = {
+      "About us": "/about-us",
+      Careers: "/careers",
+      FAQs: "/faqs",
+      "Contact us": "/contact-us",
+      "Hire on rent": "/contact-us",
+      "Find a dealer": "/find-a-dealer",
+      Products: "/products",
+      Brochure: "/brochure",
+      Blog: "/#stories",
+      Videos: "/#stories",
+      "sales@autocracymachinery.com": "mailto:sales@autocracymachinery.com",
+      "+91 87904 73345": "tel:+918790473345",
+    };
+    return map[link] ?? "/";
+  };
 
   return (
     <footer className="bg-[var(--ink)] pb-12 pt-24 text-white sm:pt-28">
@@ -992,7 +802,7 @@ function Footer() {
           <a
             aria-label="Autocracy Machinery home"
             className="inline-flex items-end gap-2"
-            href="#"
+            href="/"
           >
             <Image
               alt="Autocracy brand mark"
@@ -1017,37 +827,45 @@ function Footer() {
             <a
               aria-label="LinkedIn"
               className="grid h-5 w-5 place-items-center transition hover:opacity-80"
-              href="#"
+              href="https://www.linkedin.com/company/autocracy-machinery/"
+              rel="noreferrer"
+              target="_blank"
             >
               <Icon className="size-5" name="linkedin" />
             </a>
             <a
               aria-label="YouTube"
               className="grid h-5 w-5 place-items-center transition hover:opacity-80"
-              href="#"
+              href="https://www.youtube.com/@AutocracyMachinery"
+              rel="noreferrer"
+              target="_blank"
             >
               <Icon className="size-5" name="youtube" />
             </a>
             <a
               aria-label="Twitter"
               className="grid h-5 w-5 place-items-center transition hover:opacity-80"
-              href="#"
+              href="https://x.com/aceautocracy"
+              rel="noreferrer"
+              target="_blank"
             >
               <Icon className="size-5" name="twitter" />
             </a>
             <a
               aria-label="Facebook"
               className="grid h-5 w-5 place-items-center transition hover:opacity-80"
-              href="#"
+              href="https://www.facebook.com/people/Autocracy-Machinery/61554797280328/"
+              rel="noreferrer"
+              target="_blank"
             >
               <Icon className="size-5" name="facebook" />
             </a>
           </div>
           <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3 font-['Roboto',Arial,Helvetica,sans-serif] text-[12px] font-normal leading-[1.5] tracking-normal text-white/95">
-            <a className="transition hover:text-[var(--brand-yellow)]" href="#">
+            <a className="transition hover:text-[var(--brand-yellow)]" href="/privacy-policy">
               Privacy Policy
             </a>
-            <a className="transition hover:text-[var(--brand-yellow)]" href="#">
+            <a className="transition hover:text-[var(--brand-yellow)]" href="/terms-and-conditions">
               Terms &amp; Conditions
             </a>
           </div>
@@ -1066,7 +884,7 @@ function Footer() {
                   <li key={link}>
                     <a
                       className="transition hover:text-[var(--brand-yellow)]"
-                      href="#"
+                      href={resolveFooterHref(link)}
                     >
                       {link}
                     </a>
@@ -1097,22 +915,53 @@ const organizationSchema = {
     "Autocracy Machinery manufactures heavy-duty trenchers, utility excavation machines, environmental equipment, and infrastructure machinery for telecom, agriculture, construction, water management, solar, and defence projects.",
 };
 
-export default function Home() {
+export default async function Home() {
+  let homeIndustries: { title: string; image: string }[] = fallbackIndustries;
+  let homeProducts: { name: string; image: string }[] = fallbackProducts;
+
+  try {
+    const [dbIndustries, dbProducts] = await Promise.all([
+      getActiveIndustries(),
+      getActiveProducts(),
+    ]);
+
+    if (Array.isArray(dbIndustries) && dbIndustries.length > 0) {
+      homeIndustries = dbIndustries.map((industry) => ({
+        title: industry.title ?? "",
+        image: industry.thumbnail ?? "",
+      }));
+    }
+
+    if (Array.isArray(dbProducts) && dbProducts.length > 0) {
+      homeProducts = dbProducts.map((product) => ({
+        name: product.title ?? "",
+        image: product.thumbnail ?? "",
+      }));
+    }
+  } catch {
+    // Keep static fallback homepage cards when DB/env is unavailable.
+  }
+
   return (
     <main className="min-h-screen overflow-x-hidden bg-white text-[#01060a]">
+      <LocationGate />
       <script
         dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
         type="application/ld+json"
       />
-      <Header />
+      <GlobalHeader />
       <Hero />
-      <Industries />
-      <Products />
+      <IndustriesSection industries={homeIndustries} />
+      <HomeProductsSection assetBasePath={asset} products={homeProducts} />
       <Strengths />
-      <Awards />
+      <AnimatedAwardsSection
+        asset={asset}
+        awards={awards}
+        awardsGallery={awardsGallery}
+      />
       <Certifications />
       <Stories />
-      <Testimonials />
+      <AnimatedTestimonialsSection testimonials={testimonials} />
       <HappyClients />
       <CtaBand />
       <Footer />

@@ -1,0 +1,113 @@
+.cardWrapper {
+  border: 1px solid #ddd;
+  width: 100%;
+  padding: 0.25rem 1.25rem;
+  background-color: #fff;
+  height: 160px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Segoe UI", sans-serif;
+  position: relative;
+}
+
+.cardContent {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  position: relative;
+}
+
+.imageSection {
+  flex-shrink: 0;
+}
+
+.productImage {
+  object-fit: contain;
+}
+
+.detailsSection {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.seriesTitle {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #333;
+  position: absolute;
+  top: 0.45rem;
+  left: -1.75rem;
+  padding: 0.25rem 0.8125rem;
+  border-radius: 2.5rem;
+  background-color: #e7e7e7;
+}
+
+.titleArea {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.modelTitle {
+  font-weight: 400;
+  font-style: oblique;
+  line-height: 120%;
+  vertical-align: middle;
+  text-transform: uppercase;
+  font-size: 1.75rem;
+  font-family: "DaggerSquare", "Roboto", sans-serif;
+  color: #000;
+}
+
+.subtitle {
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: #444;
+}
+
+.specsRow {
+  display: flex;
+  gap: 32px;
+}
+
+.specItem {
+  display: flex;
+  flex-direction: column;
+}
+
+.specLabel {
+  font-size: 0.75rem;
+  color: #777;
+}
+
+.specValue {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #000;
+}
+
+// .ctaSection {
+//   margin-left: auto;
+// }
+
+.viewDetailsBtn {
+  background-color: #020406;
+  color: #ffd700;
+  padding: 12px 24px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  letter-spacing: 1px;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #111;
+  }
+}

@@ -1,0 +1,145 @@
+@import "../../../styles/varriables";
+@import "../../../styles/mixins";
+
+.caraousel {
+  width: 100%;
+  position: relative;
+  height: 36.3125rem;
+  overflow: hidden;
+  background: linear-gradient(
+    180deg,
+    rgba(1, 6, 10, 0) 43.53%,
+    #01060a 142.21%
+  );
+  @include sm-max {
+    height: 36.3125rem;
+  }
+
+  :global(.keen-slider) {
+    height: 100%;
+  }
+
+  :global(.keen-slider__slide) {
+    height: 100%;
+    min-height: 100%;
+  }
+
+  .leftButton,
+  .rightButton {
+    height: 2.75rem;
+    width: 2.75rem;
+    background-color: #0000004d;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: $text-secondary;
+    position: absolute;
+    font-size: 1.4rem;
+    z-index: 9;
+    cursor: pointer;
+    border: none;
+    @include sm-max {
+      height: 2rem;
+      width: 2rem;
+      font-size: 1rem;
+    }
+  }
+
+  .leftButton {
+    top: 40%;
+    left: 2rem;
+    @include sm-max {
+      left: 1rem;
+    }
+  }
+
+  .rightButton {
+    top: 40%;
+    right: 2rem;
+    @include sm-max {
+      right: 1rem;
+    }
+  }
+
+  .dots {
+    position: absolute;
+    left: 50%;
+    bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transform: translateX(-50%);
+    @include sm-max {
+      bottom: 1rem;
+    }
+
+    button {
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+  }
+
+  .certificates {
+    display: flex;
+    flex-direction: row;
+    gap: 1.4rem;
+    align-items: center;
+    position: absolute;
+    bottom: 3.5rem;
+    right: 5rem;
+    z-index: 9;
+    @include sm-max {
+      display: none;
+    }
+  }
+
+  .caraouselContainer {
+    position: relative;
+    height: 100%;
+    width: 100%;
+
+    .caraouselContent {
+      z-index: 9;
+      position: absolute;
+      bottom: 5.5rem;
+      left: 6.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      align-items: flex-start;
+      @include sm-max {
+        gap: 0.4rem;
+        bottom: 5rem;
+        left: 2rem;
+      }
+
+      .title {
+        width: 60%;
+        font-weight: 900;
+        font-size: 3rem;
+        line-height: 105%;
+        font-style: normal;
+        color: $text-secondary;
+        @include sm-max {
+          font-size: 1.5rem;
+          line-height: 120%;
+          width: 100%;
+        }
+      }
+
+      .description {
+        font-weight: 400;
+        font-size: 1.25rem;
+        width: 60%;
+        line-height: 140%;
+        font-style: normal;
+        color: $text-secondary;
+        @include sm-max {
+          font-size: 0.875rem;
+          line-height: 140%;
+        }
+      }
+    }
+  }
+}

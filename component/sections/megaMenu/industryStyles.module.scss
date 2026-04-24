@@ -1,0 +1,101 @@
+@import "../../../styles/varriables";
+
+.titleMenu {
+  width: 100%;
+  max-width: $header-max-width;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.5rem;
+  .industryMenu {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 30%;
+    height: 100%;
+    overflow-y: auto;
+    .eachIndustry {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.875rem 1rem;
+      cursor: pointer;
+      &:hover {
+        text-shadow: 0 0 1px rgba(0, 0, 0, 0.736);
+      }
+      p {
+        font-size: 1.125rem;
+        color: $text-primary;
+        line-height: 1.25rem;
+      }
+      .image {
+        transform: rotate(-90deg);
+        transform-origin: center;
+        transition: transform 0.3s ease;
+      }
+    }
+  }
+  .productMenu {
+    flex: 1;
+    height: 100%;
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: max-content;
+    gap: 0.5rem;
+    &.emptyStateMenu {
+      grid-template-columns: 1fr;
+    }
+
+    .eachProduct {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.125rem 0.5625rem;
+      // width: 14.5rem;
+      height: 4.875rem;
+      position: relative;
+      cursor: pointer;
+      .eachProductList {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        p {
+          font-size: 14px;
+          font-weight: 500;
+          line-height: 120%;
+          color: $text-primary;
+        }
+      }
+      .dropdown {
+        transform: rotate(-90deg);
+        transform-origin: center;
+        transition: transform 0.3s ease;
+      }
+    }
+
+    .active::before {
+      content: "";
+      position: absolute;
+      width: 5.125rem;
+      height: 0.6875rem;
+      left: 0;
+      bottom: 0;
+      z-index: 5;
+      background-color: $primary-color;
+      clip-path: polygon(0% 0%, 80% 0, 100% 100%, 100% 100%, 0% 100%);
+    }
+
+    .emptyState {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  // .individualProduct{
+  //     width: 100%
+  // }
+}

@@ -1,0 +1,25 @@
+@import "../../../styles/mixins";
+
+.button {
+  padding: 0.5rem 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.625rem;
+  p {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    @include sm-max {
+      font-size: 0.75rem;
+    }
+  }
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  @include sm-max {
+    padding: 0.5rem;
+  }
+}
