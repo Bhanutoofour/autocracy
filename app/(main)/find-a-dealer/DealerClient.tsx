@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import styles from "./dealerStyles.module.scss";
 import {
   FormCheckbox,
@@ -15,6 +15,7 @@ import useWindowSize from "@/hooks/useWindowSize";
 import { SCREENS } from "@/constants";
 import CustomDropdown from "@/component/molecules/customDropdown/CustomDropdown";
 import { submitFindDealerForm } from "@/utils/zohoCRM";
+import { getContentLanguageFromPath, type ContentLanguage } from "@/app/_lib/i18n";
 
 interface DealerDetailsSubmittedModalProps {
   onHide: () => void;
@@ -39,6 +40,18 @@ interface Dealer {
   fullAddress: string;
   availability: string;
 }
+
+const headingByLang: Record<ContentLanguage, { find: string; available: string }> = {
+  en: { find: "Find A Dealer", available: "Available Dealers" },
+  hi: { find: "डीलर खोजें", available: "उपलब्ध डीलर" },
+  fr: { find: "Trouver un revendeur", available: "Revendeurs disponibles" },
+  es: { find: "Buscar distribuidor", available: "Distribuidores disponibles" },
+  de: { find: "Haendler finden", available: "Verfuegbare Haendler" },
+  ar: { find: "ابحث عن موزع", available: "الموزعون المتاحون" },
+  zh: { find: "查找经销商", available: "可用经销商" },
+  ja: { find: "販売店を探す", available: "利用可能な販売店" },
+  bn: { find: "ডিলার খুঁজুন", available: "উপলব্ধ ডিলার" },
+};
 
 const DealerDetailsSubmittedModal = ({
   onHide,
@@ -71,7 +84,7 @@ const DealerDetailsSubmittedModal = ({
             </div>
             <div className={styles.topPortionContent}>
               <p className={styles.topPortionHeading}>
-                {!noDealersFound ? "We're not in your area yet!" : "Thank You!"}
+                {!noDealersFound ? "We are not in your area yet!" : "Thank You!"}
               </p>
               {!noDealersFound ? (
                 <div className={styles.sharingContent}>
@@ -81,7 +94,7 @@ const DealerDetailsSubmittedModal = ({
                     details, pricing, and support.
                   </p>
                   <p className={styles.thankYouForSharing}>
-                    We'll make it work! <br />
+                    We will make it work! <br />
                     For quick help, feel free to contact us:
                   </p>
                 </div>
@@ -115,6 +128,14 @@ const DealerDetailsSubmittedModal = ({
 };
 
 const DealerClient = () => {
+  const language = useMemo(
+    () =>
+      typeof window === "undefined"
+        ? "en"
+        : getContentLanguageFromPath(window.location.pathname),
+    [],
+  );
+  const headingCopy = headingByLang[language];
   const [formData, setFormData] = useState<FindADealerForm>({
     role: "looking-for-dealer",
     name: "",
@@ -219,7 +240,7 @@ const DealerClient = () => {
   return (
     <div className={styles.dealerContainer}>
       <h1 className={styles.dealerHeading}>
-        {showAvailableDealers ? "Available Dealers" : "Find A Dealer"}{" "}
+        {showAvailableDealers ? headingCopy.available : headingCopy.find}{" "}
       </h1>
       {!showAvailableDealers ? (
         <div className={styles.formArea}>

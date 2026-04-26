@@ -2,14 +2,17 @@ import Link from "next/link";
 import Image from "next/image";
 import { getActiveProducts } from "@/actions/productAction";
 import { productSlug } from "@/utils/slug";
+import { getRequestContentLanguage } from "@/app/_lib/i18n-server";
+import { tUi } from "@/app/_lib/i18n";
 
 export default async function ProductsListingPage() {
+  const language = await getRequestContentLanguage();
   const products = await getActiveProducts();
 
   return (
     <main className="site-container py-12">
       <h1 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-4xl font-bold uppercase text-[#0a0a0b]">
-        Products
+        {tUi(language, "products")}
       </h1>
       {products.length > 0 ? (
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -35,7 +38,7 @@ export default async function ProductsListingPage() {
           ))}
         </div>
       ) : (
-        <p className="mt-6 text-lg text-[#444]">No products available right now.</p>
+        <p className="mt-6 text-lg text-[#444]">{tUi(language, "no_products")}</p>
       )}
     </main>
   );

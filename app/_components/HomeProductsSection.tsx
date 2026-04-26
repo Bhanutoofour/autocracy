@@ -3,6 +3,12 @@
 import { useRef } from "react";
 import { productSlug } from "@/utils/slug";
 import Image from "next/image";
+import Link from "next/link";
+import {
+  type ContentLanguage,
+  getMessages,
+  translateProductLabel,
+} from "@/app/_lib/i18n";
 
 type ProductItem = {
   name: string;
@@ -12,12 +18,15 @@ type ProductItem = {
 type HomeProductsSectionProps = {
   products: ProductItem[];
   assetBasePath: string;
+  language: ContentLanguage;
 };
 
 export default function HomeProductsSection({
   products,
   assetBasePath,
+  language,
 }: HomeProductsSectionProps) {
+  const messages = getMessages(language);
   const railRef = useRef<HTMLDivElement | null>(null);
 
   const scrollByAmount = (direction: "left" | "right") => {
@@ -50,16 +59,16 @@ export default function HomeProductsSection({
     <section className="bg-[var(--section-gray)] py-14" id="products">
       <div className="site-container">
         <div className="mb-9 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-          <h2 className="figma-heading">Our Products lineups</h2>
+          <h2 className="figma-heading">{messages.home.productsLineups}</h2>
           <div className="flex flex-wrap items-center gap-3 sm:gap-5">
-            <a
+            <Link
               className="flex h-12 w-full items-center justify-center border border-[var(--ink)] px-5 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-base font-bold uppercase text-[#0a0a0b] sm:h-[62px] sm:min-w-[234px] sm:w-auto sm:px-7 sm:text-lg"
               href="/products"
             >
-              View all products
-            </a>
+              {messages.home.viewAllProducts}
+            </Link>
             <button
-              aria-label="Previous product"
+              aria-label={messages.common.previousProduct}
               className="grid size-11 place-items-center border border-[#c7c7c7] bg-transparent font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-semibold leading-none text-[#9ca3af] transition hover:border-[#9ca3af] hover:text-[#6b7280] sm:size-[52px]"
               onClick={() => scrollByAmount("left")}
               type="button"
@@ -67,7 +76,7 @@ export default function HomeProductsSection({
               {"\u2190"}
             </button>
             <button
-              aria-label="Next product"
+              aria-label={messages.common.nextProduct}
               className="grid size-11 place-items-center border border-[#0a0a0b] bg-transparent font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-semibold leading-none text-[#0a0a0b] transition hover:bg-[#0a0a0b]/5 sm:size-[52px]"
               onClick={() => scrollByAmount("right")}
               type="button"
@@ -82,7 +91,7 @@ export default function HomeProductsSection({
           ref={railRef}
         >
           {products.map((product) => (
-            <a
+            <Link
               className="product-card group flex h-[340px] flex-col justify-between bg-white px-6 pb-8 pt-8"
               href={`/products/${productSlug(product.name)}`}
               key={`${product.name}-${product.image}`}
@@ -97,9 +106,9 @@ export default function HomeProductsSection({
                 />
               </div>
               <h3 className="mx-auto flex min-h-[54px] max-w-[230px] items-center justify-center text-center align-middle font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[22px] font-semibold uppercase leading-[1.2] tracking-normal text-[#111113]">
-                {product.name}
+                {translateProductLabel(product.name, language)}
               </h3>
-            </a>
+            </Link>
           ))}
         </div>
         <div className="mx-auto mt-12 flex w-[300px] max-w-full">

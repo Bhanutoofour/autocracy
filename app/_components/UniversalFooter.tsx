@@ -1,5 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
+import { getMessages } from "@/app/_lib/i18n";
+import { getRequestContentLanguage } from "@/app/_lib/i18n-server";
 
 function SocialIcon({
   name,
@@ -59,38 +61,38 @@ function SocialIcon({
   );
 }
 
-export default function UniversalFooter() {
+export default async function UniversalFooter() {
+  const language = await getRequestContentLanguage();
+  const messages = getMessages(language);
+
   const footerMenus = [
     [
-      "About us",
-      "Careers",
-      "FAQs",
-      "Contact us",
-      "Hire on rent",
-      "Find a dealer",
+      { label: messages.footer.aboutUs, href: "/about-us" },
+      { label: messages.footer.careers, href: "/careers" },
+      { label: messages.footer.faqs, href: "/faqs" },
+      { label: messages.footer.contactUs, href: "/contact-us" },
+      { label: messages.footer.hireOnRent, href: "/contact-us" },
+      { label: messages.footer.findDealer, href: "/find-a-dealer" },
     ],
-    ["Products", "Brochure", "Blog", "Videos"],
-    ["sales@autocracymachinery.com", "+91 87904 73345"],
+    [
+      { label: messages.footer.products, href: "/products" },
+      { label: messages.footer.brochure, href: "/brochure" },
+      { label: messages.footer.blog, href: "/#stories" },
+      { label: messages.footer.videos, href: "/#stories" },
+    ],
+    [
+      {
+        label: "sales@autocracymachinery.com",
+        href: "mailto:sales@autocracymachinery.com",
+      },
+      { label: "+91 87904 73345", href: "tel:+918790473345" },
+    ],
   ];
-  const footerHeadings = ["Company", "Resources", "Contact"];
-
-  const resolveFooterHref = (link: string) => {
-    const map: Record<string, string> = {
-      "About us": "/about-us",
-      Careers: "/careers",
-      FAQs: "/faqs",
-      "Contact us": "/contact-us",
-      "Hire on rent": "/contact-us",
-      "Find a dealer": "/find-a-dealer",
-      Products: "/products",
-      Brochure: "/brochure",
-      Blog: "/#stories",
-      Videos: "/#stories",
-      "sales@autocracymachinery.com": "mailto:sales@autocracymachinery.com",
-      "+91 87904 73345": "tel:+918790473345",
-    };
-    return map[link] ?? "/";
-  };
+  const footerHeadings = [
+    messages.footer.companyHeading,
+    messages.footer.resourcesHeading,
+    messages.footer.contactHeading,
+  ];
 
   return (
     <>
@@ -99,12 +101,10 @@ export default function UniversalFooter() {
           <div className="relative z-10 flex translate-y-10 flex-col gap-8 bg-[var(--brand-yellow)] px-8 py-10 text-black sm:translate-y-12 sm:px-10 sm:py-12 lg:flex-row lg:items-center lg:justify-between lg:px-10 lg:py-12">
             <div>
               <h2 className="max-w-[470px] font-['Roboto',Arial,Helvetica,sans-serif] text-[32px] font-black leading-[1.05] tracking-normal">
-                Built for Performance. Branded for You.
+                {messages.footer.ctaHeading}
               </h2>
               <p className="mt-4 max-w-[470px] font-['Roboto',Arial,Helvetica,sans-serif] text-[16px] font-normal leading-6 tracking-normal text-black/90">
-                From trenchers to multi-utility machines, Autocracy Machinery
-                delivers rugged, customizable solutions, designed to power
-                infrastructure, telecom, and agri projects.
+                {messages.footer.ctaBody}
               </p>
             </div>
             <a
@@ -112,7 +112,7 @@ export default function UniversalFooter() {
               href="tel:+918790473345"
               style={{ color: "#f9c300" }}
             >
-              Get a quote
+              {messages.common.getQuote}
             </a>
           </div>
         </div>
@@ -142,8 +142,7 @@ export default function UniversalFooter() {
               />
             </Link>
             <p className="mt-8 max-w-[430px] font-['Roboto',Arial,Helvetica,sans-serif] text-[12px] font-normal leading-[1.5] tracking-normal text-white/85">
-              Autocracy Machinery is a trading style of Aceautocracy Machinery
-              Pvt. Limited, a company incorporated in India.
+              {messages.footer.legal}
             </p>
             <div className="mt-6 flex items-center gap-6 text-[var(--brand-yellow)]">
               <a
@@ -188,13 +187,13 @@ export default function UniversalFooter() {
                 className="transition hover:text-[var(--brand-yellow)]"
                 href="/privacy-policy"
               >
-                Privacy Policy
+                {messages.footer.privacyPolicy}
               </Link>
               <Link
                 className="transition hover:text-[var(--brand-yellow)]"
                 href="/terms-and-conditions"
               >
-                Terms &amp; Conditions
+                {messages.footer.terms}
               </Link>
             </div>
           </div>
@@ -209,24 +208,23 @@ export default function UniversalFooter() {
                 </h3>
                 <ul className="space-y-3">
                   {links.map((link) => {
-                    const href = resolveFooterHref(link);
-                    const isInternal = href.startsWith("/");
+                    const isInternal = link.href.startsWith("/");
 
                     return (
-                      <li key={link}>
+                      <li key={link.label}>
                         {isInternal ? (
                           <Link
                             className="transition hover:text-[var(--brand-yellow)]"
-                            href={href}
+                            href={link.href}
                           >
-                            {link}
+                            {link.label}
                           </Link>
                         ) : (
                           <a
                             className="transition hover:text-[var(--brand-yellow)]"
-                            href={href}
+                            href={link.href}
                           >
-                            {link}
+                            {link.label}
                           </a>
                         )}
                       </li>
@@ -238,7 +236,7 @@ export default function UniversalFooter() {
           </div>
         </div>
         <div className="site-container mt-10 border-t border-white/15 pt-6 text-sm text-white/55">
-          (c) 2026 All Rights Reserved to Autocracy Machinery
+          {messages.footer.copyright}
         </div>
       </footer>
     </>

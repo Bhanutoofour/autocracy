@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 
 const STORAGE_KEY = "autocracy:selected-country";
+const SUPPORTED_COUNTRIES = new Set(["IN", "US", "CA", "AU", "DE", "LK"]);
 
 const COUNTRY_LABELS: Record<string, string> = {
   IN: "IN",
@@ -22,6 +23,11 @@ export default function CountrySwitcherButton({
 
   useEffect(() => {
     const syncCountry = () => {
+      const segment = window.location.pathname.split("/").filter(Boolean)[0]?.toUpperCase();
+      if (segment && SUPPORTED_COUNTRIES.has(segment)) {
+        setCountryCode(segment);
+        return;
+      }
       const saved = window.localStorage.getItem(STORAGE_KEY) ?? "IN";
       setCountryCode(COUNTRY_LABELS[saved] ?? "IN");
     };

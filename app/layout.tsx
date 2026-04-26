@@ -21,13 +21,13 @@ export const metadata: Metadata = {
     "agriculture trenchers",
   ],
   alternates: {
-    canonical: "/",
+    canonical: "/in/en",
   },
   openGraph: {
     title: "Infrastructure & Environmental Machines Manufacturer India | Autocracy Machinery",
     description:
       "Purpose-built heavy machinery, trenchers, and environmental equipment engineered for infrastructure, telecom, agri, water management, solar, and defence projects.",
-    url: "/",
+    url: "/in/en",
     siteName: "Autocracy Machinery",
     type: "website",
     images: [

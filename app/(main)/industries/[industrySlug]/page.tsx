@@ -3,12 +3,15 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getIndustryBySlug } from "@/actions/industryAction";
 import { titleToSlug } from "@/utils/slug";
+import { getRequestContentLanguage } from "@/app/_lib/i18n-server";
+import { tUi } from "@/app/_lib/i18n";
 
 type IndustryPageProps = {
   params: Promise<{ industrySlug: string }>;
 };
 
 export default async function IndustryPage({ params }: IndustryPageProps) {
+  const language = await getRequestContentLanguage();
   const { industrySlug } = await params;
   const resolved = await getIndustryBySlug(industrySlug);
   if (!resolved) notFound();
@@ -18,7 +21,7 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
 
   return (
     <main className="site-container py-12">
-      <p className="text-sm uppercase tracking-[0.2em] text-[#777]">Industry</p>
+      <p className="text-sm uppercase tracking-[0.2em] text-[#777]">{tUi(language, "industry")}</p>
       <h1 className="mt-3 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-4xl font-bold text-[#0a0a0b]">
         {industryData.title}
       </h1>
@@ -53,10 +56,10 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
       ) : (
         <div className="mt-6 flex gap-3">
           <Link className="rounded bg-black px-4 py-2 font-semibold text-[#f9c300]" href="/industries">
-            View all industries
+            {tUi(language, "view_all_industries")}
           </Link>
           <Link className="rounded border border-black/25 px-4 py-2 font-semibold" href="/products">
-            View products
+            {tUi(language, "view_products")}
           </Link>
         </div>
       )}

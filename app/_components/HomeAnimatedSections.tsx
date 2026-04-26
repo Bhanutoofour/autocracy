@@ -27,10 +27,16 @@ export function AnimatedAwardsSection({
   asset,
   awards,
   awardsGallery,
+  label,
+  heading,
+  description,
 }: {
   asset: string;
   awards: AwardItem[];
   awardsGallery: string[];
+  label: string;
+  heading: string;
+  description: string;
 }) {
   const photosRef = useRef<HTMLDivElement>(null);
   const awardsRef = useRef<HTMLDivElement>(null);
@@ -68,7 +74,7 @@ export function AnimatedAwardsSection({
       <div className="site-container">
         <div className="mx-auto max-w-[980px] text-center">
           <p className="mb-6 text-[14px] font-normal uppercase leading-none tracking-[0.7em] text-[#243245] sm:mb-9 sm:text-[18px] sm:tracking-[1.15em]">
-            Awards
+            {label}
           </p>
           <div className="relative mx-auto max-w-[900px] px-4 sm:px-8 lg:px-12">
             <span
@@ -78,9 +84,7 @@ export function AnimatedAwardsSection({
               {"{"}
             </span>
             <h2 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[28px] font-bold leading-[1.2] tracking-normal text-[#0a0a0b] sm:text-[34px] lg:text-[40px]">
-              We&apos;ve Been Recognized for Disrupting
-              <br className="hidden lg:block" />
-              the Industrial Game
+              {heading}
             </h2>
             <span
               aria-hidden="true"
@@ -90,9 +94,7 @@ export function AnimatedAwardsSection({
             </span>
           </div>
           <p className="mx-auto mt-6 max-w-[820px] text-[16px] font-normal leading-[1.5] text-[#20242a] sm:mt-8 sm:text-[18px] sm:leading-[1.45]">
-            From national startup honors to innovation awards, our journey is
-            backed by the best celebrating bold ideas, breakthrough impact, and
-            entrepreneurial excellence.
+            {description}
           </p>
         </div>
 
@@ -150,8 +152,16 @@ export function AnimatedAwardsSection({
 
 export function AnimatedTestimonialsSection({
   testimonials,
+  heading,
+  description,
+  previousLabel,
+  nextLabel,
 }: {
   testimonials: TestimonialItem[];
+  heading: string;
+  description: string;
+  previousLabel: string;
+  nextLabel: string;
 }) {
   const testimonialsRef = useRef<HTMLDivElement>(null);
 
@@ -188,16 +198,15 @@ export function AnimatedTestimonialsSection({
         <div className="mb-10 flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <h2 className="text-left font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[32px] font-bold leading-[1.05] tracking-normal text-[#0a0a0b] sm:text-[40px]">
-              Customer Testimonial
+              {heading}
             </h2>
             <p className="mt-5 max-w-[620px] text-[16px] font-normal leading-[1.5] text-[#20242a]">
-              Autocracy Machinery is trusted by fast-growth companies.
-              Here&apos;s what they have to say about us.
+              {description}
             </p>
           </div>
           <div className="hidden gap-4 lg:flex">
             <button
-              aria-label="Previous testimonial"
+              aria-label={previousLabel}
               className="grid size-11 place-items-center border border-[#d0d0d0] bg-[#f7f7f7] font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-semibold leading-none text-[#b5b5b5]"
               onClick={() => scrollTestimonials("prev")}
               type="button"
@@ -205,7 +214,7 @@ export function AnimatedTestimonialsSection({
               {"\u2190"}
             </button>
             <button
-              aria-label="Next testimonial"
+              aria-label={nextLabel}
               className="grid size-11 place-items-center border border-[var(--ink)] bg-white font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-semibold leading-none text-[#0a0a0b]"
               onClick={() => scrollTestimonials("next")}
               type="button"

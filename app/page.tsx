@@ -1,4 +1,5 @@
-import Image from "next/image";
+﻿import Image from "next/image";
+import Link from "next/link";
 import CountrySwitcherButton from "./_components/CountrySwitcherButton";
 import LocationGate from "./_components/LocationGate";
 import GlobalHeader from "./_components/GlobalHeader";
@@ -11,6 +12,12 @@ import {
   AnimatedAwardsSection,
   AnimatedTestimonialsSection,
 } from "./_components/HomeAnimatedSections";
+import {
+  getMessages,
+  type ContentLanguage,
+  translateIndustryLabel,
+} from "@/app/_lib/i18n";
+import { getRequestContentLanguage } from "@/app/_lib/i18n-server";
 
 const asset = "/home-assets/imports/Final-1/";
 
@@ -157,6 +164,295 @@ const testimonials = [
   },
 ];
 
+const localizedHomeCopy = {
+  hi: {
+    strengths: [
+      {
+        title: "à¤¹à¤° à¤­à¥‚à¤­à¤¾à¤— à¤•à¥‡ à¤²à¤¿à¤ à¤¬à¤¹à¥à¤‰à¤ªà¤¯à¥‹à¤—à¥€ à¤Ÿà¥à¤°à¥‡à¤‚à¤šà¤¿à¤‚à¤— à¤¸à¤®à¤¾à¤§à¤¾à¤¨",
+        body: "à¤¶à¤¹à¤°à¥€ à¤—à¤²à¤¿à¤¯à¤¾à¤°à¥‹à¤‚ à¤¸à¥‡ à¤²à¥‡à¤•à¤° à¤•à¤ à¤¿à¤¨ à¤—à¥à¤°à¤¾à¤®à¥€à¤£ à¤•à¥à¤·à¥‡à¤¤à¥à¤°à¥‹à¤‚ à¤¤à¤•, à¤¹à¤®à¤¾à¤°à¥€ à¤•à¥‰à¤®à¥à¤ªà¥ˆà¤•à¥à¤Ÿ à¤Ÿà¥à¤°à¥‡à¤‚à¤šà¤°à¥à¤¸ à¤”à¤° à¤¯à¥‚à¤Ÿà¤¿à¤²à¤¿à¤Ÿà¥€ à¤à¤•à¥à¤¸à¤•à¥ˆà¤µà¥‡à¤¶à¤¨ à¤®à¤¶à¥€à¤¨à¥‡à¤‚ à¤µà¤¿à¤µà¤¿à¤§ à¤ªà¤°à¤¿à¤¯à¥‹à¤œà¤¨à¤¾à¤“à¤‚ à¤•à¥‡ à¤²à¤¿à¤ à¤‰à¤ªà¤¯à¥à¤•à¥à¤¤ à¤¹à¥ˆà¤‚à¥¤",
+      },
+      {
+        title: "à¤à¤•à¥à¤¸à¤•à¥ˆà¤µà¥‡à¤Ÿà¤° à¤¸à¥‡ à¤¤à¥‡à¤œ à¤”à¤° à¤¸à¥à¤®à¤¾à¤°à¥à¤Ÿ à¤µà¤¿à¤•à¤²à¥à¤ª",
+        body: "à¤«à¤¾à¤‡à¤¬à¤° à¤•à¥‡à¤¬à¤², à¤¡à¥à¤°à¤¿à¤ª à¤²à¤¾à¤‡à¤¨ à¤¯à¤¾ à¤°à¤•à¥à¤·à¤¾ à¤¸à¤‚à¤šà¤¾à¤° à¤¸à¤¿à¤¸à¥à¤Ÿà¤® à¤¬à¤¿à¤›à¤¾à¤¨à¥‡ à¤®à¥‡à¤‚ à¤¹à¤®à¤¾à¤°à¥€ à¤®à¤¶à¥€à¤¨à¥‡à¤‚ à¤¸à¤¾à¤« à¤”à¤° à¤¤à¥‡à¤œ à¤Ÿà¥à¤°à¥‡à¤‚à¤šà¤¿à¤‚à¤— à¤¦à¥‡à¤¤à¥€ à¤¹à¥ˆà¤‚à¥¤",
+      },
+      {
+        title: "à¤®à¤¹à¤¤à¥à¤µà¤ªà¥‚à¤°à¥à¤£ à¤ªà¤°à¤¿à¤¯à¥‹à¤œà¤¨à¤¾à¤“à¤‚ à¤•à¥‡ à¤²à¤¿à¤ à¤­à¤°à¥‹à¤¸à¥‡à¤®à¤‚à¤¦ à¤‰à¤ªà¤•à¤°à¤£",
+        body: "à¤¸à¤°à¤•à¤¾à¤°à¥€, EPC à¤”à¤° CSR à¤ªà¥à¤°à¥‹à¤œà¥‡à¤•à¥à¤Ÿà¥à¤¸ à¤®à¥‡à¤‚ à¤‰à¤ªà¤¯à¥‹à¤— à¤•à¤¿à¤ à¤œà¤¾à¤¨à¥‡ à¤µà¤¾à¤²à¥‡ à¤¹à¤®à¤¾à¤°à¥‡ à¤‰à¤ªà¤•à¤°à¤£ à¤«à¥€à¤²à¥à¤¡-à¤Ÿà¥‡à¤¸à¥à¤Ÿà¥‡à¤¡, à¤•à¤®-à¤®à¥‡à¤‚à¤Ÿà¥‡à¤¨à¥‡à¤‚à¤¸ à¤”à¤° à¤‘à¤ªà¤°à¥‡à¤Ÿà¤°-à¤«à¥à¤°à¥‡à¤‚à¤¡à¤²à¥€ à¤¹à¥ˆà¤‚à¥¤",
+      },
+    ],
+    awardsLabel: "à¤ªà¥à¤°à¤¸à¥à¤•à¤¾à¤°",
+    awardsHeading: "à¤”à¤¦à¥à¤¯à¥‹à¤—à¤¿à¤• à¤•à¥à¤·à¥‡à¤¤à¥à¤° à¤®à¥‡à¤‚ à¤¬à¤¦à¤²à¤¾à¤µ à¤•à¥‡ à¤²à¤¿à¤ à¤¹à¤®à¥‡à¤‚ à¤¸à¤®à¥à¤®à¤¾à¤¨ à¤®à¤¿à¤²à¤¾ à¤¹à¥ˆ",
+    awardsDescription:
+      "à¤°à¤¾à¤·à¥à¤Ÿà¥à¤°à¥€à¤¯ à¤¸à¥à¤Ÿà¤¾à¤°à¥à¤Ÿà¤…à¤ª à¤¸à¤®à¥à¤®à¤¾à¤¨ à¤¸à¥‡ à¤²à¥‡à¤•à¤° à¤‡à¤¨à¥‹à¤µà¥‡à¤¶à¤¨ à¤…à¤µà¥‰à¤°à¥à¤¡ à¤¤à¤•, à¤¹à¤®à¤¾à¤°à¥€ à¤¯à¤¾à¤¤à¥à¤°à¤¾ à¤¸à¤¾à¤¹à¤¸à¥€ à¤µà¤¿à¤šà¤¾à¤°à¥‹à¤‚ à¤”à¤° à¤ªà¥à¤°à¤­à¤¾à¤µà¤¶à¤¾à¤²à¥€ à¤‰à¤ªà¤²à¤¬à¥à¤§à¤¿à¤¯à¥‹à¤‚ à¤¸à¥‡ à¤¸à¤®à¤°à¥à¤¥à¤¿à¤¤ à¤¹à¥ˆà¥¤",
+    testimonialHeading: "à¤—à¥à¤°à¤¾à¤¹à¤• à¤ªà¥à¤°à¤¶à¤‚à¤¸à¤¾à¤ªà¤¤à¥à¤°",
+    testimonialDescription:
+      "Autocracy Machinery à¤ªà¤° à¤¤à¥‡à¤œà¥€ à¤¸à¥‡ à¤¬à¤¢à¤¼à¤¤à¥€ à¤•à¤‚à¤ªà¤¨à¤¿à¤¯à¤¾à¤‚ à¤­à¤°à¥‹à¤¸à¤¾ à¤•à¤°à¤¤à¥€ à¤¹à¥ˆà¤‚à¥¤ à¤œà¤¾à¤¨à¤¿à¤ à¤µà¥‡ à¤¹à¤®à¤¾à¤°à¥‡ à¤¬à¤¾à¤°à¥‡ à¤®à¥‡à¤‚ à¤•à¥à¤¯à¤¾ à¤•à¤¹à¤¤à¥‡ à¤¹à¥ˆà¤‚à¥¤",
+    previousTestimonialLabel: "à¤ªà¤¿à¤›à¤²à¤¾ à¤ªà¥à¤°à¤¶à¤‚à¤¸à¤¾à¤ªà¤¤à¥à¤°",
+    nextTestimonialLabel: "à¤…à¤—à¤²à¤¾ à¤ªà¥à¤°à¤¶à¤‚à¤¸à¤¾à¤ªà¤¤à¥à¤°",
+    testimonialQuotes: [
+      "à¤—à¥à¤œà¤°à¤¾à¤¤ à¤®à¥‡à¤‚ à¤¹à¤®à¤¾à¤°à¥‡ à¤¸à¥‹à¤²à¤° à¤ªà¥à¤°à¥‹à¤œà¥‡à¤•à¥à¤Ÿ à¤•à¥‡ à¤²à¤¿à¤ à¤§à¥à¤°à¥à¤µà¤¾ 100 à¤®à¤¿à¤¨à¥€ à¤Ÿà¥à¤°à¥‡à¤‚à¤šà¤° à¤¬à¤¹à¥à¤¤ à¤…à¤šà¥à¤›à¤¾ à¤°à¤¹à¤¾à¥¤ à¤Ÿà¤¾à¤‡à¤Ÿ à¤¸à¥à¤ªà¥‡à¤¸ à¤®à¥‡à¤‚ à¤­à¥€ à¤¸à¤Ÿà¥€à¤• à¤Ÿà¥à¤°à¥‡à¤‚à¤šà¤¿à¤‚à¤— à¤®à¤¿à¤²à¥€à¥¤",
+      "à¤›à¤¤à¥à¤¤à¥€à¤¸à¤—à¤¢à¤¼ à¤®à¥‡à¤‚ à¤µà¤¾à¤Ÿà¤° à¤ªà¤¾à¤‡à¤ªà¤²à¤¾à¤‡à¤¨ à¤‡à¤‚à¤¸à¥à¤Ÿà¥‰à¤²à¥‡à¤¶à¤¨ à¤•à¥‡ à¤²à¤¿à¤ à¤°à¥à¤¦à¥à¤°à¤¾ 100 à¤šà¥‡à¤¨ à¤Ÿà¥à¤°à¥‡à¤‚à¤šà¤° à¤¨à¥‡ à¤¶à¤¾à¤¨à¤¦à¤¾à¤° à¤ªà¥à¤°à¤¦à¤°à¥à¤¶à¤¨ à¤•à¤¿à¤¯à¤¾ à¤”à¤° à¤•à¤¾à¤® à¤¤à¥‡à¤œ à¤¹à¥à¤†à¥¤",
+      "à¤¬à¤¿à¤¹à¤¾à¤° à¤®à¥‡à¤‚ à¤¯à¥‚à¤Ÿà¤¿à¤²à¤¿à¤Ÿà¥€ à¤ªà¤¾à¤‡à¤ªà¤²à¤¾à¤‡à¤¨ à¤‡à¤‚à¤¸à¥à¤Ÿà¥‰à¤²à¥‡à¤¶à¤¨ à¤•à¥‡ à¤²à¤¿à¤ à¤°à¥à¤¦à¥à¤°à¤¾ 100 XT à¤¨à¥‡ à¤¸à¤¾à¤« à¤Ÿà¥à¤°à¥‡à¤‚à¤š à¤”à¤° à¤¸à¥à¤®à¥‚à¤¥ à¤‘à¤ªà¤°à¥‡à¤¶à¤¨ à¤¦à¤¿à¤¯à¤¾à¥¤",
+      "à¤®à¤¹à¤¾à¤°à¤¾à¤·à¥à¤Ÿà¥à¤° à¤®à¥‡à¤‚ à¤«à¤¾à¤°à¥à¤® à¤ªà¤¾à¤‡à¤ªà¤²à¤¾à¤‡à¤¨ à¤‡à¤‚à¤¸à¥à¤Ÿà¥‰à¤²à¥‡à¤¶à¤¨ à¤•à¥‡ à¤²à¤¿à¤ à¤°à¥à¤¦à¥à¤°à¤¾ 150 XT à¤¬à¤¹à¥à¤¤ à¤‰à¤ªà¤¯à¥‹à¤—à¥€ à¤°à¤¹à¤¾ à¤”à¤° à¤°à¥€à¤µà¤°à¥à¤• à¤•à¤® à¤¹à¥à¤†à¥¤",
+      "OFC à¤Ÿà¥à¤°à¥‡à¤‚à¤šà¤¿à¤‚à¤— à¤®à¥‡à¤‚ à¤‡à¤¸ à¤®à¤¶à¥€à¤¨ à¤¨à¥‡ à¤²à¤—à¤¾à¤¤à¤¾à¤° à¤—à¤¹à¤°à¤¾à¤ˆ à¤”à¤° à¤šà¥Œà¤¡à¤¼à¤¾à¤ˆ à¤¬à¤¨à¤¾à¤ à¤°à¤–à¤¨à¥‡ à¤®à¥‡à¤‚ à¤®à¤¦à¤¦ à¤•à¥€à¥¤",
+      "à¤•à¤®à¥à¤ªà¥ˆà¤•à¥à¤Ÿ à¤—à¤¾à¤‚à¤µ à¤•à¥€ à¤¸à¤¡à¤¼à¤•à¥‹à¤‚ à¤ªà¤° à¤­à¥€ à¤‰à¤ªà¤•à¤°à¤£ à¤¨à¥‡ à¤…à¤šà¥à¤›à¤¾ à¤ªà¥à¤°à¤¦à¤°à¥à¤¶à¤¨ à¤•à¤¿à¤¯à¤¾ à¤”à¤° à¤¸à¤®à¤¯ à¤•à¥€ à¤¬à¤šà¤¤ à¤¹à¥à¤ˆà¥¤",
+      "à¤‘à¤Ÿà¥‹à¤•à¥à¤°à¥‡à¤¸à¥€ à¤•à¥€ à¤¸à¤ªà¥‹à¤°à¥à¤Ÿ à¤Ÿà¥€à¤® à¤¨à¥‡ à¤¸à¥‡à¤Ÿà¤…à¤ª à¤”à¤° à¤Ÿà¥à¤°à¤¾à¤¯à¤² à¤•à¥‡ à¤¦à¥Œà¤°à¤¾à¤¨ à¤…à¤šà¥à¤›à¥€ à¤®à¤¦à¤¦ à¤•à¥€; à¤®à¤¶à¥€à¤¨ à¤šà¤²à¤¾à¤¨à¤¾ à¤†à¤¸à¤¾à¤¨ à¤°à¤¹à¤¾à¥¤",
+    ],
+  },
+  fr: {
+    strengths: [
+      {
+        title: "Des solutions de tranchage polyvalentes pour tous les terrains",
+        body: "Des zones urbaines Ã©troites aux sites ruraux difficiles, nos machines compactes couvrent les projets telecom, eau, agriculture et solaire.",
+      },
+      {
+        title: "Des alternatives plus intelligentes et plus rapides aux excavatrices",
+        body: "Pour la pose de fibre, l'irrigation goutte-Ã -goutte ou les rÃ©seaux de dÃ©fense, nos machines offrent un tranchage plus propre et plus rapide.",
+      },
+      {
+        title: "Des Ã©quipements fiables pour les projets critiques",
+        body: "UtilisÃ©s dans les projets gouvernementaux et EPC, nos Ã©quipements sont testÃ©s sur le terrain, faciles Ã  utiliser et Ã  faible maintenance.",
+      },
+    ],
+    awardsLabel: "RÃ©compenses",
+    awardsHeading: "Nous avons Ã©tÃ© reconnus pour avoir transformÃ© le secteur industriel",
+    awardsDescription:
+      "Des distinctions startup nationales aux prix d'innovation, notre parcours met en avant des idÃ©es audacieuses et un impact rÃ©el.",
+    testimonialHeading: "TÃ©moignages clients",
+    testimonialDescription:
+      "Autocracy Machinery est approuvÃ©e par des entreprises en forte croissance. Voici ce qu'elles disent de nous.",
+    previousTestimonialLabel: "TÃ©moignage prÃ©cÃ©dent",
+    nextTestimonialLabel: "TÃ©moignage suivant",
+    testimonialQuotes: [
+      "La mini trancheuse Dhruva 100 a trÃ¨s bien fonctionnÃ© sur notre projet solaire au Gujarat, mÃªme dans des rangÃ©es serrÃ©es.",
+      "Pour notre installation de pipeline d'eau au Chhattisgarh, la Rudra 100 a livrÃ© des tranchÃ©es propres et rÃ©guliÃ¨res.",
+      "En Bihar, la Rudra 100 XT nous a permis une installation rapide avec des tranchÃ©es nettes et des opÃ©rations fluides.",
+      "Pour l'irrigation agricole au Maharashtra, la Rudra 150 XT a rÃ©duit les reprises et accÃ©lÃ©rÃ© l'exÃ©cution.",
+      "Pour les travaux OFC, la machine a maintenu une profondeur et une largeur constantes sur de longues sections.",
+      "L'Ã©quipement a bien performÃ© sur des routes de village compactes oÃ¹ les grosses excavatrices ne passaient pas.",
+      "L'Ã©quipe support d'Autocracy a bien accompagnÃ© nos opÃ©rateurs; la machine est restÃ©e simple Ã  utiliser et Ã  entretenir.",
+    ],
+  },
+  es: {
+    strengths: [
+      {
+        title: "Soluciones versÃ¡tiles de zanjeo para todo tipo de terreno",
+        body: "Desde corredores urbanos estrechos hasta zonas rurales difÃ­ciles, nuestras mÃ¡quinas compactas manejan proyectos diversos con eficiencia.",
+      },
+      {
+        title: "Alternativas mÃ¡s inteligentes y rÃ¡pidas que las excavadoras",
+        body: "Para fibra, riego por goteo o sistemas de defensa, nuestras mÃ¡quinas ofrecen zanjas limpias y mayor velocidad de trabajo.",
+      },
+      {
+        title: "Equipos confiables para proyectos crÃ­ticos",
+        body: "Usados en proyectos gubernamentales y EPC, nuestros equipos son probados en campo, de bajo mantenimiento y fÃ¡ciles de operar.",
+      },
+    ],
+    awardsLabel: "Premios",
+    awardsHeading: "Hemos sido reconocidos por transformar el sector industrial",
+    awardsDescription:
+      "Desde reconocimientos nacionales de startups hasta premios de innovaciÃ³n, nuestro camino destaca por ideas audaces e impacto real.",
+    testimonialHeading: "Testimonios de clientes",
+    testimonialDescription:
+      "Empresas de rÃ¡pido crecimiento confÃ­an en Autocracy Machinery. Esto es lo que dicen sobre nosotros.",
+    previousTestimonialLabel: "Testimonio anterior",
+    nextTestimonialLabel: "Siguiente testimonio",
+    testimonialQuotes: [
+      "La mini zanjadora Dhruva 100 funcionÃ³ muy bien en nuestro proyecto solar en Gujarat, incluso en filas estrechas.",
+      "Para la instalaciÃ³n de tuberÃ­as de agua en Chhattisgarh, la Rudra 100 entregÃ³ zanjas limpias y consistentes.",
+      "En Bihar, la Rudra 100 XT nos dio operaciones fluidas y zanjas rÃ¡pidas para instalaciÃ³n de tuberÃ­as.",
+      "Para instalaciÃ³n agrÃ­cola en Maharashtra, la Rudra 150 XT redujo retrabajos y acelerÃ³ resultados.",
+      "En trabajos OFC, la mÃ¡quina mantuvo profundidad y ancho constantes en tramos largos.",
+      "El equipo funcionÃ³ bien en caminos rurales compactos donde excavadoras grandes no podÃ­an moverse.",
+      "El equipo de soporte de Autocracy ayudÃ³ durante la puesta en marcha; la mÃ¡quina fue fÃ¡cil de operar y mantener.",
+    ],
+  },
+  de: {
+    strengths: [
+      {
+        title: "Vielseitige Grabenloesungen fuer jedes Gelaende",
+        body: "Von engen Staedten bis zu schwierigen laendlichen Standorten sind unsere kompakten Maschinen fuer Telekom-, Wasser-, Landwirtschafts-, Verteidigungs- und Solarprojekte ausgelegt.",
+      },
+      {
+        title: "Intelligentere und schnellere Alternative zu Baggern",
+        body: "Ob Glasfaser, Tropfbewaesserung oder Verteidigungskommunikation - unsere Maschinen ermoeglichen sauberes und schnelles Graben.",
+      },
+      {
+        title: "Zuverlaessige Ausruestung fuer kritische Projekte",
+        body: "In Regierungs-, EPC- und CSR-Projekten bewaehrt: feldgetestet, wartungsarm und bedienerfreundlich.",
+      },
+    ],
+    awardsLabel: "Auszeichnungen",
+    awardsHeading: "Wir wurden für unsere Innovation in der Industrie ausgezeichnet",
+    awardsDescription:
+      "Von nationalen Startup-Ehrungen bis zu Innovationspreisen zeigt unsere Reise mutige Ideen und messbare Wirkung.",
+    testimonialHeading: "Kundenstimmen",
+    testimonialDescription:
+      "Autocracy Machinery genießt das Vertrauen schnell wachsender Unternehmen. Das sagen sie über uns.",
+    previousTestimonialLabel: "Vorherige Bewertung",
+    nextTestimonialLabel: "Nächste Bewertung",
+    testimonialQuotes: [
+      "Der Dhruva 100 Mini-Trencher hat in unserem Solarprojekt in Gujarat sehr gut funktioniert - schnell und praezise, auch in engen Reihen.",
+      "Der Rudra 100 war fuer unser Wasserleitungsprojekt in Chhattisgarh sehr effizient und lieferte saubere, gleichmaessige Graeben.",
+      "Mit dem Rudra 100 XT konnten wir in Bihar Leitungsarbeiten schnell und sauber umsetzen.",
+      "Beim Farm-Pipeline-Projekt in Maharashtra hat der Rudra 150 XT Nacharbeit reduziert und den Ablauf beschleunigt.",
+      "Bei OFC-Arbeiten hielt die Maschine Tiefe und Breite ueber lange Strecken konstant.",
+      "Auf engen Dorfstrassen arbeitete die Maschine stark und sparte Zeit sowie Wiederherstellungsaufwand.",
+      "Das Support-Team von Autocracy hat unsere Operatoren gut begleitet; die Maschine war einfach zu bedienen und zu warten.",
+    ],
+  },
+  ar: {
+    strengths: [
+      {
+        title: "حلول حفر خنادق متعددة الاستخدام لكل تضاريس",
+        body: "من الممرات الحضرية الضيقة إلى المواقع الريفية الصعبة، صُممت معداتنا المدمجة لأعمال الاتصالات والمياه والزراعة والدفاع والطاقة الشمسية.",
+      },
+      {
+        title: "بدائل أذكى وأسرع من الحفارات",
+        body: "سواء لتمديد كابلات الألياف أو خطوط الري بالتنقيط أو أنظمة الاتصالات الدفاعية، توفر آلاتنا حفرًا أنظف وأسرع.",
+      },
+      {
+        title: "معدات موثوقة للمشاريع الحيوية",
+        body: "مستخدمة في مشاريع حكومية وEPC وCSR، كما نوفر حلولًا مجربة ميدانيًا، منخفضة الصيانة، وسهلة التشغيل.",
+      },
+    ],
+    awardsLabel: "الجوائز",
+    awardsHeading: "تم تكريمنا لإحداث تغيير في القطاع الصناعي",
+    awardsDescription:
+      "من تكريمات الشركات الناشئة الوطنية إلى جوائز الابتكار، تعكس رحلتنا أفكارًا جريئة وتأثيرًا حقيقيًا.",
+    testimonialHeading: "آراء العملاء",
+    testimonialDescription:
+      "تحظى Autocracy Machinery بثقة الشركات سريعة النمو. إليك ما يقولونه عنا.",
+    previousTestimonialLabel: "التعليق السابق",
+    nextTestimonialLabel: "التعليق التالي",
+    testimonialQuotes: [
+      "عملت حفارة Dhruva 100 الصغيرة بشكل ممتاز في مشروعنا الشمسي في غوجارات، وقدمت دقة عالية حتى في المساحات الضيقة.",
+      "أثبتت Rudra 100 كفاءة كبيرة في مشروع تركيب خطوط المياه في تشهاتيسجاره وقدمت خنادق نظيفة ومتسقة.",
+      "استخدمنا Rudra 100 XT في تركيب خطوط المرافق في بيهار وكانت النتائج سريعة وسلسة مع جودة حفر ممتازة.",
+      "في مشروع خطوط المزارع في ماهاراشترا، ساعدتنا Rudra 150 XT على تقليل إعادة العمل وتسريع التنفيذ.",
+      "في أعمال OFC ساعدتنا الآلة على الحفاظ على عمق وعرض ثابتين عبر مسافات طويلة.",
+      "عملت المعدات جيدًا في الطرق القروية الضيقة حيث لا تستطيع الحفارات الكبيرة التحرك بحرية.",
+      "دعم فريق Autocracy مشغلينا أثناء الإعداد والتجارب وكانت الآلة سهلة التشغيل والصيانة.",
+    ],
+  },
+  zh: {
+    strengths: [
+      {
+        title: "适用于各种地形的多功能开沟方案",
+        body: "从狭窄城市通道到复杂乡村现场，我们的紧凑型设备可高效支持通信、水务、农业、国防与光伏项目。",
+      },
+      {
+        title: "比挖掘机更智能、更高效的选择",
+        body: "无论是光纤铺设、滴灌管线还是国防通信工程，我们的设备都能实现更干净、更快速的开沟作业。",
+      },
+      {
+        title: "关键项目值得信赖的设备",
+        body: "广泛应用于政府、EPC 与 CSR 项目，设备经过现场验证、维护成本低、操作友好。",
+      },
+    ],
+    awardsLabel: "奖项",
+    awardsHeading: "我们因推动工业变革而受到认可",
+    awardsDescription:
+      "从国家级创业荣誉到创新奖项，我们的旅程体现了大胆创意与实际影响力。",
+    testimonialHeading: "客户评价",
+    testimonialDescription:
+      "Autocracy Machinery 深受高速成长企业信赖。以下是他们的评价。",
+    previousTestimonialLabel: "上一条评价",
+    nextTestimonialLabel: "下一条评价",
+    testimonialQuotes: [
+      "Dhruva 100 小型开沟机在古吉拉特邦太阳能项目中表现出色，即使在狭窄区域也能保持精度与效率。",
+      "Rudra 100 在恰蒂斯加尔邦给水管线项目中开沟稳定、效率高，明显减少了人工工作量。",
+      "我们在比哈尔邦使用 Rudra 100 XT 进行管线施工，开沟整齐、作业顺畅、进度更快。",
+      "Rudra 150 XT 在马哈拉施特拉邦农田管线项目中有效减少返工并提升了施工效率。",
+      "在 OFC 施工中，该设备可在长距离范围内持续保持稳定的深度与宽度。",
+      "设备在狭窄乡村道路上同样表现良好，节省时间并减少路面恢复工作。",
+      "Autocracy 支持团队在调试与试运行阶段提供了良好指导，设备易于操作与维护。",
+    ],
+  },
+  ja: {
+    strengths: [
+      {
+        title: "あらゆる地形に対応する多用途トレンチングソリューション",
+        body: "都市部の狭い区間から厳しい地方現場まで、当社のコンパクト機は通信・水道・農業・防衛・太陽光案件に対応します。",
+      },
+      {
+        title: "油圧ショベルより賢く、速い代替手段",
+        body: "光ファイバー敷設、点滴灌漑、防衛通信工事などで、よりクリーンかつ高速な掘削を実現します。",
+      },
+      {
+        title: "重要プロジェクトに信頼される機械",
+        body: "政府・EPC・CSR案件で実績があり、現場で検証済み、低メンテナンスで扱いやすい設計です。",
+      },
+    ],
+    awardsLabel: "受賞歴",
+    awardsHeading: "私たちは産業変革への貢献で評価されています",
+    awardsDescription:
+      "国内スタートアップ表彰からイノベーション賞まで、私たちの歩みは大胆な発想と確かな成果に裏付けられています。",
+    testimonialHeading: "お客様の声",
+    testimonialDescription:
+      "Autocracy Machinery は成長企業から信頼されています。実際の声をご覧ください。",
+    previousTestimonialLabel: "前のレビュー",
+    nextTestimonialLabel: "次のレビュー",
+    testimonialQuotes: [
+      "Dhruva 100 ミニトレンチャーは、グジャラート州の太陽光案件で非常に良好に機能し、狭い区画でも精度を保てました。",
+      "Rudra 100 はチャッティースガル州の水道管工事で高い効率を示し、均一で綺麗な溝を実現しました。",
+      "ビハール州で Rudra 100 XT を使用したところ、配管施工がスムーズかつ迅速に進みました。",
+      "マハラシュトラ州の農地配管工事では、Rudra 150 XT により手戻りが減り、作業が加速しました。",
+      "OFC工事では、長距離でも溝の深さと幅を安定して維持できました。",
+      "大型機が入りにくい狭い村道でも性能を発揮し、時間短縮と復旧作業の削減に貢献しました。",
+      "Autocracy のサポートチームは立上げ時に丁寧に支援してくれ、操作と保守が容易でした。",
+    ],
+  },
+  bn: {
+    strengths: [
+      {
+        title: "সব ধরনের ভূখণ্ডে কার্যকর বহুমুখী ট্রেঞ্চিং সমাধান",
+        body: "সংকীর্ণ শহুরে করিডর থেকে কঠিন গ্রামীণ সাইট পর্যন্ত, আমাদের কমপ্যাক্ট মেশিন টেলিকম, পানি, কৃষি, প্রতিরক্ষা ও সোলার প্রকল্পে উপযোগী।",
+      },
+      {
+        title: "এক্সক্যাভেটরের চেয়ে স্মার্ট ও দ্রুত বিকল্প",
+        body: "ফাইবার কেবল, ড্রিপ লাইনের কাজ বা প্রতিরক্ষা যোগাযোগে আমাদের মেশিন আরও পরিষ্কার ও দ্রুত ট্রেঞ্চিং দেয়।",
+      },
+      {
+        title: "গুরুত্বপূর্ণ প্রকল্পের জন্য নির্ভরযোগ্য যন্ত্রপাতি",
+        body: "সরকারি, EPC ও CSR প্রকল্পে ব্যবহৃত আমাদের যন্ত্র মাঠ-পরীক্ষিত, কম রক্ষণাবেক্ষণপ্রয়োজন এবং অপারেটর-বন্ধুত্বপূর্ণ।",
+      },
+    ],
+    awardsLabel: "পুরস্কার",
+    awardsHeading: "শিল্পে নতুন পরিবর্তন আনার জন্য আমরা স্বীকৃত",
+    awardsDescription:
+      "জাতীয় স্টার্টআপ সম্মান থেকে ইনোভেশন অ্যাওয়ার্ড পর্যন্ত, আমাদের যাত্রা সাহসী ভাবনা ও বাস্তব প্রভাবের প্রমাণ।",
+    testimonialHeading: "গ্রাহক মতামত",
+    testimonialDescription:
+      "Autocracy Machinery দ্রুত বর্ধনশীল কোম্পানিগুলোর ভরসার নাম। তারা আমাদের সম্পর্কে যা বলছেন।",
+    previousTestimonialLabel: "পূর্বের মতামত",
+    nextTestimonialLabel: "পরের মতামত",
+    testimonialQuotes: [
+      "গুজরাটের সোলার প্রকল্পে Dhruva 100 মিনি ট্রেঞ্চার দারুণ কাজ করেছে, সংকীর্ণ জায়গাতেও নির্ভুলতা বজায় ছিল।",
+      "ছত্তীসগড়ে পানি পাইপলাইন প্রকল্পে Rudra 100 খুব ভালো দক্ষতা দেখিয়েছে এবং পরিষ্কার, সমান ট্রেঞ্চ দিয়েছে।",
+      "বিহারে ইউটিলিটি পাইপলাইন স্থাপনে Rudra 100 XT দ্রুত ও মসৃণ অপারেশন নিশ্চিত করেছে।",
+      "মহারাষ্ট্রে কৃষি পাইপলাইন কাজে Rudra 150 XT রিওয়ার্ক কমিয়ে কাজের গতি বাড়িয়েছে।",
+      "OFC ট্রেঞ্চিংয়ে দীর্ঘ দূরত্বজুড়ে গভীরতা ও প্রস্থ স্থির রাখতে মেশিনটি কার্যকর ছিল।",
+      "সংকীর্ণ গ্রামীণ রাস্তাতেও যন্ত্রটি ভালো পারফর্ম করেছে এবং সময় ও পুনরুদ্ধার খরচ কমিয়েছে।",
+      "Autocracy টিম সেটআপ ও ট্রায়ালে ভালো সহায়তা দিয়েছে; মেশিন চালানো ও রক্ষণাবেক্ষণ সহজ ছিল।",
+    ],
+  },} satisfies Partial<
+  Record<
+    ContentLanguage,
+    {
+      strengths: typeof strengths;
+      awardsLabel: string;
+      awardsHeading: string;
+      awardsDescription: string;
+      testimonialHeading: string;
+      testimonialDescription: string;
+      previousTestimonialLabel: string;
+      nextTestimonialLabel: string;
+      testimonialQuotes: string[];
+    }
+  >
+>;
+
 const clients = [
   { name: "MEIL", src: "/images/clients/meil.png", width: 220, height: 78 },
   { name: "LARSEN & TOUBRO", src: "/images/clients/larsen-toubro.png", width: 220, height: 72 },
@@ -225,7 +521,7 @@ const stories = [
     logo: "6f79ddcbbf2d6df60bdc72d10ee750b4062fe76d.png",
     title: "The Right Machine For The Right Job",
     excerpt:
-      "Autocracy Machinery is India’s leading manufacturer of speciality construction, agricultural and infrastructure machinery...",
+      "Autocracy Machinery is Indiaâ€™s leading manufacturer of speciality construction, agricultural and infrastructure machinery...",
   },
   {
     logo: "4c8d790d9f0e269594d166de2a1f2bc31756cb7d.png",
@@ -251,7 +547,7 @@ const stories = [
 
 function Logo() {
   return (
-    <a
+    <Link
       aria-label="Autocracy Machinery home"
       className="block w-[168px] sm:w-[190px]"
       href="/"
@@ -264,7 +560,7 @@ function Logo() {
         src="/logo.png"
         width={668}
       />
-    </a>
+    </Link>
   );
 }
 
@@ -489,7 +785,8 @@ function Header() {
   );
 }
 
-function Hero() {
+function Hero({ language }: { language: ContentLanguage }) {
+  const messages = getMessages(language);
   return (
     <section className="relative min-h-[560px] overflow-hidden bg-[var(--ink)] text-white lg:min-h-[671px]">
       <Image
@@ -516,7 +813,7 @@ function Hero() {
             className="flex h-11 w-[132px] items-center justify-center bg-[var(--brand-yellow)] px-4 text-center font-['Roboto',Arial,Helvetica,sans-serif] text-[16px] font-semibold uppercase leading-5 tracking-normal text-[#0a0a0b] transition hover:brightness-95 lg:h-[60px] lg:w-[204px]"
             href="/contact-us"
           >
-            Get a quote
+            {messages.common.getQuote}
           </a>
         </div>
       </div>
@@ -535,9 +832,12 @@ function Hero() {
 
 function IndustriesSection({
   industries,
+  language,
 }: {
   industries: { title: string; image: string }[];
+  language: ContentLanguage;
 }) {
+  const messages = getMessages(language);
   const resolveIndustryImage = (image: string) => {
     if (image.startsWith("http://") || image.startsWith("https://") || image.startsWith("/")) {
       return image;
@@ -550,15 +850,15 @@ function IndustriesSection({
       <div className="site-container">
         <div className="mb-12 text-center">
           <p className="mb-6 text-[18px] font-normal uppercase leading-none tracking-[0.75em] text-[#243245]">
-            Industries
+            {messages.home.industriesTitle}
           </p>
           <h2 className="text-center font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[40px] font-bold leading-[1.05] tracking-normal text-[#0a0a0b]">
-            Choose Your Industry
+            {messages.home.chooseIndustry}
           </h2>
         </div>
         <div className="grid grid-cols-2 gap-4 sm:gap-[30px] lg:grid-cols-4">
           {industries.map((industry, index) => (
-            <a
+            <Link
               className="group relative block h-[180px] overflow-hidden rounded-lg bg-[#312e33] sm:h-[250px]"
               href={industryHref(industry.title)}
               key={`${industry.title}-${index}`}
@@ -572,36 +872,41 @@ function IndustriesSection({
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-black/5" />
               <h3 className="absolute inset-x-0 bottom-0 p-5 align-bottom font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-semibold leading-[1.2] tracking-normal text-white">
-                {industry.title}
+                {translateIndustryLabel(industry.title, language)}
               </h3>
-            </a>
+            </Link>
           ))}
         </div>
         <div className="mt-10 flex justify-center">
-          <a
+          <Link
             className="button-gold-text figma-button bg-[var(--ink)]"
             href="/industries"
             style={{ color: "#f9c300" }}
           >
-            View all industries
-          </a>
+            {messages.home.viewAllIndustries}
+          </Link>
         </div>
       </div>
     </section>
   );
 }
 
-function Strengths() {
+function Strengths({
+  language,
+  items,
+}: {
+  language: ContentLanguage;
+  items: typeof strengths;
+}) {
+  const messages = getMessages(language);
   return (
     <section className="bg-white py-16 lg:py-[72px]">
       <div className="site-container">
         <h2 className="max-w-[640px] font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[38px] font-bold leading-[1.18] tracking-normal text-[#0a0a0b] lg:text-[48px] lg:leading-[1.2]">
-          Built for India. Engineered
-          <br />
-          for Efficiency.
+          {messages.home.strengthsHeading}
         </h2>
         <div className="mt-24 grid gap-12 lg:grid-cols-3 lg:gap-[86px]">
-          {strengths.map((item) => (
+          {items.map((item) => (
             <article className="pt-0" key={item.title}>
               <div className="mb-6 flex h-4 items-start">
                 <span className="h-4 w-[70px] bg-[var(--brand-yellow)]" />
@@ -621,7 +926,8 @@ function Strengths() {
   );
 }
 
-function Certifications() {
+function Certifications({ language }: { language: ContentLanguage }) {
+  const messages = getMessages(language);
   return (
     <section
       className="bg-[var(--section-gray)] py-16 lg:py-20"
@@ -629,7 +935,7 @@ function Certifications() {
     >
       <div className="site-container">
         <h2 className="text-center font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[36px] font-bold leading-[1.12] tracking-normal text-[#0a0a0b] sm:text-[44px]">
-          Our Certifications
+          {messages.home.certificationsHeading}
         </h2>
 
         <div className="mt-10 flex gap-0 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:grid lg:grid-cols-6">
@@ -662,14 +968,13 @@ function Certifications() {
   );
 }
 
-function Stories() {
+function Stories({ language }: { language: ContentLanguage }) {
+  const messages = getMessages(language);
   return (
     <section className="bg-white py-16 lg:py-20" id="stories">
       <div className="site-container">
         <h2 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[32px] font-bold leading-[1.25] tracking-normal text-[#0a0a0b] sm:text-[38px] lg:text-[44px]">
-          Our Story,
-          <br />
-          Through Their Words
+          {messages.home.storiesHeading}
         </h2>
 
         <div className="mt-10 flex gap-5 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -697,7 +1002,7 @@ function Stories() {
                 className="mt-auto text-[16px] font-medium leading-5 text-[#2f64b7]"
                 href="/about-us"
               >
-                Read More
+                {messages.common.readMore}
               </a>
             </article>
           ))}
@@ -707,13 +1012,14 @@ function Stories() {
   );
 }
 
-function HappyClients() {
+function HappyClients({ language }: { language: ContentLanguage }) {
+  const messages = getMessages(language);
   return (
     <section className="bg-white pt-12 pb-20 lg:pt-14 lg:pb-24">
       <div className="site-container">
         <aside className="mx-auto w-full max-w-[1260px]">
           <h2 className="w-full text-center font-['Roboto',Arial,Helvetica,sans-serif] text-[40px] font-black leading-[1.2] tracking-normal text-[#0A0A0B]">
-            Happy Clients
+            {messages.home.happyClients}
           </h2>
 
           <div className="mt-9 flex w-full items-center justify-between gap-10 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -750,6 +1056,33 @@ const organizationSchema = {
 };
 
 export default async function Home() {
+  const language = await getRequestContentLanguage();
+  const localized = localizedHomeCopy[language as keyof typeof localizedHomeCopy];
+  const strictLocalized = language === "en" ? null : localized;
+
+  const strengthsCopy = strictLocalized?.strengths ?? strengths;
+  const awardsLabelCopy = strictLocalized?.awardsLabel ?? "Awards";
+  const awardsHeadingCopy =
+    strictLocalized?.awardsHeading ?? "We've Been Recognized for Disrupting the Industrial Game";
+  const awardsDescriptionCopy =
+    strictLocalized?.awardsDescription ??
+    "From national startup honors to innovation awards, our journey is backed by the best celebrating bold ideas, breakthrough impact, and entrepreneurial excellence.";
+  const testimonialHeadingCopy =
+    strictLocalized?.testimonialHeading ?? "Customer Testimonial";
+  const testimonialDescriptionCopy =
+    strictLocalized?.testimonialDescription ??
+    "Autocracy Machinery is trusted by fast-growth companies. Here's what they have to say about us.";
+  const previousTestimonialLabelCopy =
+    strictLocalized?.previousTestimonialLabel ?? "Previous testimonial";
+  const nextTestimonialLabelCopy =
+    strictLocalized?.nextTestimonialLabel ?? "Next testimonial";
+  const testimonialsCopy = testimonials.map((item, index) => ({
+    ...item,
+    quote:
+      language === "en"
+        ? item.quote
+        : strictLocalized?.testimonialQuotes[index] ?? "",
+  }));
   let homeIndustries: { title: string; image: string }[] = fallbackIndustries;
   let homeProducts: { name: string; image: string }[] = fallbackProducts;
 
@@ -784,20 +1117,34 @@ export default async function Home() {
         type="application/ld+json"
       />
       <GlobalHeader />
-      <Hero />
-      <IndustriesSection industries={homeIndustries} />
-      <HomeProductsSection assetBasePath={asset} products={homeProducts} />
-      <Strengths />
+      <Hero language={language} />
+      <IndustriesSection industries={homeIndustries} language={language} />
+      <HomeProductsSection
+        assetBasePath={asset}
+        language={language}
+        products={homeProducts}
+      />
+      <Strengths items={strengthsCopy} language={language} />
       <AnimatedAwardsSection
         asset={asset}
         awards={awards}
         awardsGallery={awardsGallery}
+        description={awardsDescriptionCopy}
+        heading={awardsHeadingCopy}
+        label={awardsLabelCopy}
       />
-      <Certifications />
-      <Stories />
-      <AnimatedTestimonialsSection testimonials={testimonials} />
-      <HappyClients />
+      <Certifications language={language} />
+      <Stories language={language} />
+      <AnimatedTestimonialsSection
+        description={testimonialDescriptionCopy}
+        heading={testimonialHeadingCopy}
+        nextLabel={nextTestimonialLabelCopy}
+        previousLabel={previousTestimonialLabelCopy}
+        testimonials={testimonialsCopy}
+      />
+      <HappyClients language={language} />
       <UniversalFooter />
     </main>
   );
 }
+

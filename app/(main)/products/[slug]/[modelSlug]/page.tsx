@@ -2,12 +2,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getModelByProductSlugAndModelNumberSlug } from "@/actions/modelAction";
+import { getRequestContentLanguage } from "@/app/_lib/i18n-server";
+import { tUi } from "@/app/_lib/i18n";
 
 type ProductModelPageProps = {
   params: Promise<{ slug: string; modelSlug: string }>;
 };
 
 export default async function ProductModelPage({ params }: ProductModelPageProps) {
+  const language = await getRequestContentLanguage();
   const { slug, modelSlug } = await params;
   const resolved = await getModelByProductSlugAndModelNumberSlug(slug, modelSlug);
   if (!resolved) notFound();
@@ -16,7 +19,7 @@ export default async function ProductModelPage({ params }: ProductModelPageProps
 
   return (
     <main className="site-container py-12">
-      <p className="text-sm uppercase tracking-[0.2em] text-[#777]">Model</p>
+      <p className="text-sm uppercase tracking-[0.2em] text-[#777]">{tUi(language, "models")}</p>
       <h1 className="mt-3 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-4xl font-bold text-[#0a0a0b]">
         {modelData.modelTitle} ({modelData.modelNumber})
       </h1>
@@ -45,13 +48,12 @@ export default async function ProductModelPage({ params }: ProductModelPageProps
 
       <div className="mt-10 flex gap-3">
         <Link className="rounded bg-black px-4 py-2 font-semibold text-[#f9c300]" href={`/products/${slug}`}>
-          Back to product
+          {tUi(language, "back_to_product")}
         </Link>
         <Link className="rounded border border-black/25 px-4 py-2 font-semibold" href="/contact-us">
-          Contact us
+          {tUi(language, "contact_us")}
         </Link>
       </div>
     </main>
   );
 }
-

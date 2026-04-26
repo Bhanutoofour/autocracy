@@ -1,6 +1,11 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import {
+  DEFAULT_LANGUAGE,
+  isSupportedLanguage,
+} from "@/app/_lib/locale-config";
+import { getContentLanguageFromPath, getMessages } from "@/app/_lib/i18n";
 
 type CountryCode = "IN" | "US" | "CA" | "AU" | "DE" | "LK";
 
@@ -19,6 +24,8 @@ const COUNTRY_OPTIONS: CountryOption[] = [
 ];
 
 const STORAGE_KEY = "autocracy:selected-country";
+const LANGUAGE_STORAGE_KEY = "autocracy:selected-language";
+const COUNTRY_SEGMENTS = COUNTRY_OPTIONS.map((item) => item.code.toLowerCase());
 
 function isSupportedCountry(value: string): value is CountryCode {
   return COUNTRY_OPTIONS.some((item) => item.code === value);
@@ -31,13 +38,13 @@ function getCountryLabel(code: CountryCode): string {
 export default function LocationGate() {
   const [open, setOpen] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState<CountryCode>("IN");
-  const [showComingSoon, setShowComingSoon] = useState(false);
-  const [comingSoonCountry, setComingSoonCountry] = useState<CountryCode>("US");
+  const [language, setLanguage] = useState<"en" | "hi" | "fr" | "es">("en");
 
   const selectedLabel = useMemo(
     () => getCountryLabel(selectedCountry),
     [selectedCountry],
   );
+  const messages = getMessages(language);
 
   useEffect(() => {
     let active = true;
@@ -47,13 +54,12 @@ export default function LocationGate() {
         typeof window !== "undefined"
           ? window.localStorage.getItem(STORAGE_KEY)
           : null;
+      if (typeof window !== "undefined") {
+        setLanguage(getContentLanguageFromPath(window.location.pathname));
+      }
 
       if (savedCountry && isSupportedCountry(savedCountry)) {
         setSelectedCountry(savedCountry);
-        if (savedCountry !== "IN") {
-          setComingSoonCountry(savedCountry);
-          setShowComingSoon(true);
-        }
         return;
       }
 
@@ -103,25 +109,32 @@ export default function LocationGate() {
     window.dispatchEvent(new Event("country-updated"));
     setOpen(false);
 
-    if (selectedCountry === "IN") {
-      setShowComingSoon(false);
-      return;
-    }
+    const nextCountry = selectedCountry.toLowerCase();
+    const current = window.location.pathname;
+    const pathSegments = current.split("/").filter(Boolean);
+    const firstSegment = pathSegments[0]?.toLowerCase();
+    const secondSegment = pathSegments[1]?.toLowerCase();
+    const savedLanguage = (window.localStorage.getItem(LANGUAGE_STORAGE_KEY) ?? "").toLowerCase();
+    const nextLanguage =
+      (savedLanguage && isSupportedLanguage(savedLanguage) && savedLanguage) ||
+      (secondSegment && isSupportedLanguage(secondSegment) && secondSegment) ||
+      DEFAULT_LANGUAGE;
+    const baseSegments = COUNTRY_SEGMENTS.includes(firstSegment)
+      ? (secondSegment && isSupportedLanguage(secondSegment)
+          ? pathSegments.slice(2)
+          : pathSegments.slice(1))
+      : pathSegments;
+    const remainderPath = baseSegments.length > 0 ? `/${baseSegments.join("/")}` : "";
+    const targetPath = `/${nextCountry}/${nextLanguage}${remainderPath}`;
+    const targetUrl = `${targetPath}${window.location.search}${window.location.hash}`;
 
-    setComingSoonCountry(selectedCountry);
-    setShowComingSoon(true);
+    if (targetUrl !== `${window.location.pathname}${window.location.search}${window.location.hash}`) {
+      window.location.assign(targetUrl);
+    }
   };
 
   const handleCancel = () => {
     setOpen(false);
-  };
-
-  const switchToIndia = () => {
-    const india = "IN";
-    window.localStorage.setItem(STORAGE_KEY, india);
-    window.dispatchEvent(new Event("country-updated"));
-    setSelectedCountry(india);
-    setShowComingSoon(false);
   };
 
   return (
@@ -131,7 +144,7 @@ export default function LocationGate() {
           <div className="w-full max-w-[760px] overflow-hidden rounded-md bg-[#ececec] shadow-[0_20px_50px_rgba(0,0,0,0.3)]">
             <div className="bg-[var(--brand-yellow)] px-6 py-5 sm:px-10 sm:py-6">
               <h2 className="font-['Roboto',Arial,Helvetica,sans-serif] text-[22px] font-extrabold leading-[1.15] text-[#0a0a0b] sm:text-[28px]">
-                Please confirm your location
+                {messages.locationGate.title}
               </h2>
             </div>
 
@@ -140,7 +153,7 @@ export default function LocationGate() {
                 className="mb-3 block font-['Roboto',Arial,Helvetica,sans-serif] text-[14px] font-normal text-[#20242a] sm:text-[16px]"
                 htmlFor="country-select"
               >
-                Select Country
+                {messages.locationGate.selectCountry}
               </label>
               <div className="relative">
                 <select
@@ -182,45 +195,22 @@ export default function LocationGate() {
                   onClick={handleConfirm}
                   type="button"
                 >
-                  Confirm
+                  {messages.locationGate.confirm}
                 </button>
                 <button
                   className="h-[54px] rounded-md border border-black/45 bg-transparent font-['Roboto',Arial,Helvetica,sans-serif] text-[18px] font-bold text-[#0a0a0b] transition hover:bg-black/5 sm:text-[20px]"
                   onClick={handleCancel}
                   type="button"
                 >
-                  Cancel
+                  {messages.locationGate.cancel}
                 </button>
               </div>
 
               <p className="mt-4 text-sm text-[#444]">
-                Auto-detected: <span className="font-semibold">{selectedLabel}</span>
+                {messages.locationGate.autoDetected}{" "}
+                <span className="font-semibold">{selectedLabel}</span>
               </p>
             </div>
-          </div>
-        </div>
-      ) : null}
-
-      {showComingSoon ? (
-        <div className="fixed inset-0 z-[95] grid place-items-center bg-[#01060a]/85 p-4">
-          <div className="w-full max-w-[640px] rounded-xl bg-white p-8 text-center shadow-2xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#666]">
-              {comingSoonCountry}
-            </p>
-            <h3 className="mt-3 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-4xl font-bold text-[#0a0a0b]">
-              We&apos;re Coming Soon
-            </h3>
-            <p className="mx-auto mt-4 max-w-[520px] text-lg text-[#30343b]">
-              Our website is currently available for India. We&apos;ll launch for{" "}
-              {getCountryLabel(comingSoonCountry)} soon.
-            </p>
-            <button
-              className="mt-7 inline-flex h-12 items-center justify-center rounded-md bg-[var(--brand-yellow)] px-8 text-lg font-bold text-[#0a0a0b] transition hover:brightness-95"
-              onClick={switchToIndia}
-              type="button"
-            >
-              Switch To India Website
-            </button>
           </div>
         </div>
       ) : null}

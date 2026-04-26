@@ -4,6 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import CountrySwitcherButton from "./CountrySwitcherButton";
+import LanguageSwitcherButton from "./LanguageSwitcherButton";
+import {
+  getContentLanguageFromPath,
+  getMessages,
+  translateIndustryLabel,
+  translateProductLabel,
+} from "@/app/_lib/i18n";
 import {
   INDUSTRIES,
   INDUSTRY_TO_PRODUCTS,
@@ -16,6 +23,7 @@ type MenuKey = "industries" | "products" | null;
 
 type ProductCard = {
   label: string;
+  displayLabel: string;
   image: string;
 };
 
@@ -189,12 +197,18 @@ function ProductMenuCard({
     >
       <div className="flex items-center gap-3">
         <div className="relative h-[41px] w-[78px] shrink-0">
-          <Image alt={card.label} className="object-contain" fill sizes="86px" src={card.image} />
+          <Image
+            alt={card.displayLabel}
+            className="object-contain"
+            fill
+            sizes="86px"
+            src={card.image}
+          />
         </div>
         <span
           className="line-clamp-2 max-w-[160px] align-middle font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[16px] font-bold leading-[120%] tracking-[0] text-[#0A0A0B]"
         >
-          {card.label}
+          {card.displayLabel}
         </span>
       </div>
       <Icon
@@ -227,6 +241,7 @@ const PRODUCT_IMAGE_MAP: Record<string, string> = {
 
 const MENU_PRODUCTS: ProductCard[] = PRODUCTS.map((label) => ({
   label,
+  displayLabel: label,
   image: PRODUCT_IMAGE_MAP[label] ?? "/home-assets/imports/Final-1/282576ad5e8a2a7d8bdf398187b6cfa2059de92a.png",
 }));
 
@@ -236,6 +251,14 @@ export default function GlobalHeader() {
     "OFC Telecommunications",
   );
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const language = useMemo(
+    () =>
+      typeof window === "undefined"
+        ? "en"
+        : getContentLanguageFromPath(window.location.pathname),
+    [],
+  );
+  const messages = getMessages(language);
 
   const industryProducts = useMemo(() => {
     const labels = INDUSTRY_TO_PRODUCTS[activeIndustry];
@@ -245,16 +268,16 @@ export default function GlobalHeader() {
   }, [activeIndustry]);
 
   const navLinks = [
-    { label: "About Us", href: "/about-us" },
-    { label: "Blogs", href: "/#stories" },
-    { label: "Contact Us", href: "/contact-us" },
+    { label: messages.common.aboutUs, href: "/about-us" },
+    { label: messages.common.blogs, href: "/#stories" },
+    { label: messages.common.contactUs, href: "/contact-us" },
   ];
   const mobileMainMenu = [
-    { label: "Industry", href: "/industries", showArrow: true },
-    { label: "Product", href: "/products", showArrow: true },
-    { label: "About Us", href: "/about-us", showArrow: false },
-    { label: "Blogs", href: "/#stories", showArrow: false },
-    { label: "Contact Us", href: "/contact-us", showArrow: false },
+    { label: messages.common.industry, href: "/industries", showArrow: true },
+    { label: messages.common.product, href: "/products", showArrow: true },
+    { label: messages.common.aboutUs, href: "/about-us", showArrow: false },
+    { label: messages.common.blogs, href: "/#stories", showArrow: false },
+    { label: messages.common.contactUs, href: "/contact-us", showArrow: false },
   ];
   const navItemClass =
     "flex h-6 items-center justify-center gap-1 text-center font-['Roboto_Condensed','Roboto','Arial_Narrow',Arial,sans-serif] text-[14px] font-semibold uppercase leading-[105%] tracking-normal transition";
@@ -273,13 +296,14 @@ export default function GlobalHeader() {
           <div className="flex items-center gap-4">
             <a className="hidden items-center gap-2 sm:flex" href="tel:+918790473345">
               <Icon className="size-4" name="phone" />
-              CALL +91 87904 73345
+              +91 87904 73345
             </a>
             <a className="hidden items-center gap-2 md:flex" href="/find-a-dealer">
               <Icon className="size-4" name="search" />
-              Find a dealer
+              {messages.common.findDealer}
             </a>
             <CountrySwitcherButton />
+            <LanguageSwitcherButton />
           </div>
         </div>
       </div>
@@ -297,7 +321,7 @@ export default function GlobalHeader() {
                 onClick={() => setActiveMenu((prev) => (prev === "industries" ? null : "industries"))}
                 type="button"
               >
-                Industries
+                {messages.home.industriesTitle}
                 <Icon
                   className={`size-4 transition-transform ${activeMenu === "industries" ? "rotate-180 text-[#b88900]" : ""}`}
                   name="chevron"
@@ -311,7 +335,7 @@ export default function GlobalHeader() {
                 onClick={() => setActiveMenu((prev) => (prev === "products" ? null : "products"))}
                 type="button"
               >
-                Products
+                {messages.footer.products}
                 <Icon
                   className={`size-4 transition-transform ${activeMenu === "products" ? "rotate-180 text-[#b88900]" : ""}`}
                   name="chevron"
@@ -335,14 +359,14 @@ export default function GlobalHeader() {
               href="/brochure"
             >
               <Icon className="size-5" name="download" />
-              Brochure
+              {messages.common.brochure}
             </a>
             <a
               className="button-gold-text flex h-10 items-center justify-center bg-[var(--ink)] px-6 text-center font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-semibold uppercase leading-5 tracking-normal transition hover:bg-[#2d2d2d]"
               href="/contact-us"
               style={{ color: "#f9c300" }}
             >
-              Get a quote
+              {messages.common.getQuote}
             </a>
           </div>
         </div>
@@ -363,7 +387,7 @@ export default function GlobalHeader() {
                       onMouseEnter={() => setActiveIndustry(industry)}
                       type="button"
                     >
-                      {industry}
+                      {translateIndustryLabel(industry, language)}
                       <Icon className="size-5" name="arrow-right" />
                     </button>
                   ))}
@@ -372,7 +396,10 @@ export default function GlobalHeader() {
                 <div className="grid auto-rows-[78px] content-start grid-cols-3 gap-3">
                   {industryProducts.map((card) => (
                     <ProductMenuCard
-                      card={card}
+                      card={{
+                        ...card,
+                        displayLabel: translateProductLabel(card.label, language),
+                      }}
                       href={industryProductToHref(activeIndustry, card.label)}
                       key={`${activeIndustry}-${card.label}`}
                     />
@@ -389,7 +416,10 @@ export default function GlobalHeader() {
               <div className="grid auto-rows-[78px] grid-cols-4 gap-2">
                 {MENU_PRODUCTS.map((card) => (
                   <ProductMenuCard
-                    card={card}
+                    card={{
+                      ...card,
+                      displayLabel: translateProductLabel(card.label, language),
+                    }}
                     href={productToHref(card.label)}
                     key={`product-grid-${card.label}`}
                   />
@@ -426,7 +456,7 @@ export default function GlobalHeader() {
             href="/brochure"
           >
             <Icon className="size-5" name="download" />
-            <span className="leading-none">Brochure</span>
+            <span className="leading-none">{messages.common.brochure}</span>
           </a>
         </div>
 
@@ -452,6 +482,10 @@ export default function GlobalHeader() {
               </div>
 
               <div className="mt-auto px-6 pb-8">
+                <div className="mb-4 flex items-center justify-between rounded border border-black/20 px-3 py-2">
+                  <CountrySwitcherButton />
+                  <LanguageSwitcherButton />
+                </div>
                 <a
                   className="mb-6 inline-flex items-center gap-2 font-['Roboto',Arial,Helvetica,sans-serif] text-[16px] font-semibold text-[#0a0a0b]"
                   href="tel:+918790473345"
@@ -462,20 +496,20 @@ export default function GlobalHeader() {
                 <div className="grid grid-cols-2 gap-4">
                   <a
                     className="flex h-[62px] items-center justify-center bg-[var(--brand-yellow)] font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-bold uppercase leading-none text-[#0a0a0b]"
-                    href="/contact-us"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Get a quote
-                  </a>
-                  <a
+                  href="/contact-us"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {messages.common.getQuote}
+                </a>
+                <a
                     className="flex h-[62px] items-center justify-center gap-2 border border-black/30 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-semibold uppercase leading-none text-[#0a0a0b]"
-                    href="/brochure"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    <Icon className="size-5" name="download" />
-                    <span>Brochure</span>
-                  </a>
-                </div>
+                  href="/brochure"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <Icon className="size-5" name="download" />
+                  <span>{messages.common.brochure}</span>
+                </a>
+              </div>
               </div>
             </div>
           </div>
