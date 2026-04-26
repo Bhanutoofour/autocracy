@@ -1,5 +1,5 @@
-import Footer from "@/component/Footer/Footer";
 import GlobalHeader from "@/app/_components/GlobalHeader";
+import UniversalFooter from "@/app/_components/UniversalFooter";
 
 export default async function MainLayout({
   children,
@@ -10,7 +10,7 @@ export default async function MainLayout({
     <>
       <GlobalHeader />
       <main className="w-full">{children}</main>
-      <Footer />
+      <UniversalFooter />
     </>
   );
 }

@@ -1,0 +1,246 @@
+import Image from "next/image";
+import Link from "next/link";
+
+function SocialIcon({
+  name,
+  className = "size-5",
+}: {
+  name: "linkedin" | "youtube" | "twitter" | "facebook";
+  className?: string;
+}) {
+  if (name === "linkedin") {
+    return (
+      <svg
+        aria-hidden="true"
+        className={className}
+        fill="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path d="M4.98 3.5C4.98 4.88 3.86 6 2.48 6S0 4.88 0 3.5 1.12 1 2.48 1s2.5 1.12 2.5 2.5ZM.4 8h4.2v15H.4V8Zm7 0h4v2h.06c.56-1.06 1.94-2.2 4-2.2 4.28 0 5.07 2.82 5.07 6.49V23h-4.2v-7.64c0-1.82-.03-4.16-2.53-4.16-2.53 0-2.92 1.98-2.92 4.03V23H6.4V8Z" />
+      </svg>
+    );
+  }
+
+  if (name === "youtube") {
+    return (
+      <svg
+        aria-hidden="true"
+        className={className}
+        fill="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path d="M23.5 7.2a3.04 3.04 0 0 0-2.14-2.15C19.47 4.5 12 4.5 12 4.5s-7.47 0-9.36.55A3.04 3.04 0 0 0 .5 7.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 4.8 3.04 3.04 0 0 0 2.14 2.15C4.53 19.5 12 19.5 12 19.5s7.47 0 9.36-.55a3.04 3.04 0 0 0 2.14-2.15A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-4.8ZM9.55 15.2V8.8L15.8 12l-6.25 3.2Z" />
+      </svg>
+    );
+  }
+
+  if (name === "twitter") {
+    return (
+      <svg
+        aria-hidden="true"
+        className={className}
+        fill="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path d="M22 5.8c-.7.3-1.5.5-2.3.6.8-.5 1.4-1.2 1.7-2.2-.8.5-1.7.8-2.6 1-1.5-1.6-4-1.7-5.6-.2a4 4 0 0 0-1.2 3.7 11.3 11.3 0 0 1-8.2-4.1 4 4 0 0 0 1.2 5.3c-.6 0-1.2-.2-1.7-.5v.1c0 1.9 1.3 3.5 3.1 3.9-.6.2-1.2.2-1.8.1.5 1.6 2 2.8 3.8 2.8A8 8 0 0 1 2 18.3a11.2 11.2 0 0 0 6.1 1.8c7.3 0 11.4-6 11.4-11.3v-.5c.8-.5 1.5-1.2 2-2Z" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg
+      aria-hidden="true"
+      className={className}
+      fill="currentColor"
+      viewBox="0 0 24 24"
+    >
+      <path d="M13.5 8H16V5h-2.5C10.5 5 9 6.8 9 9.6V12H7v3h2v7h3v-7h3l.5-3H12V9.8c0-1.1.3-1.8 1.5-1.8Z" />
+    </svg>
+  );
+}
+
+export default function UniversalFooter() {
+  const footerMenus = [
+    [
+      "About us",
+      "Careers",
+      "FAQs",
+      "Contact us",
+      "Hire on rent",
+      "Find a dealer",
+    ],
+    ["Products", "Brochure", "Blog", "Videos"],
+    ["sales@autocracymachinery.com", "+91 87904 73345"],
+  ];
+  const footerHeadings = ["Company", "Resources", "Contact"];
+
+  const resolveFooterHref = (link: string) => {
+    const map: Record<string, string> = {
+      "About us": "/about-us",
+      Careers: "/careers",
+      FAQs: "/faqs",
+      "Contact us": "/contact-us",
+      "Hire on rent": "/contact-us",
+      "Find a dealer": "/find-a-dealer",
+      Products: "/products",
+      Brochure: "/brochure",
+      Blog: "/#stories",
+      Videos: "/#stories",
+      "sales@autocracymachinery.com": "mailto:sales@autocracymachinery.com",
+      "+91 87904 73345": "tel:+918790473345",
+    };
+    return map[link] ?? "/";
+  };
+
+  return (
+    <>
+      <section className="bg-white pt-0" id="contact">
+        <div className="site-container">
+          <div className="relative z-10 flex translate-y-10 flex-col gap-8 bg-[var(--brand-yellow)] px-8 py-10 text-black sm:translate-y-12 sm:px-10 sm:py-12 lg:flex-row lg:items-center lg:justify-between lg:px-10 lg:py-12">
+            <div>
+              <h2 className="max-w-[470px] font-['Roboto',Arial,Helvetica,sans-serif] text-[32px] font-black leading-[1.05] tracking-normal">
+                Built for Performance. Branded for You.
+              </h2>
+              <p className="mt-4 max-w-[470px] font-['Roboto',Arial,Helvetica,sans-serif] text-[16px] font-normal leading-6 tracking-normal text-black/90">
+                From trenchers to multi-utility machines, Autocracy Machinery
+                delivers rugged, customizable solutions, designed to power
+                infrastructure, telecom, and agri projects.
+              </p>
+            </div>
+            <a
+              className="button-gold-text figma-button h-[48px] w-full min-w-[138px] bg-[var(--ink)] px-6 text-[20px] leading-none sm:w-auto"
+              href="tel:+918790473345"
+              style={{ color: "#f9c300" }}
+            >
+              Get a quote
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <footer className="bg-[var(--ink)] pb-12 pt-24 text-white sm:pt-28">
+        <div className="site-container grid gap-10 lg:grid-cols-[minmax(320px,0.9fr)_1.1fr] lg:items-start">
+          <div>
+            <Link
+              aria-label="Autocracy Machinery home"
+              className="inline-flex items-end gap-2"
+              href="/"
+            >
+              <Image
+                alt="Autocracy brand mark"
+                className="h-[40px] w-[44px]"
+                height={40}
+                src="/footer-logo-mark.png"
+                width={44}
+              />
+              <Image
+                alt="Autocracy Machinery"
+                className="h-auto w-[170px]"
+                height={39}
+                src="/footer-logo-combined.png"
+                width={170}
+              />
+            </Link>
+            <p className="mt-8 max-w-[430px] font-['Roboto',Arial,Helvetica,sans-serif] text-[12px] font-normal leading-[1.5] tracking-normal text-white/85">
+              Autocracy Machinery is a trading style of Aceautocracy Machinery
+              Pvt. Limited, a company incorporated in India.
+            </p>
+            <div className="mt-6 flex items-center gap-6 text-[var(--brand-yellow)]">
+              <a
+                aria-label="LinkedIn"
+                className="grid h-5 w-5 place-items-center transition hover:opacity-80"
+                href="https://www.linkedin.com/company/autocracy-machinery/"
+                rel="noreferrer"
+                target="_blank"
+              >
+                <SocialIcon className="size-5" name="linkedin" />
+              </a>
+              <a
+                aria-label="YouTube"
+                className="grid h-5 w-5 place-items-center transition hover:opacity-80"
+                href="https://www.youtube.com/@AutocracyMachinery"
+                rel="noreferrer"
+                target="_blank"
+              >
+                <SocialIcon className="size-5" name="youtube" />
+              </a>
+              <a
+                aria-label="Twitter"
+                className="grid h-5 w-5 place-items-center transition hover:opacity-80"
+                href="https://x.com/aceautocracy"
+                rel="noreferrer"
+                target="_blank"
+              >
+                <SocialIcon className="size-5" name="twitter" />
+              </a>
+              <a
+                aria-label="Facebook"
+                className="grid h-5 w-5 place-items-center transition hover:opacity-80"
+                href="https://www.facebook.com/people/Autocracy-Machinery/61554797280328/"
+                rel="noreferrer"
+                target="_blank"
+              >
+                <SocialIcon className="size-5" name="facebook" />
+              </a>
+            </div>
+            <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3 font-['Roboto',Arial,Helvetica,sans-serif] text-[12px] font-normal leading-[1.5] tracking-normal text-white/95">
+              <Link
+                className="transition hover:text-[var(--brand-yellow)]"
+                href="/privacy-policy"
+              >
+                Privacy Policy
+              </Link>
+              <Link
+                className="transition hover:text-[var(--brand-yellow)]"
+                href="/terms-and-conditions"
+              >
+                Terms &amp; Conditions
+              </Link>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 lg:gap-10">
+            {footerMenus.map((links, columnIndex) => (
+              <div
+                className="font-['Roboto',Arial,Helvetica,sans-serif] text-[12px] font-normal leading-[1.5] tracking-normal text-white/90"
+                key={`footer-col-${columnIndex + 1}`}
+              >
+                <h3 className="mb-3 text-[13px] font-semibold uppercase tracking-[0.04em] text-white">
+                  {footerHeadings[columnIndex]}
+                </h3>
+                <ul className="space-y-3">
+                  {links.map((link) => {
+                    const href = resolveFooterHref(link);
+                    const isInternal = href.startsWith("/");
+
+                    return (
+                      <li key={link}>
+                        {isInternal ? (
+                          <Link
+                            className="transition hover:text-[var(--brand-yellow)]"
+                            href={href}
+                          >
+                            {link}
+                          </Link>
+                        ) : (
+                          <a
+                            className="transition hover:text-[var(--brand-yellow)]"
+                            href={href}
+                          >
+                            {link}
+                          </a>
+                        )}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="site-container mt-10 border-t border-white/15 pt-6 text-sm text-white/55">
+          (c) 2026 All Rights Reserved to Autocracy Machinery
+        </div>
+      </footer>
+    </>
+  );
+}

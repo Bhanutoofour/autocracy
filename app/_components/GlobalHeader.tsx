@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import Link from "next/link";
+import { useEffect, useMemo, useState } from "react";
 import CountrySwitcherButton from "./CountrySwitcherButton";
 import {
   INDUSTRIES,
@@ -20,7 +21,7 @@ type ProductCard = {
 
 function Logo() {
   return (
-    <a
+    <Link
       aria-label="Autocracy Machinery home"
       className="block w-[168px] sm:w-[190px]"
       href="/"
@@ -33,7 +34,7 @@ function Logo() {
         src="/logo.png"
         width={668}
       />
-    </a>
+    </Link>
   );
 }
 
@@ -47,6 +48,7 @@ function Icon({
     | "chevron"
     | "download"
     | "menu"
+    | "close"
     | "arrow-right"
     | "linkedin"
     | "youtube"
@@ -99,6 +101,15 @@ function Icon({
         <path d="M4 7h16" />
         <path d="M4 12h16" />
         <path d="M4 17h16" />
+      </svg>
+    );
+  }
+
+  if (name === "close") {
+    return (
+      <svg {...common}>
+        <path d="m6 6 12 12" />
+        <path d="m18 6-12 12" />
       </svg>
     );
   }
@@ -224,6 +235,7 @@ export default function GlobalHeader() {
   const [activeIndustry, setActiveIndustry] = useState<(typeof INDUSTRIES)[number]>(
     "OFC Telecommunications",
   );
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const industryProducts = useMemo(() => {
     const labels = INDUSTRY_TO_PRODUCTS[activeIndustry];
@@ -237,12 +249,26 @@ export default function GlobalHeader() {
     { label: "Blogs", href: "/#stories" },
     { label: "Contact Us", href: "/contact-us" },
   ];
+  const mobileMainMenu = [
+    { label: "Industry", href: "/industries", showArrow: true },
+    { label: "Product", href: "/products", showArrow: true },
+    { label: "About Us", href: "/about-us", showArrow: false },
+    { label: "Blogs", href: "/#stories", showArrow: false },
+    { label: "Contact Us", href: "/contact-us", showArrow: false },
+  ];
   const navItemClass =
     "flex h-6 items-center justify-center gap-1 text-center font-['Roboto_Condensed','Roboto','Arial_Narrow',Arial,sans-serif] text-[14px] font-semibold uppercase leading-[105%] tracking-normal transition";
 
+  useEffect(() => {
+    document.body.style.overflow = mobileMenuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileMenuOpen]);
+
   return (
     <header className="sticky top-0 z-50 border-b border-black/10 bg-white">
-      <div className="bg-[var(--brand-yellow)] text-[12px] font-semibold uppercase text-[var(--ink)]">
+      <div className="hidden bg-[var(--brand-yellow)] text-[12px] font-semibold uppercase text-[var(--ink)] lg:block">
         <div className="site-container flex h-8 items-center justify-end">
           <div className="flex items-center gap-4">
             <a className="hidden items-center gap-2 sm:flex" href="tel:+918790473345">
@@ -374,41 +400,86 @@ export default function GlobalHeader() {
         ) : null}
       </div>
 
-      <div className="site-container flex h-[72px] items-center justify-between lg:hidden">
-        <Logo />
-        <details className="relative">
-          <summary
-            aria-label="Open menu"
-            className="grid size-11 cursor-pointer list-none place-items-center border border-black/15 [&::-webkit-details-marker]:hidden"
+      <div className="lg:hidden">
+        <div className="grid h-12 grid-cols-2 bg-[var(--brand-yellow)]">
+          <button
+            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+            className="flex h-full items-center px-4 text-[var(--ink)]"
+            onClick={() => setMobileMenuOpen((prev) => !prev)}
+            type="button"
           >
-            <Icon name="menu" />
-          </summary>
-          <div className="absolute right-0 top-12 w-[min(20rem,calc(100vw-2rem))] border border-black/10 bg-white p-4 shadow-2xl">
-            <nav className="grid gap-1 text-sm font-black uppercase text-[var(--ink)]">
-              <a className="px-3 py-3 transition hover:bg-[var(--brand-yellow)]" href="/industries">
-                Industries
-              </a>
-              <a className="px-3 py-3 transition hover:bg-[var(--brand-yellow)]" href="/products">
-                Products
-              </a>
-              {navLinks.map((item) => (
+            <Icon className="size-7" name={mobileMenuOpen ? "close" : "menu"} />
+          </button>
+          <button
+            aria-label="Search"
+            className="flex h-full items-center justify-end border-l border-black/15 px-4 text-[var(--ink)]"
+            type="button"
+          >
+            <Icon className="size-6" name="search" />
+          </button>
+        </div>
+
+        <div className="site-container flex h-[88px] items-center justify-between bg-[#f2f2f2]">
+          <Logo />
+          <a
+            className="flex h-[46px] items-center justify-center gap-2 border border-[var(--ink)] bg-[#f2f2f2] px-5 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-semibold uppercase leading-none text-[#0a0a0b]"
+            href="/brochure"
+          >
+            <Icon className="size-5" name="download" />
+            <span className="leading-none">Brochure</span>
+          </a>
+        </div>
+
+        {mobileMenuOpen ? (
+          <div className="fixed inset-x-0 bottom-0 top-12 z-50 bg-[#efefef]">
+            <div className="flex h-full flex-col">
+              <div className="px-9 pt-9">
+                <nav className="grid gap-3">
+                  {mobileMainMenu.map((item) => (
+                    <Link
+                      className="flex h-[50px] items-center justify-between font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[16px] font-bold uppercase leading-none text-[#0a0a0b]"
+                      href={item.href}
+                      key={item.label}
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      {item.label}
+                      {item.showArrow ? (
+                        <Icon className="size-7" name="arrow-right" />
+                      ) : null}
+                    </Link>
+                  ))}
+                </nav>
+              </div>
+
+              <div className="mt-auto px-6 pb-8">
                 <a
-                  className="px-3 py-3 transition hover:bg-[var(--brand-yellow)]"
-                  href={item.href}
-                  key={item.label}
+                  className="mb-6 inline-flex items-center gap-2 font-['Roboto',Arial,Helvetica,sans-serif] text-[16px] font-semibold text-[#0a0a0b]"
+                  href="tel:+918790473345"
                 >
-                  {item.label}
+                  <Icon className="size-7" name="phone" />
+                  +91 87904 73345
                 </a>
-              ))}
-              <a className="px-3 py-3 transition hover:bg-[var(--brand-yellow)]" href="/brochure">
-                Brochure
-              </a>
-              <a className="px-3 py-3 transition hover:bg-[var(--brand-yellow)]" href="/contact-us">
-                Get a quote
-              </a>
-            </nav>
+                <div className="grid grid-cols-2 gap-4">
+                  <a
+                    className="flex h-[62px] items-center justify-center bg-[var(--brand-yellow)] font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-bold uppercase leading-none text-[#0a0a0b]"
+                    href="/contact-us"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Get a quote
+                  </a>
+                  <a
+                    className="flex h-[62px] items-center justify-center gap-2 border border-black/30 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-semibold uppercase leading-none text-[#0a0a0b]"
+                    href="/brochure"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <Icon className="size-5" name="download" />
+                    <span>Brochure</span>
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
-        </details>
+        ) : null}
       </div>
     </header>
   );

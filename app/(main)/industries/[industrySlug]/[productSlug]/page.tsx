@@ -69,7 +69,7 @@ export default async function IndustryProductPage({
                   {model.modelNumber} | {model.series}
                 </p>
                 <Link
-                  className="mt-4 inline-flex rounded bg-black px-3 py-2 text-sm font-semibold text-[#f9c300]"
+                  className="button-gold-text mt-4 inline-flex rounded bg-black px-3 py-2 text-sm font-semibold !text-[#f9c300]"
                   href={`/industries/${industrySlug}/${productSlug}/${modelNumberSlug(model.modelNumber)}`}
                 >
                   View model
@@ -86,7 +86,7 @@ export default async function IndustryProductPage({
 
       <div className="mt-10 flex gap-3">
         <Link
-          className="rounded bg-black px-4 py-2 font-semibold text-[#f9c300]"
+          className="button-gold-text rounded bg-black px-4 py-2 font-semibold !text-[#f9c300]"
           href={`/industries/${titleToSlug(industryData.title ?? "")}`}
         >
           Back to industry

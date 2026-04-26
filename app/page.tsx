@@ -3,6 +3,7 @@ import CountrySwitcherButton from "./_components/CountrySwitcherButton";
 import LocationGate from "./_components/LocationGate";
 import GlobalHeader from "./_components/GlobalHeader";
 import HomeProductsSection from "./_components/HomeProductsSection";
+import UniversalFooter from "./_components/UniversalFooter";
 import { titleToSlug } from "@/utils/slug";
 import { getActiveIndustries } from "@/actions/industryAction";
 import { getActiveProducts } from "@/actions/productAction";
@@ -735,173 +736,6 @@ function HappyClients() {
   );
 }
 
-function CtaBand() {
-  return (
-    <section className="bg-white pt-0" id="contact">
-      <div className="site-container">
-        <div className="relative z-10 flex translate-y-10 flex-col gap-8 bg-[var(--brand-yellow)] px-8 py-10 text-black sm:translate-y-12 sm:px-10 sm:py-12 lg:flex-row lg:items-center lg:justify-between lg:px-10 lg:py-12">
-          <div>
-            <h2 className="max-w-[470px] font-['Roboto',Arial,Helvetica,sans-serif] text-[32px] font-black leading-[1.05] tracking-normal">
-              Built for Performance. Branded for You.
-            </h2>
-            <p className="mt-4 max-w-[470px] font-['Roboto',Arial,Helvetica,sans-serif] text-[16px] font-normal leading-6 tracking-normal text-black/90">
-              From trenchers to multi-utility machines, Autocracy Machinery
-              delivers rugged, customizable solutions, designed to power
-              infrastructure, telecom, and agri projects.
-            </p>
-          </div>
-          <a
-            className="button-gold-text figma-button h-[48px] w-full min-w-[138px] bg-[var(--ink)] px-6 text-[20px] leading-none sm:w-auto"
-            href="tel:+918790473345"
-            style={{ color: "#f9c300" }}
-          >
-            Get a quote
-          </a>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Footer() {
-  const footerMenus = [
-    [
-      "About us",
-      "Careers",
-      "FAQs",
-      "Contact us",
-      "Hire on rent",
-      "Find a dealer",
-    ],
-    ["Products", "Brochure", "Blog", "Videos"],
-    ["sales@autocracymachinery.com", "+91 87904 73345"],
-  ];
-  const footerHeadings = ["Company", "Resources", "Contact"];
-  const resolveFooterHref = (link: string) => {
-    const map: Record<string, string> = {
-      "About us": "/about-us",
-      Careers: "/careers",
-      FAQs: "/faqs",
-      "Contact us": "/contact-us",
-      "Hire on rent": "/contact-us",
-      "Find a dealer": "/find-a-dealer",
-      Products: "/products",
-      Brochure: "/brochure",
-      Blog: "/#stories",
-      Videos: "/#stories",
-      "sales@autocracymachinery.com": "mailto:sales@autocracymachinery.com",
-      "+91 87904 73345": "tel:+918790473345",
-    };
-    return map[link] ?? "/";
-  };
-
-  return (
-    <footer className="bg-[var(--ink)] pb-12 pt-24 text-white sm:pt-28">
-      <div className="site-container grid gap-10 lg:grid-cols-[minmax(320px,0.9fr)_1.1fr] lg:items-start">
-        <div>
-          <a
-            aria-label="Autocracy Machinery home"
-            className="inline-flex items-end gap-2"
-            href="/"
-          >
-            <Image
-              alt="Autocracy brand mark"
-              className="h-[40px] w-[44px]"
-              height={40}
-              src="/footer-logo-mark.png"
-              width={44}
-            />
-            <Image
-              alt="Autocracy Machinery"
-              className="h-auto w-[170px]"
-              height={39}
-              src="/footer-logo-combined.png"
-              width={170}
-            />
-          </a>
-          <p className="mt-8 max-w-[430px] font-['Roboto',Arial,Helvetica,sans-serif] text-[12px] font-normal leading-[1.5] tracking-normal text-white/85">
-            Autocracy Machinery is a trading style of Aceautocracy Machinery
-            Pvt. Limited, a company incorporated in India.
-          </p>
-          <div className="mt-6 flex items-center gap-6 text-[var(--brand-yellow)]">
-            <a
-              aria-label="LinkedIn"
-              className="grid h-5 w-5 place-items-center transition hover:opacity-80"
-              href="https://www.linkedin.com/company/autocracy-machinery/"
-              rel="noreferrer"
-              target="_blank"
-            >
-              <Icon className="size-5" name="linkedin" />
-            </a>
-            <a
-              aria-label="YouTube"
-              className="grid h-5 w-5 place-items-center transition hover:opacity-80"
-              href="https://www.youtube.com/@AutocracyMachinery"
-              rel="noreferrer"
-              target="_blank"
-            >
-              <Icon className="size-5" name="youtube" />
-            </a>
-            <a
-              aria-label="Twitter"
-              className="grid h-5 w-5 place-items-center transition hover:opacity-80"
-              href="https://x.com/aceautocracy"
-              rel="noreferrer"
-              target="_blank"
-            >
-              <Icon className="size-5" name="twitter" />
-            </a>
-            <a
-              aria-label="Facebook"
-              className="grid h-5 w-5 place-items-center transition hover:opacity-80"
-              href="https://www.facebook.com/people/Autocracy-Machinery/61554797280328/"
-              rel="noreferrer"
-              target="_blank"
-            >
-              <Icon className="size-5" name="facebook" />
-            </a>
-          </div>
-          <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3 font-['Roboto',Arial,Helvetica,sans-serif] text-[12px] font-normal leading-[1.5] tracking-normal text-white/95">
-            <a className="transition hover:text-[var(--brand-yellow)]" href="/privacy-policy">
-              Privacy Policy
-            </a>
-            <a className="transition hover:text-[var(--brand-yellow)]" href="/terms-and-conditions">
-              Terms &amp; Conditions
-            </a>
-          </div>
-        </div>
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 lg:gap-10">
-          {footerMenus.map((links, columnIndex) => (
-            <div
-              className="font-['Roboto',Arial,Helvetica,sans-serif] text-[12px] font-normal leading-[1.5] tracking-normal text-white/90"
-              key={`footer-col-${columnIndex + 1}`}
-            >
-              <h3 className="mb-3 text-[13px] font-semibold uppercase tracking-[0.04em] text-white">
-                {footerHeadings[columnIndex]}
-              </h3>
-              <ul className="space-y-3">
-                {links.map((link) => (
-                  <li key={link}>
-                    <a
-                      className="transition hover:text-[var(--brand-yellow)]"
-                      href={resolveFooterHref(link)}
-                    >
-                      {link}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </div>
-      <div className="site-container mt-10 border-t border-white/15 pt-6 text-sm text-white/55">
-        (c) 2026 All Rights Reserved to Autocracy Machinery
-      </div>
-    </footer>
-  );
-}
-
 const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
@@ -963,8 +797,7 @@ export default async function Home() {
       <Stories />
       <AnimatedTestimonialsSection testimonials={testimonials} />
       <HappyClients />
-      <CtaBand />
-      <Footer />
+      <UniversalFooter />
     </main>
   );
 }

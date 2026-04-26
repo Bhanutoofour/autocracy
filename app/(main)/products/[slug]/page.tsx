@@ -74,7 +74,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   {model.modelNumber} | {model.series}
                 </p>
                 <Link
-                  className="mt-4 inline-flex rounded bg-black px-3 py-2 text-sm font-semibold text-[#f9c300]"
+                  className="button-gold-text mt-4 inline-flex rounded bg-black px-3 py-2 text-sm font-semibold !text-[#f9c300]"
                   href={`/products/${slug}/${modelNumberSlug(model.modelNumber)}`}
                 >
                   View model
@@ -88,7 +88,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       </div>
 
       <div className="mt-10 flex gap-3">
-        <Link className="rounded bg-black px-4 py-2 font-semibold text-[#f9c300]" href="/products">
+        <Link className="button-gold-text rounded bg-black px-4 py-2 font-semibold !text-[#f9c300]" href="/products">
           View all products
         </Link>
         <Link className="rounded border border-black/25 px-4 py-2 font-semibold" href="/contact-us">
