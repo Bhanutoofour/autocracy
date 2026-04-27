@@ -32,7 +32,6 @@ const COUNTRY_OPTIONS: CountryOption[] = [
 
 const STORAGE_KEY = "autocracy:selected-country";
 const LANGUAGE_STORAGE_KEY = "autocracy:selected-language";
-const SESSION_POPUP_KEY = "autocracy:country-popup-shown";
 
 function normalizeCountryCode(value: string | null | undefined): SupportedCountry | null {
   const normalized = (value ?? "").trim().toLowerCase();
@@ -60,22 +59,6 @@ function writeLocalStorage(key: string, value: string) {
   }
 }
 
-function readSessionStorage(key: string): string | null {
-  try {
-    return window.sessionStorage.getItem(key);
-  } catch {
-    return null;
-  }
-}
-
-function writeSessionStorage(key: string, value: string) {
-  try {
-    window.sessionStorage.setItem(key, value);
-  } catch {
-    // Ignore storage write failures in restrictive browser modes.
-  }
-}
-
 export default function LocationGate() {
   const [open, setOpen] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState<SupportedCountry>("in");
@@ -96,7 +79,6 @@ export default function LocationGate() {
 
       const savedCountry = normalizeCountryCode(readLocalStorage(STORAGE_KEY));
       const hasSavedCountry = Boolean(savedCountry);
-      const shownThisSession = readSessionStorage(SESSION_POPUP_KEY) === "1";
 
       setLanguage(getContentLanguageFromPath(window.location.pathname));
 
@@ -104,9 +86,8 @@ export default function LocationGate() {
         setSelectedCountry(savedCountry);
       }
 
-      if (!hasSavedCountry || !shownThisSession) {
+      if (!hasSavedCountry) {
         setOpen(true);
-        writeSessionStorage(SESSION_POPUP_KEY, "1");
       }
 
       if (hasSavedCountry) return;
