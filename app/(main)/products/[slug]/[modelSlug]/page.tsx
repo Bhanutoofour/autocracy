@@ -61,7 +61,7 @@ export default async function ProductModelPage({ params }: ProductModelPageProps
   const language = await getRequestContentLanguage();
   const locale = await getRequestLocale();
   const { slug, modelSlug } = await params;
-  const resolved = await getModelByProductSlugAndModelNumberSlug(slug, modelSlug);
+  const resolved = await getModelByProductSlugAndModelNumberSlug(slug, modelSlug, language);
   if (!resolved) notFound();
 
   const { modelData } = resolved;
@@ -117,7 +117,7 @@ export default async function ProductModelPage({ params }: ProductModelPageProps
       value: feature.value,
     })),
   };
-  const relatedModels = (await getModelsBySeries(modelData.series)).filter((model) => model.id !== modelData.id);
+  const relatedModels = (await getModelsBySeries(modelData.series, language)).filter((model) => model.id !== modelData.id);
   const relatedModelCards = relatedModels.slice(0, 6).map((model) => ({
     ...model,
     href: localizeHref(`/products/${slug}/${modelNumberSlug(model.modelNumber)}`, locale),

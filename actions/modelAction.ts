@@ -18,8 +18,77 @@ import {
 } from "@/utils/slug";
 import { getProductById, getActiveProducts } from "@/actions/productAction";
 import { getIndustryBySlug } from "@/actions/industryAction";
+import { type ContentLanguage } from "@/app/_lib/i18n";
+import { localizeDbText } from "@/app/_lib/db-localization";
 
 const MODEL_CACHE_REVALIDATE_SECONDS = 300;
+
+function localizeModelFeature(feature: ModelFeature, language: ContentLanguage): ModelFeature {
+  return {
+    name: localizeDbText(feature.name, language, {
+      strictHindi: language === "hi",
+      isLabel: true,
+      fallback: language === "hi" ? "विशेषता" : "Feature",
+    }),
+    value: localizeDbText(feature.value, language, {
+      strictHindi: language === "hi",
+      fallback: "-",
+    }),
+  };
+}
+
+function localizeModelDescriptionBlock(
+  block: ModelDescription,
+  language: ContentLanguage,
+  fallbackTitle: string,
+): ModelDescription {
+  return {
+    ...block,
+    title: localizeDbText(block.title, language, {
+      strictHindi: language === "hi",
+      fallback: fallbackTitle,
+    }),
+    imageAltText: localizeDbText(block.imageAltText, language, {
+      strictHindi: language === "hi",
+      fallback: fallbackTitle,
+    }),
+    description: (block.description || []).map((line) =>
+      localizeDbText(line, language, {
+        strictHindi: language === "hi",
+        fallback: "",
+      }),
+    ),
+  };
+}
+
+function localizeModelRow(
+  model: {
+    id: number;
+    modelNumber: string;
+    modelTitle: string;
+    productName: string;
+  },
+  language: ContentLanguage,
+): {
+  id: number;
+  modelNumber: string;
+  modelTitle: string;
+  productName: string;
+} {
+  return {
+    ...model,
+    modelTitle: localizeDbText(model.modelTitle, language, {
+      strictHindi: language === "hi",
+      isLabel: true,
+      fallback: "Model",
+    }),
+    productName: localizeDbText(model.productName, language, {
+      strictHindi: language === "hi",
+      isLabel: true,
+      fallback: "Product",
+    }),
+  };
+}
 
 const getActiveModelsCached = unstable_cache(
   async (): Promise<
@@ -56,7 +125,9 @@ const getActiveModelsCached = unstable_cache(
   }
 );
 
-export const getActiveModels = async (): Promise<
+export const getActiveModels = async (
+  language: ContentLanguage = "en",
+): Promise<
   {
     id: number;
     modelNumber: string;
@@ -65,14 +136,14 @@ export const getActiveModels = async (): Promise<
   }[]
 > => {
   try {
-    return getActiveModelsCached();
+    const rows = await getActiveModelsCached();
+    return rows.map((row) => localizeModelRow(row, language));
   } catch (error) {
     console.error("Error fetching active models:", error);
     throw error;
   }
 };
 
-/** Active models under industry product pages (for sitemap URLs). */
 export const getIndustryNestedModelSitemapRows = async (): Promise<
   { industryTitle: string; productTitle: string; modelNumber: string }[]
 > => {
@@ -114,15 +185,12 @@ export const getIndustryNestedModelSitemapRows = async (): Promise<
   }
 };
 
-/**
- * Resolve model by URL slug only (no query params).
- * Uses active models list then fetches full data for the match.
- */
 export const getModelBySlug = async (
   slug: string,
+  language: ContentLanguage = "en",
 ): Promise<{ modelData: ModelObjectTypes; modelId: number } | null> => {
   try {
-    const rows = await getActiveModels();
+    const rows = await getActiveModels("en");
     const matched = rows.find(
       (row) =>
         modelSlug(
@@ -133,7 +201,7 @@ export const getModelBySlug = async (
     );
     if (!matched) return null;
 
-    const modelData = await getModelById(matched.id);
+    const modelData = await getModelById(matched.id, language);
     if (!modelData) return null;
 
     return { modelData, modelId: matched.id };
@@ -143,9 +211,6 @@ export const getModelBySlug = async (
   }
 };
 
-/**
- * Legacy `/product/[slug]?modelId=` — try combined `modelSlug` first, then active model by `modelId`.
- */
 export async function resolveModelForLegacyProductPage(
   combinedSlug: string,
   modelIdQuery?: string | string[]
@@ -177,10 +242,6 @@ function matchesModelNumberSlugInUrl(
   return a === b && a.length > 0;
 }
 
-/**
- * Last URL segment: prefer slugified `model_number`, also accept legacy
- * `modelSlug("", modelTitle, modelNumber)` (e.g. mini-trencher-dhruva100).
- */
 function matchesModelUrlSegment(
   modelNumber: string,
   modelTitle: string,
@@ -195,7 +256,6 @@ function matchesModelUrlSegment(
   return legacy.length > 0 && legacy === n;
 }
 
-/** URL segment matches DB title via `titleToSlug`, normalized. */
 function titleSlugMatchesUrlSegment(
   dbTitle: string,
   urlSegment: string,
@@ -205,7 +265,6 @@ function titleSlugMatchesUrlSegment(
   return a === b && a.length > 0;
 }
 
-/** Same as strict match, plus singular/plural slug (e.g. trencher vs trenchers). */
 function titleSlugMatchesUrlSegmentRelaxed(
   dbTitle: string,
   urlSegment: string,
@@ -232,17 +291,14 @@ function findProductByTitleSlug<T extends { title: string | null }>(
   );
 }
 
-/**
- * `/industries/[industrySlug]/[productSlug]/[modelSlug]`
- * All three must match: industry title slug, product title slug (in that industry), model_number slug only.
- */
 export const getModelByIndustryProductAndModelNumberSlug = async (
   industrySlug: string,
   productSlug: string,
   modelNumberSegment: string,
+  language: ContentLanguage = "en",
 ): Promise<{ modelData: ModelObjectTypes; modelId: number; industryId: number } | null> => {
   try {
-    const industryResolved = await getIndustryBySlug(industrySlug);
+    const industryResolved = await getIndustryBySlug(industrySlug, "en");
     if (!industryResolved) return null;
 
     const { industryData, industryId } = industryResolved;
@@ -252,7 +308,7 @@ export const getModelByIndustryProductAndModelNumberSlug = async (
     );
     if (!matchedProduct?.id) return null;
 
-    const productData = await getProductById(matchedProduct.id, industryId);
+    const productData = await getProductById(matchedProduct.id, industryId, "en");
     if (!productData?.models?.length) return null;
 
     const modelRow = productData.models.find((m) =>
@@ -264,7 +320,7 @@ export const getModelByIndustryProductAndModelNumberSlug = async (
     );
     if (!modelRow?.id) return null;
 
-    const modelData = await getModelById(modelRow.id);
+    const modelData = await getModelById(modelRow.id, language);
     if (!modelData) return null;
 
     return { modelData, modelId: modelRow.id, industryId };
@@ -277,20 +333,17 @@ export const getModelByIndustryProductAndModelNumberSlug = async (
   }
 };
 
-/**
- * `/products/[slug]/[modelSlug]`
- * Product title slug + model_number slug only (no industry in URL).
- */
 export const getModelByProductSlugAndModelNumberSlug = async (
   productSlug: string,
   modelNumberSegment: string,
+  language: ContentLanguage = "en",
 ): Promise<{ modelData: ModelObjectTypes; modelId: number } | null> => {
   try {
-    const productsList = await getActiveProducts();
+    const productsList = await getActiveProducts("en");
     const matchedProduct = findProductByTitleSlug(productsList, productSlug);
     if (!matchedProduct?.id) return null;
 
-    const productData = await getProductById(matchedProduct.id);
+    const productData = await getProductById(matchedProduct.id, undefined, "en");
     if (!productData?.models?.length) return null;
 
     const modelRow = productData.models.find((m) =>
@@ -302,7 +355,7 @@ export const getModelByProductSlugAndModelNumberSlug = async (
     );
     if (!modelRow?.id) return null;
 
-    const modelData = await getModelById(modelRow.id);
+    const modelData = await getModelById(modelRow.id, language);
     if (!modelData) return null;
 
     return { modelData, modelId: modelRow.id };
@@ -317,12 +370,11 @@ export const getModelByProductSlugAndModelNumberSlug = async (
 
 export const getModelById = async (
   modelId: number,
+  language: ContentLanguage = "en",
 ): Promise<ModelObjectTypes | null> => {
   try {
-    // Fetch the model with product information
     const result = await db
       .select({
-        // Model fields
         id: models.id,
         modelNumber: models.modelNumber,
         modelTitle: models.modelTitle,
@@ -336,7 +388,6 @@ export const getModelById = async (
         modelDescription: models.modelDescription,
         seoDescription: models.seoDescription,
         seoMetadata: models.seoMetadata,
-        // Product fields
         productName: products.title,
         generalImage: products.generalImage,
         generalImageAltText: products.generalImageAltText,
@@ -351,23 +402,65 @@ export const getModelById = async (
 
     const modelData = result[0];
 
+    const localizedDescriptions = Array.isArray(modelData.modelDescription)
+      ? modelData.modelDescription.map((block, index) =>
+          localizeModelDescriptionBlock(block, language, `Model overview ${index + 1}`),
+        )
+      : [];
+
+    const localizedSpecsIntro = modelData.specsTableIntro
+      ? {
+          heading: localizeDbText(modelData.specsTableIntro.heading, language, {
+            strictHindi: language === "hi",
+            fallback: "",
+          }),
+          paragraph: localizeDbText(modelData.specsTableIntro.paragraph, language, {
+            strictHindi: language === "hi",
+            fallback: "",
+          }),
+        }
+      : null;
+
     const resultData = {
       id: modelData.id,
       modelNumber: modelData.modelNumber,
-      modelTitle: modelData.modelTitle,
-      machineType: modelData.machineType,
-      productName: modelData.productName,
+      modelTitle: localizeDbText(modelData.modelTitle, language, {
+        strictHindi: language === "hi",
+        isLabel: true,
+        fallback: "Model",
+      }),
+      machineType: localizeDbText(modelData.machineType, language, {
+        strictHindi: language === "hi",
+        isLabel: true,
+        fallback: "Machine type",
+      }),
+      productName: localizeDbText(modelData.productName, language, {
+        strictHindi: language === "hi",
+        isLabel: true,
+        fallback: "Product",
+      }),
       series: modelData.series,
       coverImage: modelData.coverImage,
-      coverImageAltText: modelData.coverImageAltText,
-      keyFeatures: modelData.keyFeatures || [],
-      specsTableIntro: modelData.specsTableIntro ?? null,
+      coverImageAltText: localizeDbText(modelData.coverImageAltText, language, {
+        strictHindi: language === "hi",
+        fallback: modelData.coverImageAltText || modelData.modelTitle || "Model image",
+      }),
+      keyFeatures: Array.isArray(modelData.keyFeatures)
+        ? modelData.keyFeatures.map((feature) => localizeModelFeature(feature, language))
+        : [],
+      specsTableIntro: localizedSpecsIntro,
       brochure: modelData.brochure,
-      modelDescription: modelData.modelDescription || [],
-      seoDescription: modelData.seoDescription || "",
+      modelDescription: localizedDescriptions,
+      seoDescription: localizeDbText(modelData.seoDescription, language, {
+        strictHindi: language === "hi",
+        fallback: "",
+      }),
       seoMetadata: modelData.seoMetadata,
       generalImage: modelData.generalImage,
-      generalImageAltText: modelData.generalImageAltText,
+      generalImageAltText: localizeDbText(modelData.generalImageAltText, language, {
+        strictHindi: language === "hi",
+        fallback: modelData.generalImageAltText || "Product image",
+      }),
     };
 
     return resultData;
@@ -379,9 +472,9 @@ export const getModelById = async (
 
 export const getModelsBySeries = async (
   seriesName: string,
+  language: ContentLanguage = "en",
 ): Promise<Model[]> => {
   try {
-    // Fetch all models with the specified series name
     const result = await db
       .select({
         id: models.id,
@@ -402,15 +495,30 @@ export const getModelsBySeries = async (
     const processedResult = result.map((model) => ({
       id: model.id,
       thumbnail: model.thumbnail,
-      thumbnailAltText: model.thumbnailAltText,
+      thumbnailAltText: localizeDbText(model.thumbnailAltText, language, {
+        strictHindi: language === "hi",
+        fallback: model.thumbnailAltText || model.modelTitle || "Model image",
+      }),
       modelNumber: model.modelNumber,
-      modelTitle: model.modelTitle,
-      machineType: model.machineType,
+      modelTitle: localizeDbText(model.modelTitle, language, {
+        strictHindi: language === "hi",
+        isLabel: true,
+        fallback: "Model",
+      }),
+      machineType: localizeDbText(model.machineType, language, {
+        strictHindi: language === "hi",
+        isLabel: true,
+        fallback: "Machine type",
+      }),
       series: model.series,
       keyFeatures: Array.isArray(model.keyFeatures)
-        ? model.keyFeatures.slice(0, 3)
+        ? model.keyFeatures.slice(0, 3).map((feature) => localizeModelFeature(feature, language))
         : [],
-      productName: model.productName,
+      productName: localizeDbText(model.productName, language, {
+        strictHindi: language === "hi",
+        isLabel: true,
+        fallback: "Product",
+      }),
     }));
 
     return processedResult;
@@ -420,7 +528,9 @@ export const getModelsBySeries = async (
   }
 };
 
-export const getRentalModel = async (): Promise<RentalModelTypes[]> => {
+export const getRentalModel = async (
+  language: ContentLanguage = "en",
+): Promise<RentalModelTypes[]> => {
   try {
     const result = await db
       .select({
@@ -441,12 +551,30 @@ export const getRentalModel = async (): Promise<RentalModelTypes[]> => {
     const processedResult = result.map((model) => ({
       id: model.id,
       modelNumber: model.modelNumber,
-      modelTitle: model.modelTitle,
-      machineType: model.machineType,
-      shortDescription: model.shortDescription,
+      modelTitle: localizeDbText(model.modelTitle, language, {
+        strictHindi: language === "hi",
+        isLabel: true,
+        fallback: "Model",
+      }),
+      machineType: localizeDbText(model.machineType, language, {
+        strictHindi: language === "hi",
+        isLabel: true,
+        fallback: "Machine type",
+      }),
+      shortDescription: localizeDbText(model.shortDescription, language, {
+        strictHindi: language === "hi",
+        fallback: "",
+      }),
       thumbnail: model.thumbnail,
-      thumbnailAltText: model.thumbnailAltText,
-      productName: model.productName,
+      thumbnailAltText: localizeDbText(model.thumbnailAltText, language, {
+        strictHindi: language === "hi",
+        fallback: model.thumbnailAltText || model.modelTitle || "Model image",
+      }),
+      productName: localizeDbText(model.productName, language, {
+        strictHindi: language === "hi",
+        isLabel: true,
+        fallback: "Product",
+      }),
     }));
 
     return processedResult;
@@ -456,7 +584,6 @@ export const getRentalModel = async (): Promise<RentalModelTypes[]> => {
   }
 };
 
-// Revalidate the home page when model data changes
 export const revalidateModelData = async () => {
   revalidateTag("models", "max");
   revalidatePath("/");

@@ -12,7 +12,7 @@ interface ModelState {
   model: Model;
   isProductPage?: boolean;
   productName?: string;
-  /** e.g. `/industries/ofc/chain-trencher` → model link adds `/{modelNumberSlug}` only. */
+  /** e.g. `/industries/ofc/chain-trencher` -> model link adds `/{modelNumberSlug}` only. */
   basePath?: string;
 }
 

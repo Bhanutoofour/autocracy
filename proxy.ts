@@ -55,7 +55,15 @@ function handleLocaleProxy(request: NextRequest) {
 
     const rewriteUrl = request.nextUrl.clone();
     rewriteUrl.pathname = internalPath === "/" ? "/" : internalPath;
-    const response = NextResponse.rewrite(rewriteUrl);
+    const requestHeaders = new Headers(request.headers);
+    requestHeaders.set("x-country", country);
+    requestHeaders.set("x-lang", language);
+
+    const response = NextResponse.rewrite(rewriteUrl, {
+      request: {
+        headers: requestHeaders,
+      },
+    });
     response.headers.set("x-country", country);
     response.headers.set("x-lang", language);
     return response;

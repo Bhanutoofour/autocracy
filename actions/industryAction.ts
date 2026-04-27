@@ -1,10 +1,13 @@
-"use server";
+﻿"use server";
 
 import db from "@/db/drizzle";
 import { industries, productIndustries, products } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 import { revalidatePath, revalidateTag, unstable_cache } from "next/cache";
 import { titleToSlug } from "@/utils/slug";
+import { normalizeUrlPathSegment } from "@/utils/slug";
+import { type ContentLanguage } from "@/app/_lib/i18n";
+import { localizeDbText } from "@/app/_lib/db-localization";
 
 const INDUSTRY_CACHE_REVALIDATE_SECONDS = 300;
 
@@ -73,38 +76,73 @@ const getActiveIndustriesCached = unstable_cache(
   }
 );
 
-export const getActiveIndustries = async (): Promise<ActiveIndustry[]> => {
+function localizeIndustryProduct(product: IndustryProduct, language: ContentLanguage): IndustryProduct {
+  return {
+    ...product,
+    title: localizeDbText(product.title, language, {
+      strictHindi: language === "hi",
+      isLabel: true,
+      fallback: "Product",
+    }),
+    thumbnailAltText: localizeDbText(product.thumbnailAltText, language, {
+      strictHindi: language === "hi",
+      fallback: product.thumbnailAltText || product.title || "Product image",
+    }),
+  };
+}
+
+function localizeActiveIndustry(industry: ActiveIndustry, language: ContentLanguage): ActiveIndustry {
+  return {
+    ...industry,
+    title: localizeDbText(industry.title, language, {
+      strictHindi: language === "hi",
+      isLabel: true,
+      fallback: "Industry",
+    }),
+    thumbnailAltText: localizeDbText(industry.thumbnailAltText, language, {
+      strictHindi: language === "hi",
+      fallback: industry.thumbnailAltText || industry.title || "Industry image",
+    }),
+    products: (industry.products || []).map((product) => localizeIndustryProduct(product, language)),
+  };
+}
+
+export const getActiveIndustries = async (
+  language: ContentLanguage = "en",
+): Promise<ActiveIndustry[]> => {
   try {
-    return getActiveIndustriesCached();
+    const rows = await getActiveIndustriesCached();
+    return rows.map((industry) => localizeActiveIndustry(industry, language));
   } catch (error) {
     console.error("Error fetching active industries:", error);
     return [];
   }
 };
 
-// Revalidate the home page when industry data changes
 export const revalidateIndustryData = async () => {
   revalidateTag("industries", "max");
   revalidatePath("/");
 };
 
-/**
- * Resolve industry by URL slug only (no query params).
- * Does a lightweight id+title lookup, then fetches full data for the match only.
- */
 export const getIndustryBySlug = async (
-  slug: string
+  slug: string,
+  language: ContentLanguage = "en",
 ): Promise<{ industryData: IndustryDataType; industryId: number } | null> => {
   try {
+    const normalizedSlug = normalizeUrlPathSegment(slug ?? "");
+    if (!normalizedSlug) return null;
+
     const rows = await db
       .select({ id: industries.id, title: industries.title })
       .from(industries)
       .where(eq(industries.active, true));
 
-    const matched = rows.find((row) => titleToSlug(row.title ?? "") === slug);
+    const matched = rows.find(
+      (row) => normalizeUrlPathSegment(titleToSlug(row.title ?? "")) === normalizedSlug,
+    );
     if (!matched) return null;
 
-    const industryData = await getIndustryById(matched.id);
+    const industryData = await getIndustryById(matched.id, language);
     if (!industryData) return null;
 
     return { industryData, industryId: matched.id };
@@ -115,7 +153,8 @@ export const getIndustryBySlug = async (
 };
 
 export const getIndustryById = async (
-  industryId: number
+  industryId: number,
+  language: ContentLanguage = "en",
 ): Promise<IndustryDataType | null> => {
   try {
     const result = await db
@@ -152,21 +191,33 @@ export const getIndustryById = async (
       .where(eq(industries.id, industryId))
       .orderBy(industries.id, products.id);
 
-    // Use Map for more efficient grouping - SAME OUTPUT, BETTER PERFORMANCE
     const industryMap = new Map<number, IndustryDataType>();
 
     for (const row of result) {
       if (!industryMap.has(row.id)) {
         industryMap.set(row.id, {
           id: row.id,
-          title: row.title,
-          description: row.description,
-          active: row.active ?? true, // Ensure boolean type
+          title: localizeDbText(row.title, language, {
+            strictHindi: language === "hi",
+            isLabel: true,
+            fallback: "Industry",
+          }),
+          description: localizeDbText(row.description, language, {
+            strictHindi: language === "hi",
+            fallback: "",
+          }),
+          active: row.active ?? true,
           thumbnail: row.thumbnail,
-          thumbnailAltText: row.thumbnailAltText,
+          thumbnailAltText: localizeDbText(row.thumbnailAltText, language, {
+            strictHindi: language === "hi",
+            fallback: row.thumbnailAltText || row.title || "Industry image",
+          }),
           bannerImages: row.bannerImages,
           brochure: row.brochure,
-          seoDescription: row.seoDescription || "",
+          seoDescription: localizeDbText(row.seoDescription, language, {
+            strictHindi: language === "hi",
+            fallback: "",
+          }),
           seoMetadata: row.seoMetadata || undefined,
           products: [],
         });
@@ -174,12 +225,11 @@ export const getIndustryById = async (
 
       const industry = industryMap.get(row.id)!;
       if (row.products && row.products.id) {
-        // Check if product already exists to avoid duplicates
         const productExists = industry.products.some(
           (p) => p.id === row.products!.id
         );
         if (!productExists) {
-          industry.products.push(row.products);
+          industry.products.push(localizeIndustryProduct(row.products, language));
         }
       }
     }

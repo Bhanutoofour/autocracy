@@ -1,13 +1,34 @@
-"use server";
+﻿"use server";
 
 import db from "@/db/drizzle";
 import { blogs, blogIndustries, blogProducts, blogModels } from "@/db/schema";
 import { eq, desc, and, inArray, ne } from "drizzle-orm";
 import { revalidatePath, revalidateTag, unstable_cache } from "next/cache";
+import { type ContentLanguage } from "@/app/_lib/i18n";
+import { localizeDbHtml, localizeDbText } from "@/app/_lib/db-localization";
 
 const BLOG_CACHE_REVALIDATE_SECONDS = 300;
 
-async function fetchBlogBySlug(slug: string) {
+function localizeBlog<T extends Record<string, unknown>>(blog: T, language: ContentLanguage): T {
+  return {
+    ...blog,
+    title: localizeDbText(blog.title, language, {
+      strictHindi: language === "hi",
+      fallback: "Blog",
+    }),
+    description: localizeDbText(blog.description, language, {
+      strictHindi: language === "hi",
+      fallback: "",
+    }),
+    content: localizeDbHtml(blog.content, language),
+    bannerAltText: localizeDbText(blog.bannerAltText, language, {
+      strictHindi: language === "hi",
+      fallback: "Blog image",
+    }),
+  } as T;
+}
+
+async function fetchBlogBySlug(slug: string, language: ContentLanguage = "en") {
   const [blog] = await db
     .select()
     .from(blogs)
@@ -34,7 +55,7 @@ async function fetchBlogBySlug(slug: string) {
     .where(eq(blogModels.blogId, blog.id));
 
   return {
-    ...blog,
+    ...localizeBlog(blog, language),
     industryIds: industryIds.map((i) => i.industryId),
     productIds: productIds.map((p) => p.productId),
     modelIds: modelIds.map((m) => m.modelId),
@@ -46,7 +67,8 @@ async function fetchRelatedBlogs(
   industryIds: number[],
   productIds: number[],
   modelIds: number[],
-  limit: number
+  limit: number,
+  language: ContentLanguage = "en",
 ) {
   const relatedBlogIds = new Set<number>();
 
@@ -127,7 +149,7 @@ async function fetchRelatedBlogs(
         .where(eq(blogModels.blogId, blog.id));
 
       return {
-        ...blog,
+        ...localizeBlog(blog, language),
         industryIds: relatedIndustryIds.map((i) => i.industryId),
         productIds: relatedProductIds.map((p) => p.productId),
         modelIds: relatedModelIds.map((m) => m.modelId),
@@ -136,7 +158,7 @@ async function fetchRelatedBlogs(
   );
 }
 
-async function fetchActiveBlogs() {
+async function fetchActiveBlogs(language: ContentLanguage = "en") {
   const allBlogs = await db
     .select()
     .from(blogs)
@@ -161,7 +183,7 @@ async function fetchActiveBlogs() {
         .where(eq(blogModels.blogId, blog.id));
 
       return {
-        ...blog,
+        ...localizeBlog(blog, language),
         industryIds: industryIds.map((i) => i.industryId),
         productIds: productIds.map((p) => p.productId),
         modelIds: modelIds.map((m) => m.modelId),
@@ -171,7 +193,7 @@ async function fetchActiveBlogs() {
 }
 
 const getBlogBySlugCached = unstable_cache(
-  async (slug: string) => fetchBlogBySlug(slug),
+  async (slug: string, language: ContentLanguage) => fetchBlogBySlug(slug, language),
   ["public-blog-by-slug"],
   {
     revalidate: BLOG_CACHE_REVALIDATE_SECONDS,
@@ -185,8 +207,9 @@ const getRelatedBlogsCached = unstable_cache(
     industryIds: number[],
     productIds: number[],
     modelIds: number[],
-    limit: number
-  ) => fetchRelatedBlogs(currentBlogId, industryIds, productIds, modelIds, limit),
+    limit: number,
+    language: ContentLanguage,
+  ) => fetchRelatedBlogs(currentBlogId, industryIds, productIds, modelIds, limit, language),
   ["public-related-blogs"],
   {
     revalidate: BLOG_CACHE_REVALIDATE_SECONDS,
@@ -195,7 +218,7 @@ const getRelatedBlogsCached = unstable_cache(
 );
 
 const getActiveBlogsCached = unstable_cache(
-  async () => fetchActiveBlogs(),
+  async (language: ContentLanguage) => fetchActiveBlogs(language),
   ["public-active-blogs"],
   {
     revalidate: BLOG_CACHE_REVALIDATE_SECONDS,
@@ -203,9 +226,9 @@ const getActiveBlogsCached = unstable_cache(
   }
 );
 
-export async function getBlogBySlug(slug: string) {
+export async function getBlogBySlug(slug: string, language: ContentLanguage = "en") {
   try {
-    return getBlogBySlugCached(slug);
+    return getBlogBySlugCached(slug, language);
   } catch (error) {
     console.error("Error fetching blog by slug:", error);
     return null;
@@ -217,7 +240,8 @@ export async function getRelatedBlogs(
   industryIds: number[],
   productIds: number[],
   modelIds: number[],
-  limit: number = 3
+  limit: number = 3,
+  language: ContentLanguage = "en",
 ) {
   try {
     return getRelatedBlogsCached(
@@ -225,7 +249,8 @@ export async function getRelatedBlogs(
       industryIds,
       productIds,
       modelIds,
-      limit
+      limit,
+      language,
     );
   } catch (error) {
     console.error("Error fetching related blogs:", error);
@@ -233,9 +258,9 @@ export async function getRelatedBlogs(
   }
 }
 
-export async function getActiveBlogs() {
+export async function getActiveBlogs(language: ContentLanguage = "en") {
   try {
-    return getActiveBlogsCached();
+    return getActiveBlogsCached(language);
   } catch (error) {
     console.error("Error fetching blogs:", error);
     return [];

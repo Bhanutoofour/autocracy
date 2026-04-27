@@ -1,4 +1,4 @@
-import Image from "next/image";
+﻿import Image from "next/image";
 import Link from "next/link";
 import { getMessages, type ContentLanguage, tUi } from "@/app/_lib/i18n";
 
@@ -72,14 +72,19 @@ export default function ModelDetailContent({
   industryContext,
 }: ModelDetailContentProps) {
   const messages = getMessages(language);
+  const isHindi = language === "hi";
   const primaryFeatures = (modelData.keyFeatures || []).slice(0, 8);
   const detailRows = modelData.keyFeatures || [];
   const descriptionBlocks = descriptionBlocksOverride ?? modelData.modelDescription;
   const hasModelDescriptions = descriptionBlocks.length > 0;
-  const specsHeading = modelData.specsTableIntro?.heading?.trim() || "Precision Machines. Project-Ready.";
+  const specsHeading =
+    modelData.specsTableIntro?.heading?.trim()
+    || (isHindi ? "सटीक मशीनें। परियोजना के लिए तैयार।" : "Precision Machines. Project-Ready.");
   const specsParagraph =
     modelData.specsTableIntro?.paragraph?.trim()
-    || "Built for performance and trusted for field-ready execution across demanding projects.";
+    || (isHindi
+      ? "उच्च प्रदर्शन के लिए निर्मित और चुनौतीपूर्ण परियोजनाओं में भरोसेमंद फील्ड-तैयार निष्पादन के लिए उपयुक्त।"
+      : "Built for performance and trusted for field-ready execution across demanding projects.");
 
   return (
     <main className="site-container py-8 sm:py-12">
@@ -182,7 +187,7 @@ export default function ModelDetailContent({
                     rel="noreferrer"
                     target="_blank"
                   >
-                    Watch Video
+                    {isHindi ? "वीडियो देखें" : "Watch Video"}
                   </Link>
                 ) : null}
               </div>
@@ -197,7 +202,7 @@ export default function ModelDetailContent({
                         loading="lazy"
                         referrerPolicy="strict-origin-when-cross-origin"
                         src={embedUrl}
-                        title={block.title || "Model video"}
+                        title={block.title || (isHindi ? "मॉडल वीडियो" : "Model video")}
                       />
                     </div>
                   ) : (
@@ -232,10 +237,10 @@ export default function ModelDetailContent({
               <thead className="bg-[#f8f8f8]">
                 <tr>
                   <th className="px-5 py-3 text-sm font-semibold uppercase tracking-[0.06em] text-[#475360] sm:px-6">
-                    Feature
+                    {isHindi ? "विशेषता" : "Feature"}
                   </th>
                   <th className="px-5 py-3 text-sm font-semibold uppercase tracking-[0.06em] text-[#475360] sm:px-6">
-                    Value
+                    {isHindi ? "मान" : "Value"}
                   </th>
                 </tr>
               </thead>
@@ -254,7 +259,9 @@ export default function ModelDetailContent({
 
       <section className="mt-10 rounded bg-[var(--brand-yellow)] px-6 py-10 text-center">
         <h2 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[30px] font-bold leading-[1.15] text-[#0a0a0b] sm:text-[36px]">
-          Ready to power up your projects with {modelData.modelTitle}?
+          {isHindi
+            ? `${modelData.modelTitle} के साथ अपने प्रोजेक्ट्स को गति देने के लिए तैयार हैं?`
+            : `Ready to power up your projects with ${modelData.modelTitle}?`}
         </h2>
         <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
           <Link
@@ -279,7 +286,9 @@ export default function ModelDetailContent({
       {relatedModels.length > 0 ? (
         <section className="mt-10">
           <h2 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[30px] font-bold leading-[1.15] text-[#0a0a0b] sm:text-[34px]">
-            More Models in {modelData.series} Series
+            {isHindi
+              ? `${modelData.series} सीरीज़ में और मॉडल`
+              : `More Models in ${modelData.series} Series`}
           </h2>
           <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {relatedModels.map((model) => (
@@ -332,3 +341,4 @@ export default function ModelDetailContent({
     </main>
   );
 }
+

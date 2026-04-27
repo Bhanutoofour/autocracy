@@ -6,7 +6,7 @@ import {
 } from "@/actions/modelAction";
 import { getRequestContentLanguage, getRequestLocale } from "@/app/_lib/i18n-server";
 import { buildLocalizedAlternates, localizeHref, toAbsoluteUrl } from "@/app/_lib/locale-path";
-import { tUi } from "@/app/_lib/i18n";
+import { tUi, translateIndustryLabel } from "@/app/_lib/i18n";
 import ModelDetailContent from "@/app/_components/ModelDetailContent";
 import { modelNumberSlug } from "@/utils/slug";
 import { findIndustryLabel } from "@/app/_lib/siteCatalog";
@@ -76,12 +76,14 @@ export default async function IndustryProductModelPage({
   params,
 }: IndustryProductModelPageProps) {
   const language = await getRequestContentLanguage();
+  const copyLanguage = language === "hi" ? "hi" : "en";
   const locale = await getRequestLocale();
   const { industrySlug, productSlug, modelSlug } = await params;
   const resolved = await getModelByIndustryProductAndModelNumberSlug(
     industrySlug,
     productSlug,
     modelSlug,
+    language,
   );
   if (!resolved) notFound();
 
@@ -144,7 +146,7 @@ export default async function IndustryProductModelPage({
       value: feature.value,
     })),
   };
-  const relatedModels = (await getModelsBySeries(modelData.series)).filter((model) => model.id !== modelData.id);
+  const relatedModels = (await getModelsBySeries(modelData.series, language)).filter((model) => model.id !== modelData.id);
   const relatedModelCards = relatedModels.slice(0, 6).map((model) => ({
     ...model,
     href: localizeHref(
@@ -153,17 +155,20 @@ export default async function IndustryProductModelPage({
     ),
   }));
   const industryLabel = findIndustryLabel(industrySlug) || industrySlug.replace(/-/g, " ");
+  const localizedIndustryLabel = translateIndustryLabel(industryLabel, language);
   const industryNarrative = getIndustryModelNarrative(
     industrySlug,
-    industryLabel,
+    localizedIndustryLabel,
     modelData.modelTitle,
     modelData.productName,
+    copyLanguage,
   );
   const industryDescriptionBlocks = await getIndustryModelDescription(
     industrySlug,
-    industryLabel,
+    localizedIndustryLabel,
     industryId,
     modelData,
+    language,
   );
 
   return (
@@ -180,7 +185,7 @@ export default async function IndustryProductModelPage({
         relatedModels={relatedModelCards}
         descriptionBlocksOverride={industryDescriptionBlocks}
         industryContext={{
-          industryLabel,
+          industryLabel: localizedIndustryLabel,
           heading: industryNarrative.heading,
           summary: industryNarrative.summary,
           highlights: industryNarrative.highlights,

@@ -6,6 +6,7 @@ type ProductLongformContent = {
   selectionHeading: string;
   selectionPoints: string[];
 };
+type SupportedCopyLanguage = "en" | "hi";
 
 const PRODUCT_CONTENT: Record<string, ProductLongformContent> = {
   trenchers: {
@@ -65,9 +66,34 @@ function fallbackContent(
   productTitle: string,
   industries: string[],
   series: string[],
+  language: SupportedCopyLanguage,
 ): ProductLongformContent {
   const industriesSnippet = industries.slice(0, 4).join(", ");
   const seriesSnippet = series.slice(0, 3).join(", ");
+
+  if (language === "hi") {
+    return {
+      headline: `${productTitle} बहु-उद्योग परियोजनाओं के लिए इंजीनियर्ड समाधान`,
+      summary:
+        `${productTitle} विभिन्न परियोजना परिस्थितियों में स्थिर प्रदर्शन, व्यावहारिक उत्पादकता और बेहतर गुणवत्ता के साथ उपयोग के लिए उपयुक्त है।`,
+      valueHeading: "वास्तविक परियोजनाओं में प्रमुख लाभ",
+      valuePoints: [
+        "विभिन्न साइट परिस्थितियों में भरोसेमंद और दोहराने योग्य प्रदर्शन",
+        "दैनिक संचालन के लिए स्थिर आउटपुट और बेहतर नियंत्रण",
+        "इंस्टॉलेशन एवं इंफ्रास्ट्रक्चर टीमों के लिए अधिक कुशल वर्कफ़्लो",
+      ],
+      selectionHeading: "सही कॉन्फ़िगरेशन कैसे चुनें",
+      selectionPoints: [
+        industriesSnippet
+          ? `मुख्य उपयोग क्षेत्र का आकलन करें: ${industriesSnippet}`
+          : "पहले साइट की स्थिति और अपेक्षित प्रदर्शन तय करें",
+        seriesSnippet
+          ? `उपलब्ध मॉडल/सीरीज़ की तुलना करें: ${seriesSnippet}`
+          : "मॉडल स्पेसिफिकेशन को गहराई, चौड़ाई और आउटपुट लक्ष्यों से मिलाएँ",
+        "मशीन चयन को टाइमलाइन, टीम क्षमता और सपोर्ट उपलब्धता के अनुसार तय करें",
+      ],
+    };
+  }
 
   return {
     headline: `${productTitle} Engineered for Multi-Industry Execution`,
@@ -97,6 +123,10 @@ export function getProductLongformContent(
   productTitle: string,
   industries: string[],
   series: string[],
+  language: SupportedCopyLanguage = "en",
 ): ProductLongformContent {
-  return PRODUCT_CONTENT[productSlug] ?? fallbackContent(productTitle, industries, series);
+  if (language === "hi") {
+    return fallbackContent(productTitle, industries, series, "hi");
+  }
+  return PRODUCT_CONTENT[productSlug] ?? fallbackContent(productTitle, industries, series, "en");
 }

@@ -10,8 +10,10 @@ import {
   products,
   models,
 } from "@/db/schema";
-import { eq, inArray, desc, asc } from "drizzle-orm";
+import { eq, inArray, desc } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { type ContentLanguage } from "@/app/_lib/i18n";
+import { localizeDbText } from "@/app/_lib/db-localization";
 
 export type VideoWithRelations = {
   id: number;
@@ -29,7 +31,9 @@ export type VideoWithRelations = {
 };
 
 // Fetch all active videos with their relationships
-export const getActiveVideos = async (): Promise<VideoWithRelations[]> => {
+export const getActiveVideos = async (
+  language: ContentLanguage = "en",
+): Promise<VideoWithRelations[]> => {
   try {
     const result = await db
       .select()
@@ -87,7 +91,10 @@ export const getActiveVideos = async (): Promise<VideoWithRelations[]> => {
 
         return {
           id: video.id,
-          title: video.title,
+          title: localizeDbText(video.title, language, {
+            strictHindi: language === "hi",
+            fallback: "Video",
+          }),
           embedLink: video.embedLink,
           active: !!video.active,
           createdAt: video.createdAt,
@@ -95,9 +102,30 @@ export const getActiveVideos = async (): Promise<VideoWithRelations[]> => {
           industryIds: industryIdsArray,
           productIds: productIdsArray,
           modelIds: modelIdsArray,
-          industries: industriesArr,
-          products: productsArr,
-          models: modelsArr,
+          industries: industriesArr.map((industry) => ({
+            ...industry,
+            title: localizeDbText(industry.title, language, {
+              strictHindi: language === "hi",
+              isLabel: true,
+              fallback: "Industry",
+            }),
+          })),
+          products: productsArr.map((product) => ({
+            ...product,
+            title: localizeDbText(product.title, language, {
+              strictHindi: language === "hi",
+              isLabel: true,
+              fallback: "Product",
+            }),
+          })),
+          models: modelsArr.map((model) => ({
+            ...model,
+            modelTitle: localizeDbText(model.modelTitle, language, {
+              strictHindi: language === "hi",
+              isLabel: true,
+              fallback: "Model",
+            }),
+          })),
         };
       })
     );
@@ -114,4 +142,3 @@ export const revalidateVideoData = async () => {
   revalidatePath("/");
   revalidatePath("/videos");
 };
-

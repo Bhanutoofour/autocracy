@@ -1,5 +1,7 @@
 "use client";
 
+import { useMemo, useTransition } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   DEFAULT_COUNTRY,
   getCountryLanguageOptions,
@@ -41,57 +43,67 @@ function parsePath(pathname: string) {
   };
 }
 
-function readStoredLanguage(): string | null {
-  try {
-    return window.localStorage.getItem(STORAGE_KEY);
-  } catch {
-    return null;
-  }
-}
-
 export default function LanguageSwitcherButton({
   className,
 }: {
   className?: string;
 }) {
-  const fallbackPathData: {
-    country: SupportedCountry;
-    language: string | undefined;
-    remainder: string[];
-  } = { country: DEFAULT_COUNTRY, language: undefined, remainder: [] };
-  const pathData =
-    typeof window !== "undefined"
-      ? parsePath(window.location.pathname)
-      : fallbackPathData;
+  const router = useRouter();
+  const nextPathname = usePathname() || "/";
+  const searchParams = useSearchParams();
+  const [isPending, startTransition] = useTransition();
+  const runtimePathname =
+    typeof window !== "undefined" ? window.location.pathname : nextPathname;
+  const pathData = useMemo(() => parsePath(runtimePathname), [runtimePathname]);
   const allowedLanguages = getCountryLanguageOptions(pathData.country);
   const language = getContentLanguage(
     getNormalizedLanguageForCountry(pathData.country, pathData.language),
   );
 
   const handleChange = (nextLanguage: ContentLanguage) => {
-    const { country, remainder } = parsePath(window.location.pathname);
+    const { country, remainder } = pathData;
     const normalizedLanguage = getNormalizedLanguageForCountry(
       country,
       nextLanguage,
     );
     const nextPath = `/${country}/${normalizedLanguage}${remainder.length ? `/${remainder.join("/")}` : ""}`;
-    const nextUrl = `${nextPath}${window.location.search}${window.location.hash}`;
+    const query = searchParams.toString();
+    const nextUrl = query ? `${nextPath}?${query}` : nextPath;
+    const browserCurrentUrl =
+      typeof window !== "undefined"
+        ? `${window.location.pathname}${window.location.search}`
+        : `${nextPathname}${query ? `?${query}` : ""}`;
 
     try {
       window.localStorage.setItem(STORAGE_KEY, normalizedLanguage);
     } catch {
       // Ignore storage write failures in restrictive browser modes.
     }
-    if (nextUrl !== `${window.location.pathname}${window.location.search}${window.location.hash}`) {
-      window.location.assign(nextUrl);
+
+    if (nextUrl !== browserCurrentUrl) {
+      startTransition(() => {
+        router.push(nextUrl, { scroll: false });
+      });
+
+      // Locale-prefixed rewrites can bypass client-side route updates.
+      // Fallback to full navigation if URL didn't change shortly after push.
+      if (typeof window !== "undefined") {
+        window.setTimeout(() => {
+          const latestUrl = `${window.location.pathname}${window.location.search}`;
+          const renderedLang = (document.documentElement.lang || "").toLowerCase();
+          const languageDidNotApply = renderedLang !== normalizedLanguage;
+
+          if (latestUrl === browserCurrentUrl || languageDidNotApply) {
+            window.location.assign(nextUrl);
+          }
+        }, 220);
+      }
     }
   };
 
-  const storedLanguage =
-    typeof window !== "undefined" ? readStoredLanguage() : null;
   const resolvedLanguage = getNormalizedLanguageForCountry(
     pathData.country,
-    storedLanguage ?? language,
+    language,
   );
 
   return (
@@ -109,6 +121,7 @@ export default function LanguageSwitcherButton({
       }
     >
       <select
+        disabled={isPending}
         onChange={(event) => {
           const next = event.target.value.toLowerCase();
           if (
@@ -124,6 +137,7 @@ export default function LanguageSwitcherButton({
           cursor: "pointer",
           font: "inherit",
           textTransform: "uppercase",
+          opacity: isPending ? 0.75 : 1,
           appearance: "none",
           WebkitAppearance: "none",
           MozAppearance: "none",

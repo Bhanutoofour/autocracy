@@ -1,4 +1,4 @@
-"use server";
+﻿"use server";
 
 import db from "@/db/drizzle";
 import {
@@ -11,7 +11,10 @@ import {
 import { eq, inArray } from "drizzle-orm";
 import { revalidatePath, revalidateTag, unstable_cache } from "next/cache";
 import { productSlug } from "@/utils/slug";
+import { normalizeUrlPathSegment } from "@/utils/slug";
 import { getActiveIndustries } from "@/actions/industryAction";
+import { type ContentLanguage } from "@/app/_lib/i18n";
+import { localizeDbText } from "@/app/_lib/db-localization";
 
 const PRODUCT_CACHE_REVALIDATE_SECONDS = 300;
 
@@ -41,18 +44,67 @@ const getActiveProductsCached = unstable_cache(
   }
 );
 
-export const getActiveProducts = async (): Promise<ActiveProduct[]> => {
+function localizeProductCard(product: ActiveProduct, language: ContentLanguage): ActiveProduct {
+  return {
+    ...product,
+    title: localizeDbText(product.title, language, {
+      strictHindi: language === "hi",
+      isLabel: true,
+      fallback: "Product",
+    }),
+    thumbnailAltText: localizeDbText(product.thumbnailAltText, language, {
+      strictHindi: language === "hi",
+      fallback: product.thumbnailAltText || product.title || "Product image",
+    }),
+  };
+}
+
+function localizeModelCard(model: Model, language: ContentLanguage): Model {
+  return {
+    ...model,
+    modelTitle: localizeDbText(model.modelTitle, language, {
+      strictHindi: language === "hi",
+      isLabel: true,
+      fallback: "Model",
+    }),
+    machineType: localizeDbText(model.machineType, language, {
+      strictHindi: language === "hi",
+      isLabel: true,
+      fallback: "Machine type",
+    }),
+    thumbnailAltText: localizeDbText(model.thumbnailAltText, language, {
+      strictHindi: language === "hi",
+      fallback: model.thumbnailAltText || model.modelTitle || "Model image",
+    }),
+    keyFeatures: (model.keyFeatures || []).map((feature) => ({
+      name: localizeDbText(feature.name, language, {
+        strictHindi: language === "hi",
+        isLabel: true,
+        fallback: "Feature",
+      }),
+      value: localizeDbText(feature.value, language, {
+        strictHindi: false,
+        fallback: "-",
+      }),
+    })),
+  };
+}
+
+export const getActiveProducts = async (
+  language: ContentLanguage = "en",
+): Promise<ActiveProduct[]> => {
   try {
-    return getActiveProductsCached();
+    const rows = await getActiveProductsCached();
+    return rows.map((product) => localizeProductCard(product, language));
   } catch (error) {
     console.error("Error fetching active products:", error);
     return [];
   }
 };
 
-export const getProductsWithIndustries = async (): Promise<
-  ProductWithIndustries[]
-> => {
+export const getProductsWithIndustries = async (
+  language: ContentLanguage = "en",
+): Promise<ProductWithIndustries[]> => {
   try {
     const result = await db
       .select({
@@ -66,7 +118,6 @@ export const getProductsWithIndustries = async (): Promise<
       .where(eq(products.active, true))
       .orderBy(products.id);
 
-    // Get industries for each product
     const productsWithIndustries = await Promise.all(
       result.map(async (product) => {
         const productIndustryRows = await db
@@ -84,8 +135,20 @@ export const getProductsWithIndustries = async (): Promise<
           : [];
 
         return {
-          ...product,
-          industries: industriesArr.map((ind) => ind.title),
+          ...localizeProductCard(
+            {
+              ...product,
+              active: !!product.active,
+            },
+            language,
+          ),
+          industries: industriesArr.map((ind) =>
+            localizeDbText(ind.title, language, {
+              strictHindi: language === "hi",
+              isLabel: true,
+              fallback: "Industry",
+            }),
+          ),
           active: !!product.active,
         };
       }),
@@ -98,23 +161,18 @@ export const getProductsWithIndustries = async (): Promise<
   }
 };
 
-// Revalidate the home page when product data changes
 export const revalidateProductData = async () => {
   revalidateTag("products", "max");
   revalidatePath("/");
 };
 
-/**
- * Resolve product by URL slug only (no query params).
- * Slug can be category-only (product title) or industry-product (industry-title-product-title).
- */
-/** Normalize slug for matching (handles old URLs with & or double dashes). */
 function normalizeProductSlug(s: string): string {
-  return s.trim().replace(/&/g, "").replace(/-+/g, "-").replace(/^-|-$/g, "");
+  return normalizeUrlPathSegment(s);
 }
 
 export const getProductBySlug = async (
   slug: string,
+  language: ContentLanguage = "en",
 ): Promise<{
   productData: ProductDataType;
   productId: number;
@@ -125,8 +183,8 @@ export const getProductBySlug = async (
     if (!normalizedSlug) return null;
 
     const [productsList, industriesList] = await Promise.all([
-      getActiveProducts(),
-      getActiveIndustries(),
+      getActiveProducts("en"),
+      getActiveIndustries("en"),
     ]);
 
     const candidates: {
@@ -163,6 +221,7 @@ export const getProductBySlug = async (
     const productData = await getProductById(
       matched.productId,
       matched.industryId || undefined,
+      language,
     );
     if (!productData) return null;
 
@@ -180,9 +239,9 @@ export const getProductBySlug = async (
 export const getProductById = async (
   productId: number,
   industryId?: number,
+  language: ContentLanguage = "en",
 ): Promise<ProductDataType | null> => {
   try {
-    // Fetch the product
     const productArr = await db
       .select()
       .from(products)
@@ -190,14 +249,12 @@ export const getProductById = async (
     if (!productArr.length) return null;
     const product = productArr[0];
 
-    // Fetch industries for this product
     const productIndustryRows = await db
       .select({ industryId: productIndustries.industryId })
       .from(productIndustries)
       .where(eq(productIndustries.productId, productId));
     const industryIds = productIndustryRows.map((row) => row.industryId);
 
-    // Fetch industry details
     const industriesArr = industryIds.length
       ? await db
           .select()
@@ -205,60 +262,79 @@ export const getProductById = async (
           .where(inArray(industries.id, industryIds))
       : [];
     const industryTitles = industriesArr
-      .map((ind) => ind.title)
-      .filter(
-        (title): title is string => title !== null && title !== undefined,
-      );
+      .map((ind) =>
+        localizeDbText(ind.title, language, {
+          strictHindi: language === "hi",
+          isLabel: true,
+          fallback: "Industry",
+        }),
+      )
+      .filter((title): title is string => title !== null && title !== undefined);
 
-    // Fetch models for this product
     let modelRows = await db
       .select()
       .from(models)
       .where(eq(models.productId, productId))
       .orderBy(models.id);
 
-    // If industryId is provided, filter models by modelIndustries
     if (industryId) {
       const modelIndustryRows = await db
         .select({ modelId: modelIndustries.modelId })
         .from(modelIndustries)
         .where(eq(modelIndustries.industryId, industryId));
       const allowedModelIds = modelIndustryRows.map((row) => row.modelId);
-      modelRows = modelRows.filter((model) =>
-        allowedModelIds.includes(model.id),
-      );
+      modelRows = modelRows.filter((model) => allowedModelIds.includes(model.id));
     }
 
-    // Only return required fields for each model
-    const modelsFiltered = modelRows.map((model) => ({
-      id: model.id,
-      thumbnail: model.thumbnail,
-      thumbnailAltText: model.thumbnailAltText,
-      modelNumber: model.modelNumber,
-      modelTitle: model.modelTitle,
-      machineType: model.machineType,
-      series: model.series,
-      keyFeatures: Array.isArray(model.keyFeatures)
-        ? model.keyFeatures.slice(0, 3)
-        : [],
-    }));
+    const modelsFiltered = modelRows.map((model) =>
+      localizeModelCard(
+        {
+          id: model.id,
+          thumbnail: model.thumbnail,
+          thumbnailAltText: model.thumbnailAltText,
+          modelNumber: model.modelNumber,
+          modelTitle: model.modelTitle,
+          machineType: model.machineType,
+          series: model.series,
+          keyFeatures: Array.isArray(model.keyFeatures)
+            ? model.keyFeatures.slice(0, 3)
+            : [],
+        },
+        language,
+      ),
+    );
 
-    // Get unique series from the filtered models
     const series = Array.from(new Set(modelsFiltered.map((m) => m.series)));
 
     const resultData = {
       id: product.id,
-      title: product.title,
-      description: product.description,
+      title: localizeDbText(product.title, language, {
+        strictHindi: language === "hi",
+        isLabel: true,
+        fallback: "Product",
+      }),
+      description: localizeDbText(product.description, language, {
+        strictHindi: language === "hi",
+        fallback: "",
+      }),
       thumbnail: product.thumbnail,
-      thumbnailAltText: product.thumbnailAltText,
+      thumbnailAltText: localizeDbText(product.thumbnailAltText, language, {
+        strictHindi: language === "hi",
+        fallback: "Product image",
+      }),
       series,
       active: product.active,
       generalImage: product.generalImage,
-      generalImageAltText: product.generalImageAltText,
+      generalImageAltText: localizeDbText(product.generalImageAltText, language, {
+        strictHindi: language === "hi",
+        fallback: "Product image",
+      }),
       industries: industryTitles,
       models: modelsFiltered,
-      seoDescription: product.seoDescription || "",
+      seoDescription: localizeDbText(product.seoDescription, language, {
+        strictHindi: language === "hi",
+        fallback: "",
+      }),
       seoMetadata: product.seoMetadata || undefined,
     };
 

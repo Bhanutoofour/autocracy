@@ -1,3 +1,5 @@
+import { localizeDbText } from "@/app/_lib/db-localization";
+
 type IndustryProductContent = {
   sectionLabel: string;
   headline: string;
@@ -9,6 +11,7 @@ type IndustryProductContent = {
   fitHeading: string;
   fitPoints: string[];
 };
+type SupportedCopyLanguage = "en" | "hi";
 
 type IndustryDefaults = {
   sectionLabel: string;
@@ -273,7 +276,46 @@ export function getIndustryProductContent(
   industryTitle: string,
   productSlug: string,
   productTitle: string,
+  language: SupportedCopyLanguage = "en",
 ): IndustryProductContent {
+  if (language === "hi") {
+    const localizedIndustryTitle = localizeDbText(industryTitle, "hi", {
+      strictHindi: true,
+      isLabel: true,
+      fallback: "उद्योग",
+    });
+    const localizedProductTitle = localizeDbText(productTitle, "hi", {
+      strictHindi: true,
+      isLabel: true,
+      fallback: "उत्पाद",
+    });
+
+    return {
+      sectionLabel: localizedIndustryTitle,
+      headline: `${localizedIndustryTitle} के लिए ${localizedProductTitle}`,
+      summary:
+        `${localizedProductTitle} का उपयोग ${localizedIndustryTitle} परियोजनाओं में स्थिर आउटपुट, नियंत्रित ट्रेंचिंग और तेज निष्पादन के लिए किया जाता है।`,
+      useCasesHeading: "सामान्य उपयोग के परिदृश्य",
+      useCases: [
+        `${localizedIndustryTitle} परियोजनाओं में यूटिलिटी ट्रेंचिंग कार्य`,
+        "दोहराने योग्य ट्रेंच प्रोफाइल के साथ बेहतर इंस्टॉलेशन गुणवत्ता",
+        "फील्ड उत्पादकता बढ़ाने के लिए तेज और नियंत्रित निष्पादन",
+      ],
+      executionHeading: "निष्पादन प्राथमिकताएं",
+      executionPoints: [
+        "डाउनस्ट्रीम कार्यों के लिए स्थिर गहराई और चौड़ाई",
+        "कम रीवर्क के साथ अधिक विश्वसनीय परियोजना प्रगति",
+        "टाइट टाइमलाइन में बेहतर शेड्यूल कंट्रोल",
+      ],
+      fitHeading: "यह कॉन्फ़िगरेशन क्यों उपयुक्त है",
+      fitPoints: [
+        "वास्तविक साइट परिस्थितियों में भरोसेमंद प्रदर्शन",
+        "टीमों के लिए स्थिर और कार्यान्वयन-तैयार आउटपुट",
+        "परियोजना गुणवत्ता और उत्पादकता में समग्र सुधार",
+      ],
+    };
+  }
+
   const defaults = INDUSTRY_DEFAULTS[industrySlug];
   if (!defaults) {
     return fallbackContent(industryTitle, productTitle);
@@ -302,3 +344,4 @@ export function getIndustryProductContent(
     fitPoints: overrides.fitPoints ?? base.fitPoints,
   };
 }
+

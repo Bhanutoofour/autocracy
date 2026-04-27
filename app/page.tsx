@@ -327,6 +327,33 @@ const fallbackStories = [
   },
 ];
 
+const fallbackStoriesHi = [
+  {
+    image: "6f79ddcbbf2d6df60bdc72d10ee750b4062fe76d.png",
+    title: "सही काम के लिए सही मशीन",
+    excerpt:
+      "Autocracy Machinery निर्माण, कृषि और इंफ्रास्ट्रक्चर परियोजनाओं के लिए उद्देश्य-आधारित मशीनों के निर्माण के लिए जानी जाती है...",
+  },
+  {
+    image: "4c8d790d9f0e269594d166de2a1f2bc31756cb7d.png",
+    title: "कृषि और इंफ्रास्ट्रक्चर क्षेत्र के लिए नई दिशा",
+    excerpt:
+      "Autocracy Machinery को कृषि और इंफ्रास्ट्रक्चर के लिए उन्नत मशीनरी समाधान उपलब्ध कराने के लिए सराहा गया...",
+  },
+  {
+    image: "e01088c2bc9dc1e016102c3d92b7aa506b5fe0d8.png",
+    title: "महिला-नेतृत्व वाले स्टार्टअप्स में इंजीनियरिंग नवाचार",
+    excerpt:
+      "महिला-नेतृत्व वाले स्टार्टअप्स में Autocracy Machinery को भारतीय इंजीनियरिंग उत्कृष्टता के उदाहरण के रूप में प्रस्तुत किया गया...",
+  },
+  {
+    image: "28fe76fafbd6a96b61c2da01d6e43907611ed888.png",
+    title: "चुनौतियों के बीच निर्माण क्षेत्र में नई पहचान",
+    excerpt:
+      "Autocracy Machinery ने कठिन चुनौतियों के बीच नवाचार और गुणवत्ता के साथ अपनी मजबूत पहचान बनाई...",
+  },
+];
+
 type HomeStoryCard = {
   id: string;
   title: string;
@@ -837,9 +864,10 @@ export default async function Home() {
         ? item.quote
         : strictLocalized?.testimonialQuotes[index] ?? "",
   }));
+  const storiesSeed = language === "hi" ? fallbackStoriesHi : fallbackStories;
   let homeIndustries: { title: string; image: string }[] = fallbackIndustries;
   let homeProducts: { name: string; image: string }[] = fallbackProducts;
-  let homeStories: HomeStoryCard[] = fallbackStories.map((story, index) => ({
+  let homeStories: HomeStoryCard[] = storiesSeed.map((story, index) => ({
     id: `fallback-story-${index + 1}`,
     title: story.title,
     excerpt: story.excerpt,
@@ -849,9 +877,9 @@ export default async function Home() {
 
   try {
     const [dbIndustries, dbProducts, dbBlogs] = await Promise.all([
-      getActiveIndustries(),
-      getActiveProducts(),
-      getActiveBlogs(),
+      getActiveIndustries(language),
+      getActiveProducts(language),
+      getActiveBlogs(language),
     ]);
 
     if (Array.isArray(dbIndustries) && dbIndustries.length > 0) {
@@ -868,7 +896,7 @@ export default async function Home() {
       }));
     }
 
-    if (Array.isArray(dbBlogs) && dbBlogs.length > 0) {
+    if (language === "en" && Array.isArray(dbBlogs) && dbBlogs.length > 0) {
       homeStories = dbBlogs.slice(0, 6).map((blog) => ({
         id: `db-story-${blog.id}`,
         title: blog.title ?? "Untitled blog",
@@ -883,21 +911,33 @@ export default async function Home() {
 
   let heroSlides: HeroSection[] = [];
   try {
-    heroSlides = await getHeroSections();
+    heroSlides = await getHeroSections(language);
   } catch (error) {
     console.error("Error loading hero slides:", error);
   }
 
-  const fallbackHeroSlides: HeroSection[] = [
-    {
-      id: 1,
-      title: "Single chain trencher",
-      description:
-        "New series designed for trench profiles upto 600mm in width and upto 1500mm in depth",
-      image: "032f1530adf57211e22495cccd59ff0a6d6be4d0.png",
-      altText: "Single chain trencher working at a field site",
-    },
-  ];
+  const fallbackHeroSlides: HeroSection[] =
+    language === "hi"
+      ? [
+          {
+            id: 1,
+            title: "सिंगल चेन ट्रेंचर",
+            description:
+              "नई सीरीज़, जो 600 मिमी चौड़ाई और 1500 मिमी गहराई तक सटीक ट्रेंच प्रोफाइल के लिए डिज़ाइन की गई है।",
+            image: "032f1530adf57211e22495cccd59ff0a6d6be4d0.png",
+            altText: "फील्ड साइट पर काम करता हुआ सिंगल चेन ट्रेंचर",
+          },
+        ]
+      : [
+          {
+            id: 1,
+            title: "Single chain trencher",
+            description:
+              "New series designed for trench profiles upto 600mm in width and upto 1500mm in depth",
+            image: "032f1530adf57211e22495cccd59ff0a6d6be4d0.png",
+            altText: "Single chain trencher working at a field site",
+          },
+        ];
 
   const resolvedHeroSlides = heroSlides.length > 0 ? heroSlides : fallbackHeroSlides;
 

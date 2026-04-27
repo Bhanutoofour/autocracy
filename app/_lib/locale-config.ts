@@ -1,7 +1,15 @@
 export const DEFAULT_COUNTRY = "in";
 export const DEFAULT_LANGUAGE = "en";
 
-export const SUPPORTED_COUNTRIES = ["in", "ae", "us", "ca", "au", "de", "lk"] as const;
+export const SUPPORTED_COUNTRIES = [
+  "in",
+  "ae",
+  "us",
+  "ca",
+  "au",
+  "de",
+  "lk",
+] as const;
 export const SUPPORTED_LANGUAGES = [
   "en",
   "hi",

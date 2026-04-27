@@ -1,4 +1,6 @@
 import { getIndustryModelImageOverride } from "@/actions/industryModelImageOverrideAction";
+import { type ContentLanguage } from "@/app/_lib/i18n";
+import { localizeDbText } from "@/app/_lib/db-localization";
 
 type IndustryDescriptionBlueprint = {
   title: string;
@@ -67,7 +69,39 @@ function getIndustryBlueprint(
   industrySlug: string,
   industryLabel: string,
   modelTitle: string,
+  language: ContentLanguage = "en",
 ): IndustryDescriptionBlueprint[] {
+  if (language === "hi") {
+    const industryName = localizeDbText(industryLabel, "hi", {
+      strictHindi: true,
+      isLabel: true,
+      fallback: "उद्योग",
+    });
+    const localizedModelTitle = localizeDbText(modelTitle, "hi", {
+      strictHindi: true,
+      isLabel: true,
+      fallback: "मॉडल",
+    });
+    return [
+      {
+        title: `${industryName} में उपयोग के प्रमुख परिदृश्य`,
+        paragraphs: [
+          `${localizedModelTitle} का उपयोग उन परियोजनाओं में किया जाता है जहां नियंत्रित ट्रेंचिंग और समय पर निष्पादन आवश्यक होता है।`,
+          "यह मशीन वास्तविक साइट परिस्थितियों में स्थिर ट्रेंच प्रोफाइल बनाए रखने में मदद करती है।",
+          "इससे इंस्टॉलेशन, बैकफिलिंग और आगे की फील्ड गतिविधियों में बेहतर समन्वय मिलता है।",
+        ],
+      },
+      {
+        title: `${industryName} के लिए निष्पादन प्राथमिकताएं`,
+        paragraphs: [
+          "रूट प्लानिंग, ट्रेंच गहराई और प्रोफाइल की निरंतरता पर फोकस रखें।",
+          "ट्रेंचिंग की गति को साइट की स्थितियों और डाउनस्ट्रीम टीम के कार्य प्रवाह के साथ सिंक्रोनाइज़ करें।",
+          "गुणवत्ता और सुरक्षा मानकों को पूरे प्रोजेक्ट कॉरिडोर में स्थिर बनाए रखें।",
+        ],
+      },
+    ];
+  }
+
   switch (industrySlug) {
     case "ofc-telecommunications":
       return [
@@ -191,6 +225,7 @@ export async function getIndustryModelDescription(
   industryLabel: string,
   industryId: number,
   modelData: ModelObjectTypes,
+  language: ContentLanguage = "en",
 ): Promise<ModelDescription[]> {
   const primaryImage = modelData.modelDescription[0]?.image || modelData.coverImage;
   const primaryAltText =
@@ -204,7 +239,7 @@ export async function getIndustryModelDescription(
     || modelData.coverImageAltText
     || `${modelData.modelTitle} execution`;
 
-  const blueprint = getIndustryBlueprint(industrySlug, industryLabel, modelData.modelTitle);
+  const blueprint = getIndustryBlueprint(industrySlug, industryLabel, modelData.modelTitle, language);
   const first = blueprint[0];
   const second = blueprint[1];
   let dbImageOverride: Awaited<ReturnType<typeof getIndustryModelImageOverride>> = null;
@@ -245,3 +280,4 @@ export async function getIndustryModelDescription(
     },
   ];
 }
+

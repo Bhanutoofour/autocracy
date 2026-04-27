@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { getActiveBlogs } from "@/actions/blogAction";
@@ -75,10 +75,10 @@ export default async function BlogListingPage({ searchParams }: BlogListingPageP
   );
 
   const [activeBlogs, industries, products, models] = await Promise.all([
-    getActiveBlogs(),
-    getActiveIndustries(),
-    getActiveProducts(),
-    getActiveModels(),
+    getActiveBlogs(language),
+    getActiveIndustries(language),
+    getActiveProducts(language),
+    getActiveModels(language),
   ]);
 
   const usedIndustryIds = new Set<number>();

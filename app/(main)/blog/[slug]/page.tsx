@@ -83,6 +83,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
     blog.productIds,
     blog.modelIds,
     3,
+    language,
   );
   const publishedOn = formatBlogDate(blog.updatedAt || blog.createdAt);
   const blogImage = resolveBlogImageSrc(blog.banner);

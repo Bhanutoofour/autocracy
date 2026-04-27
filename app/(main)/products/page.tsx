@@ -30,7 +30,7 @@ export const metadata: Metadata = {
 export default async function ProductsListingPage() {
   const language = await getRequestContentLanguage();
   const locale = await getRequestLocale();
-  const products = await getActiveProducts();
+  const products = await getActiveProducts(language);
 
   return (
     <main className="site-container py-12">

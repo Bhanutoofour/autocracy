@@ -61,8 +61,9 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
 export default async function ProductPage({ params }: ProductPageProps) {
   const language = await getRequestContentLanguage();
   const locale = await getRequestLocale();
+  const copyLanguage = language === "hi" ? "hi" : "en";
   const { slug } = await params;
-  const resolved = await getProductBySlug(slug);
+  const resolved = await getProductBySlug(slug, language);
   if (!resolved) notFound();
 
   const { productData } = resolved;
@@ -71,6 +72,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
     productData.title ?? "Product",
     productData.industries || [],
     productData.series || [],
+    copyLanguage,
   );
   const pageUrl = toAbsoluteUrl(localizeHref(`/products/${slug}`, locale));
   const breadcrumbSchema = {

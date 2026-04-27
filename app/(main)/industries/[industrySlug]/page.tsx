@@ -64,7 +64,7 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
   const language = await getRequestContentLanguage();
   const locale = await getRequestLocale();
   const { industrySlug } = await params;
-  const resolved = await getIndustryBySlug(industrySlug);
+  const resolved = await getIndustryBySlug(industrySlug, language);
   if (!resolved) notFound();
 
   const { industryData } = resolved;

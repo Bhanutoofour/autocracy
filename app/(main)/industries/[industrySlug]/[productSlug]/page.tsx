@@ -7,6 +7,7 @@ import { getProductById } from "@/actions/productAction";
 import {
   modelNumberSlug,
   productSlug as productTitleSlug,
+  normalizeUrlPathSegment,
   titleToSlug,
 } from "@/utils/slug";
 import { getRequestContentLanguage, getRequestLocale } from "@/app/_lib/i18n-server";
@@ -18,6 +19,16 @@ import JsonLd from "@/app/_components/JsonLd";
 type IndustryProductPageProps = {
   params: Promise<{ industrySlug: string; productSlug: string }>;
 };
+
+function matchesProductSlug(dbTitle: string, routeSlug: string): boolean {
+  const db = normalizeUrlPathSegment(titleToSlug(dbTitle ?? ""));
+  const route = normalizeUrlPathSegment(routeSlug ?? "");
+  if (!db || !route) return false;
+  if (db === route) return true;
+  if (db.endsWith("s") && db.slice(0, -1) === route) return true;
+  if (route.endsWith("s") && route.slice(0, -1) === db) return true;
+  return false;
+}
 
 export async function generateMetadata({
   params,
@@ -35,7 +46,7 @@ export async function generateMetadata({
 
   const { industryData, industryId } = industryResolved;
   const matchedProduct = industryData.products.find(
-    (product) => titleToSlug(product.title ?? "") === productSlug,
+    (product) => matchesProductSlug(product.title ?? "", productSlug),
   );
   if (!matchedProduct?.id) {
     return {
@@ -88,24 +99,32 @@ export default async function IndustryProductPage({
   params,
 }: IndustryProductPageProps) {
   const language = await getRequestContentLanguage();
+  const copyLanguage = language === "hi" ? "hi" : "en";
   const locale = await getRequestLocale();
   const { industrySlug, productSlug } = await params;
-  const industryResolved = await getIndustryBySlug(industrySlug);
+  let industryResolved = await getIndustryBySlug(industrySlug, language);
+  if (!industryResolved && language !== "en") {
+    industryResolved = await getIndustryBySlug(industrySlug, "en");
+  }
   if (!industryResolved) notFound();
 
   const { industryData, industryId } = industryResolved;
   const matchedProduct = industryData.products.find(
-    (product) => titleToSlug(product.title ?? "") === productSlug,
+    (product) => matchesProductSlug(product.title ?? "", productSlug),
   );
   if (!matchedProduct?.id) notFound();
 
-  const productData = await getProductById(matchedProduct.id, industryId);
+  let productData = await getProductById(matchedProduct.id, industryId, language);
+  if (!productData && language !== "en") {
+    productData = await getProductById(matchedProduct.id, industryId, "en");
+  }
   if (!productData) notFound();
   const industryProductContent = getIndustryProductContent(
     industrySlug,
     industryData.title ?? "Industry",
     productSlug,
     productData.title ?? "Product",
+    copyLanguage,
   );
   const pageUrl = toAbsoluteUrl(localizeHref(`/industries/${industrySlug}/${productSlug}`, locale));
   const breadcrumbSchema = {
