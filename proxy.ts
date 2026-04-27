@@ -10,6 +10,19 @@ function isPublicAsset(pathname: string): boolean {
   return /\.[^/]+$/.test(pathname);
 }
 
+function isCountryAgnosticPath(pathname: string): boolean {
+  if (pathname === "/blog" || pathname.startsWith("/blog/")) {
+    return true;
+  }
+
+  return (
+    pathname === "/about-us" ||
+    pathname === "/contact-us" ||
+    pathname === "/privacy-policy" ||
+    pathname === "/terms-and-conditions"
+  );
+}
+
 function handleLocaleProxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
@@ -32,6 +45,14 @@ function handleLocaleProxy(request: NextRequest) {
   // Rewrite internally to existing app routes so we don't duplicate files.
   if (country && isSupportedCountry(country) && language && isSupportedLanguage(language)) {
     const internalPath = `/${segments.slice(2).join("/")}`;
+
+    // These pages are country-agnostic. Keep a single canonical country prefix.
+    if (country !== DEFAULT_COUNTRY && isCountryAgnosticPath(internalPath)) {
+      const redirectUrl = request.nextUrl.clone();
+      redirectUrl.pathname = `/${DEFAULT_COUNTRY}/${language}${internalPath}`;
+      return NextResponse.redirect(redirectUrl, 301);
+    }
+
     const rewriteUrl = request.nextUrl.clone();
     rewriteUrl.pathname = internalPath === "/" ? "/" : internalPath;
     const response = NextResponse.rewrite(rewriteUrl);
