@@ -11,6 +11,7 @@ import { getRequestContentLanguage, getRequestLocale } from "@/app/_lib/i18n-ser
 import {
   buildLocalizedAlternates,
   localizeHref,
+  toAbsoluteUrl,
 } from "@/app/_lib/locale-path";
 import {
   formatBlogDate,
@@ -19,6 +20,7 @@ import {
   stripHtmlToText,
   toExcerpt,
 } from "@/app/_lib/blog-utils";
+import JsonLd from "@/app/_components/JsonLd";
 
 export const revalidate = 300;
 
@@ -84,9 +86,62 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
   );
   const publishedOn = formatBlogDate(blog.updatedAt || blog.createdAt);
   const blogImage = resolveBlogImageSrc(blog.banner);
+  const blogPath = localizeHref(`/blog/${slug}`, locale);
+  const blogUrl = toAbsoluteUrl(blogPath);
+  const blogSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: blog.title,
+    description:
+      blog.seoMetadata?.pageDescription?.trim()
+      || stripHtmlToText(blog.description || blog.content).slice(0, 160),
+    image: blogImage ? [blogImage] : undefined,
+    datePublished: new Date(blog.createdAt).toISOString(),
+    dateModified: new Date(blog.updatedAt || blog.createdAt).toISOString(),
+    mainEntityOfPage: blogUrl,
+    author: {
+      "@type": "Organization",
+      name: "Autocracy Machinery",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Autocracy Machinery",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://www.autocracymachinery.com/logo.png",
+      },
+    },
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: toAbsoluteUrl(localizeHref("/", locale)),
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Blog",
+        item: toAbsoluteUrl(localizeHref("/blog", locale)),
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: blog.title,
+        item: blogUrl,
+      },
+    ],
+  };
 
   return (
     <main className="site-container py-12">
+      <JsonLd data={blogSchema} />
+      <JsonLd data={breadcrumbSchema} />
       <Link
         className="inline-flex items-center text-sm font-semibold uppercase tracking-[0.12em] text-[#2f64b7]"
         href={localizeHref("/blog", locale)}

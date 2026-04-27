@@ -3,7 +3,9 @@ import type { Metadata } from "next";
 import FaqClient from "./FaqClient";
 import { getRequestContentLanguage } from "@/app/_lib/i18n-server";
 import { tUi } from "@/app/_lib/i18n";
-import { buildLocalizedAlternates } from "@/app/_lib/locale-path";
+import { buildLocalizedAlternates, toAbsoluteUrl } from "@/app/_lib/locale-path";
+import { FAQs } from "@/data/qnaForFaq";
+import JsonLd from "@/app/_components/JsonLd";
 
 export const metadata: Metadata = {
   title: "Frequently Asked Questions - FAQs – Autocracy Machinery",
@@ -35,5 +37,26 @@ export default async function FaqPage() {
       </main>
     );
   }
-  return <FaqClient />;
+  const faqEntities = FAQs.flatMap((category) => category.faqs || []).map((faq) => ({
+    "@type": "Question",
+    name: faq.question,
+    acceptedAnswer: {
+      "@type": "Answer",
+      text: faq.answer,
+    },
+  }));
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqEntities,
+    url: toAbsoluteUrl("/in/en/faqs"),
+  };
+
+  return (
+    <>
+      <JsonLd data={faqSchema} />
+      <FaqClient />
+    </>
+  );
 }

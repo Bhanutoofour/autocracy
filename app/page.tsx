@@ -5,11 +5,13 @@ import CountrySwitcherButton from "./_components/CountrySwitcherButton";
 import LocationGate from "./_components/LocationGate";
 import GlobalHeader from "./_components/GlobalHeader";
 import HomeProductsSection from "./_components/HomeProductsSection";
+import HomeHeroSlider from "./_components/HomeHeroSlider";
 import UniversalFooter from "./_components/UniversalFooter";
 import { titleToSlug } from "@/utils/slug";
 import { getActiveIndustries } from "@/actions/industryAction";
 import { getActiveProducts } from "@/actions/productAction";
 import { getActiveBlogs } from "@/actions/blogAction";
+import { getHeroSections } from "@/actions/heroAction";
 import {
   AnimatedAwardsSection,
   AnimatedTestimonialsSection,
@@ -573,51 +575,6 @@ function Header() {
   );
 }
 
-function Hero({ language }: { language: ContentLanguage }) {
-  const messages = getMessages(language);
-  return (
-    <section className="relative min-h-[560px] overflow-hidden bg-[var(--ink)] text-white lg:min-h-[671px]">
-      <Image
-        alt="Single chain trencher working at a field site"
-        className="object-cover opacity-85"
-        fill
-        priority
-        sizes="100vw"
-        src={`${asset}032f1530adf57211e22495cccd59ff0a6d6be4d0.png`}
-      />
-      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(1,6,10,0.84),rgba(1,6,10,0.38)_52%,rgba(1,6,10,0.1))]" />
-
-      <div className="site-container relative flex min-h-[560px] items-end pb-16 pt-20 lg:min-h-[671px] lg:items-center lg:pb-0">
-        <div className="flex w-full max-w-[320px] flex-col items-start gap-6 lg:max-w-[760px]">
-          <h1 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[32px] font-black leading-[1.05] tracking-normal text-white lg:text-[56px]">
-            Single chain trencher
-          </h1>
-          <p className="max-w-[720px] text-base font-normal leading-[1.4] tracking-normal text-white lg:text-[20px]">
-            New series designed for trench profiles upto 600mm
-            <br className="hidden lg:block" />
-            in width and upto 1500mm in depth
-          </p>
-          <a
-            className="flex h-11 w-[132px] items-center justify-center bg-[var(--brand-yellow)] px-4 text-center font-['Roboto',Arial,Helvetica,sans-serif] text-[16px] font-semibold uppercase leading-5 tracking-normal text-[#0a0a0b] transition hover:brightness-95 lg:h-[60px] lg:w-[204px]"
-            href="/in/en/contact-us"
-          >
-            {messages.common.getQuote}
-          </a>
-        </div>
-      </div>
-
-      <div className="absolute bottom-[19px] left-1/2 flex h-4 -translate-x-1/2 items-center gap-2 lg:bottom-9">
-        {[0, 1, 2, 3, 4].map((item) => (
-          <span
-            className={item === 1 ? "size-4 bg-white" : "size-2.5 bg-white/50"}
-            key={item}
-          />
-        ))}
-      </div>
-    </section>
-  );
-}
-
 function IndustriesSection({
   industries,
   language,
@@ -924,6 +881,26 @@ export default async function Home() {
     // Keep static fallback homepage cards when DB/env is unavailable.
   }
 
+  let heroSlides: HeroSection[] = [];
+  try {
+    heroSlides = await getHeroSections();
+  } catch (error) {
+    console.error("Error loading hero slides:", error);
+  }
+
+  const fallbackHeroSlides: HeroSection[] = [
+    {
+      id: 1,
+      title: "Single chain trencher",
+      description:
+        "New series designed for trench profiles upto 600mm in width and upto 1500mm in depth",
+      image: "032f1530adf57211e22495cccd59ff0a6d6be4d0.png",
+      altText: "Single chain trencher working at a field site",
+    },
+  ];
+
+  const resolvedHeroSlides = heroSlides.length > 0 ? heroSlides : fallbackHeroSlides;
+
   return (
     <main className="min-h-screen overflow-x-hidden bg-white text-[#01060a]">
       <LocationGate />
@@ -932,7 +909,11 @@ export default async function Home() {
         type="application/ld+json"
       />
       <GlobalHeader />
-      <Hero language={language} />
+      <HomeHeroSlider
+        assetBasePath={asset}
+        ctaLabel={getMessages(language).common.getQuote}
+        slides={resolvedHeroSlides}
+      />
       <IndustriesSection industries={homeIndustries} language={language} />
       <HomeProductsSection
         assetBasePath={asset}
@@ -962,9 +943,3 @@ export default async function Home() {
     </main>
   );
 }
-
-
-
-
-
-

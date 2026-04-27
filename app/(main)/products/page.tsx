@@ -1,12 +1,35 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { getActiveProducts } from "@/actions/productAction";
 import { productSlug } from "@/utils/slug";
-import { getRequestContentLanguage } from "@/app/_lib/i18n-server";
+import { getRequestContentLanguage, getRequestLocale } from "@/app/_lib/i18n-server";
 import { tUi } from "@/app/_lib/i18n";
+import { buildLocalizedAlternates, localizeHref } from "@/app/_lib/locale-path";
+
+export const metadata: Metadata = {
+  title: "Products | Autocracy Machinery",
+  description:
+    "Explore Autocracy Machinery product categories including trenchers, attachments, and field-ready utility equipment for infrastructure and industrial work.",
+  alternates: buildLocalizedAlternates("/products"),
+  openGraph: {
+    title: "Products | Autocracy Machinery",
+    description:
+      "Explore Autocracy Machinery product categories including trenchers, attachments, and field-ready utility equipment.",
+    url: "/in/en/products",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Products | Autocracy Machinery",
+    description:
+      "Explore Autocracy Machinery product categories including trenchers, attachments, and field-ready utility equipment.",
+  },
+};
 
 export default async function ProductsListingPage() {
   const language = await getRequestContentLanguage();
+  const locale = await getRequestLocale();
   const products = await getActiveProducts();
 
   return (
@@ -19,7 +42,7 @@ export default async function ProductsListingPage() {
           {products.map((product) => (
             <Link
               className="rounded-md border border-black/15 bg-white p-4 transition hover:border-black/35"
-              href={`/products/${productSlug(product.title ?? "")}`}
+              href={localizeHref(`/products/${productSlug(product.title ?? "")}`, locale)}
               key={product.id}
             >
               <div className="relative h-[180px] w-full overflow-hidden rounded bg-[#f5f5f5]">

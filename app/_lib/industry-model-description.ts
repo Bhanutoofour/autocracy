@@ -234,12 +234,14 @@ export async function getIndustryModelDescription(
       imageAltText: firstBlockImageAltText,
       title: first.title,
       description: first.paragraphs,
+      youtubeLink: modelData.modelDescription[0]?.youtubeLink || "",
     },
     {
       image: secondBlockImage || secondaryImage,
       imageAltText: secondBlockImageAltText,
       title: second.title,
       description: second.paragraphs,
+      youtubeLink: modelData.modelDescription[1]?.youtubeLink || "",
     },
   ];
 }

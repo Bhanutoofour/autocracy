@@ -1,12 +1,35 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { getActiveIndustries } from "@/actions/industryAction";
 import { titleToSlug } from "@/utils/slug";
-import { getRequestContentLanguage } from "@/app/_lib/i18n-server";
+import { getRequestContentLanguage, getRequestLocale } from "@/app/_lib/i18n-server";
 import { tUi } from "@/app/_lib/i18n";
+import { buildLocalizedAlternates, localizeHref } from "@/app/_lib/locale-path";
+
+export const metadata: Metadata = {
+  title: "Industries | Autocracy Machinery",
+  description:
+    "Discover industries served by Autocracy Machinery, from telecom and water projects to agriculture, solar, and infrastructure development.",
+  alternates: buildLocalizedAlternates("/industries"),
+  openGraph: {
+    title: "Industries | Autocracy Machinery",
+    description:
+      "Discover industries served by Autocracy Machinery, from telecom and water projects to agriculture and infrastructure.",
+    url: "/in/en/industries",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Industries | Autocracy Machinery",
+    description:
+      "Discover industries served by Autocracy Machinery, from telecom and water projects to agriculture and infrastructure.",
+  },
+};
 
 export default async function IndustriesListingPage() {
   const language = await getRequestContentLanguage();
+  const locale = await getRequestLocale();
   const industries = await getActiveIndustries();
 
   return (
@@ -19,7 +42,7 @@ export default async function IndustriesListingPage() {
           {industries.map((industry) => (
             <Link
               className="rounded-md border border-black/15 bg-white p-4 transition hover:border-black/35"
-              href={`/industries/${titleToSlug(industry.title ?? "")}`}
+              href={localizeHref(`/industries/${titleToSlug(industry.title ?? "")}`, locale)}
               key={industry.id}
             >
               <div className="relative h-[180px] w-full overflow-hidden rounded bg-[#f5f5f5]">

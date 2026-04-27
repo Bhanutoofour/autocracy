@@ -2,6 +2,36 @@ import Image from "next/image";
 import Link from "next/link";
 import { getMessages, type ContentLanguage, tUi } from "@/app/_lib/i18n";
 
+function getYouTubeEmbedUrl(url?: string): string {
+  const value = (url || "").trim();
+  if (!value) return "";
+  if (value.includes("youtube.com/embed/")) return value;
+  const match = value.match(
+    /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/i,
+  );
+  if (!match?.[1]) return "";
+  return `https://www.youtube.com/embed/${match[1]}`;
+}
+
+function DownloadIcon({ className = "size-5" }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      className={className}
+      fill="none"
+      viewBox="0 0 24 24"
+    >
+      <path
+        d="M12 4v10m0 0 4-4m-4 4-4-4M5 19h14"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2.8"
+      />
+    </svg>
+  );
+}
+
 type RelatedModelCard = {
   id: number;
   modelNumber: string;
@@ -53,48 +83,56 @@ export default function ModelDetailContent({
 
   return (
     <main className="site-container py-8 sm:py-12">
-      <section className="rounded-[8px] border border-black/10 bg-[#f8f8f8] p-5 sm:p-6 lg:p-8">
-        <div className="flex flex-wrap items-start justify-between gap-5">
-          <div>
-            <p className="text-sm uppercase tracking-[0.22em] text-[#666]">{modelData.productName}</p>
-            <h1 className="mt-2 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-3xl font-bold text-[#0a0a0b] sm:text-4xl">
-              {modelData.modelTitle}
-            </h1>
-            <p className="mt-2 text-[15px] text-[#3f4650]">
-              {modelData.modelNumber} | {modelData.machineType}
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-3">
-            <Link
-              className="button-gold-text inline-flex min-h-[44px] items-center rounded bg-black px-4 py-2 text-sm font-semibold uppercase tracking-[0.03em] !text-[#f9c300]"
-              href={brochureHref}
-              target={brochureHref.startsWith("http") ? "_blank" : undefined}
-            >
-              {messages.common.brochure}
-            </Link>
-            <Link
-              className="inline-flex min-h-[44px] items-center rounded border border-black/25 bg-white px-4 py-2 text-sm font-semibold uppercase tracking-[0.03em] text-[#0a0a0b]"
-              href={contactHref}
-            >
-              {messages.common.getQuote}
-            </Link>
-          </div>
-        </div>
-
-        <div className="relative mt-6 overflow-hidden rounded-lg border border-black/10 bg-white">
-          <div className="relative aspect-[16/8] min-h-[220px] w-full sm:min-h-[300px] lg:min-h-[360px]">
+      <section className="overflow-hidden rounded-[8px] border border-black/10 bg-[#ececec]">
+        <div className="relative overflow-hidden bg-white">
+          <div className="relative aspect-[16/7] min-h-[220px] w-full sm:min-h-[300px] lg:min-h-[380px]">
             <Image
               alt={modelData.coverImageAltText || modelData.modelTitle}
-              className="object-contain"
+              className="object-cover"
               fill
               sizes="(min-width: 1280px) 72vw, (min-width: 768px) 92vw, 100vw"
               src={modelData.coverImage}
             />
           </div>
         </div>
+        <div className="bg-black px-5 py-5 sm:px-6 lg:px-8">
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="text-[12px] font-semibold uppercase tracking-[0.16em] text-white/70">
+                {modelData.productName}
+              </p>
+              <h1 className="mt-2 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[40px] font-bold uppercase leading-none text-white sm:text-[52px]">
+                {modelData.modelNumber || modelData.modelTitle}
+              </h1>
+              <p className="mt-3 text-[16px] text-white/90 sm:text-[22px]">
+                {modelData.modelTitle}
+                <span className="px-2 text-[var(--brand-yellow)]">|</span>
+                <span className="text-[var(--brand-yellow)]">{modelData.machineType}</span>
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <Link
+                className="inline-flex min-h-[56px] items-center border border-white px-5 py-2 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-semibold uppercase tracking-[0.03em] !text-white transition hover:bg-white/10"
+                href={brochureHref}
+                target={brochureHref.startsWith("http") ? "_blank" : undefined}
+              >
+                <span className="inline-flex items-center gap-3">
+                  <DownloadIcon className="size-6" />
+                  <span>{messages.common.brochure}</span>
+                </span>
+              </Link>
+              <Link
+                className="inline-flex min-h-[56px] items-center bg-[var(--brand-yellow)] px-5 py-2 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-semibold uppercase tracking-[0.03em] text-[#0a0a0b] transition hover:brightness-95"
+                href={contactHref}
+              >
+                {messages.common.getQuote}
+              </Link>
+            </div>
+          </div>
+        </div>
 
         {primaryFeatures.length > 0 ? (
-          <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="grid gap-3 p-5 sm:grid-cols-2 sm:p-6 xl:grid-cols-4 lg:p-8">
             {primaryFeatures.map((feature, index) => (
               <article className="rounded border border-black/10 bg-white px-4 py-4" key={`${feature.name}-${index}`}>
                 <p className="text-[14px] text-[#4b5662]">{feature.name}</p>
@@ -124,7 +162,9 @@ export default function ModelDetailContent({
 
       {hasModelDescriptions ? (
         <section className="mt-10 space-y-10">
-          {descriptionBlocks.map((block, index) => (
+          {descriptionBlocks.map((block, index) => {
+            const embedUrl = getYouTubeEmbedUrl(block.youtubeLink);
+            return (
             <article className="grid gap-6 border-b border-black/10 pb-10 md:grid-cols-2 md:items-center" key={`${block.title}-${index}`}>
               <div className={index % 2 === 1 ? "md:order-2" : ""}>
                 <h2 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[30px] font-bold leading-[1.15] text-[#0a0a0b]">
@@ -135,7 +175,7 @@ export default function ModelDetailContent({
                     <p key={`${block.title}-paragraph-${paragraphIndex}`}>{paragraph}</p>
                   ))}
                 </div>
-                {block.youtubeLink ? (
+                {!embedUrl && block.youtubeLink ? (
                   <Link
                     className="mt-4 inline-flex text-sm font-semibold uppercase tracking-[0.04em] text-[#0a0a0b] underline underline-offset-4"
                     href={block.youtubeLink}
@@ -148,19 +188,34 @@ export default function ModelDetailContent({
               </div>
               <div className={index % 2 === 1 ? "md:order-1" : ""}>
                 <div className="relative overflow-hidden rounded border border-black/10 bg-[#f5f5f5]">
-                  <div className="relative aspect-[16/10] w-full">
-                    <Image
-                      alt={block.imageAltText || block.title}
-                      className="object-cover"
-                      fill
-                      sizes="(min-width: 1280px) 36vw, (min-width: 768px) 45vw, 100vw"
-                      src={block.image}
-                    />
-                  </div>
+                  {embedUrl ? (
+                    <div className="relative aspect-[16/10] w-full">
+                      <iframe
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        className="absolute inset-0 h-full w-full"
+                        loading="lazy"
+                        referrerPolicy="strict-origin-when-cross-origin"
+                        src={embedUrl}
+                        title={block.title || "Model video"}
+                      />
+                    </div>
+                  ) : (
+                    <div className="relative aspect-[16/10] w-full">
+                      <Image
+                        alt={block.imageAltText || block.title}
+                        className="object-cover"
+                        fill
+                        sizes="(min-width: 1280px) 36vw, (min-width: 768px) 45vw, 100vw"
+                        src={block.image}
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
             </article>
-          ))}
+            );
+          })}
         </section>
       ) : null}
 
@@ -207,7 +262,10 @@ export default function ModelDetailContent({
             href={brochureHref}
             target={brochureHref.startsWith("http") ? "_blank" : undefined}
           >
-            {messages.common.brochure}
+            <span className="inline-flex items-center gap-2">
+              <DownloadIcon className="size-5" />
+              <span>{messages.common.brochure}</span>
+            </span>
           </Link>
           <Link
             className="inline-flex min-h-[44px] items-center rounded border border-black/35 bg-white px-4 py-2 text-sm font-semibold uppercase tracking-[0.03em] text-[#0a0a0b]"

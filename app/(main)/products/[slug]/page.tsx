@@ -1,16 +1,62 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getProductBySlug } from "@/actions/productAction";
 import { modelNumberSlug } from "@/utils/slug";
 import { getRequestContentLanguage, getRequestLocale } from "@/app/_lib/i18n-server";
-import { localizeHref } from "@/app/_lib/locale-path";
+import { buildLocalizedAlternates, localizeHref, toAbsoluteUrl } from "@/app/_lib/locale-path";
 import { tUi } from "@/app/_lib/i18n";
 import { getProductLongformContent } from "@/app/_lib/product-longform-content";
+import JsonLd from "@/app/_components/JsonLd";
 
 type ProductPageProps = {
   params: Promise<{ slug: string }>;
 };
+
+export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const resolved = await getProductBySlug(slug);
+
+  if (!resolved) {
+    return {
+      title: "Product | Autocracy Machinery",
+      description: "Explore product specifications and available models from Autocracy Machinery.",
+      alternates: buildLocalizedAlternates(`/products/${slug}`),
+    };
+  }
+
+  const { productData } = resolved;
+  const seoTitle =
+    productData.seoMetadata?.pageTitle?.trim()
+    || `${productData.title} | Products | Autocracy Machinery`;
+  const seoDescription =
+    productData.seoMetadata?.pageDescription?.trim()
+    || productData.seoDescription?.trim()
+    || productData.description?.trim()
+    || "Explore product specifications and available models from Autocracy Machinery.";
+  const socialImage = productData.seoMetadata?.socialImage?.trim() || productData.thumbnail;
+
+  return {
+    title: seoTitle,
+    description: seoDescription,
+    keywords: productData.seoMetadata?.pageKeywords?.trim() || undefined,
+    alternates: buildLocalizedAlternates(`/products/${slug}`),
+    openGraph: {
+      title: productData.seoMetadata?.socialTitle?.trim() || seoTitle,
+      description: productData.seoMetadata?.socialDescription?.trim() || seoDescription,
+      url: `/in/en/products/${slug}`,
+      type: "website",
+      images: socialImage ? [{ url: socialImage }] : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: productData.seoMetadata?.socialTitle?.trim() || seoTitle,
+      description: productData.seoMetadata?.socialDescription?.trim() || seoDescription,
+      images: socialImage ? [socialImage] : undefined,
+    },
+  };
+}
 
 export default async function ProductPage({ params }: ProductPageProps) {
   const language = await getRequestContentLanguage();
@@ -26,9 +72,57 @@ export default async function ProductPage({ params }: ProductPageProps) {
     productData.industries || [],
     productData.series || [],
   );
+  const pageUrl = toAbsoluteUrl(localizeHref(`/products/${slug}`, locale));
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: toAbsoluteUrl(localizeHref("/", locale)),
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Products",
+        item: toAbsoluteUrl(localizeHref("/products", locale)),
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: productData.title,
+        item: pageUrl,
+      },
+    ],
+  };
+  const productGroupSchema = {
+    "@context": "https://schema.org",
+    "@type": "ProductGroup",
+    name: productData.title,
+    description: productData.seoDescription?.trim() || productData.description || undefined,
+    brand: {
+      "@type": "Brand",
+      name: "Autocracy Machinery",
+    },
+    category: productData.title,
+    image: productData.thumbnail ? [productData.thumbnail] : undefined,
+    url: pageUrl,
+    hasVariant: productData.models.map((model) => ({
+      "@type": "Product",
+      name: model.modelTitle,
+      sku: model.modelNumber,
+      model: model.modelNumber,
+      image: model.thumbnail ? [model.thumbnail] : undefined,
+      url: toAbsoluteUrl(localizeHref(`/products/${slug}/${modelNumberSlug(model.modelNumber)}`, locale)),
+    })),
+  };
 
   return (
     <main className="site-container py-12">
+      <JsonLd data={breadcrumbSchema} />
+      <JsonLd data={productGroupSchema} />
       <p className="text-sm uppercase tracking-[0.2em] text-[#777]">{tUi(language, "product")}</p>
       <h1 className="mt-3 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-4xl font-bold text-[#0a0a0b]">
         {productData.title}

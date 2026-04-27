@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
@@ -9,13 +10,79 @@ import {
   titleToSlug,
 } from "@/utils/slug";
 import { getRequestContentLanguage, getRequestLocale } from "@/app/_lib/i18n-server";
-import { localizeHref } from "@/app/_lib/locale-path";
+import { buildLocalizedAlternates, localizeHref, toAbsoluteUrl } from "@/app/_lib/locale-path";
 import { tUi } from "@/app/_lib/i18n";
 import { getIndustryProductContent } from "@/app/_lib/industry-product-content";
+import JsonLd from "@/app/_components/JsonLd";
 
 type IndustryProductPageProps = {
   params: Promise<{ industrySlug: string; productSlug: string }>;
 };
+
+export async function generateMetadata({
+  params,
+}: IndustryProductPageProps): Promise<Metadata> {
+  const { industrySlug, productSlug } = await params;
+  const industryResolved = await getIndustryBySlug(industrySlug);
+
+  if (!industryResolved) {
+    return {
+      title: "Industry Product | Autocracy Machinery",
+      description: "Explore product applications for specific industries at Autocracy Machinery.",
+      alternates: buildLocalizedAlternates(`/industries/${industrySlug}/${productSlug}`),
+    };
+  }
+
+  const { industryData, industryId } = industryResolved;
+  const matchedProduct = industryData.products.find(
+    (product) => titleToSlug(product.title ?? "") === productSlug,
+  );
+  if (!matchedProduct?.id) {
+    return {
+      title: `${industryData.title} Product | Autocracy Machinery`,
+      description: `Explore relevant product categories for ${industryData.title}.`,
+      alternates: buildLocalizedAlternates(`/industries/${industrySlug}/${productSlug}`),
+    };
+  }
+
+  const productData = await getProductById(matchedProduct.id, industryId);
+  if (!productData) {
+    return {
+      title: `${industryData.title} Product | Autocracy Machinery`,
+      description: `Explore relevant product categories for ${industryData.title}.`,
+      alternates: buildLocalizedAlternates(`/industries/${industrySlug}/${productSlug}`),
+    };
+  }
+
+  const fallbackTitle = `${industryData.title} - ${productData.title} | Autocracy Machinery`;
+  const seoTitle = productData.seoMetadata?.pageTitle?.trim() || fallbackTitle;
+  const seoDescription =
+    productData.seoMetadata?.pageDescription?.trim()
+    || productData.seoDescription?.trim()
+    || productData.description?.trim()
+    || `${productData.title} solutions for ${industryData.title} projects.`;
+  const socialImage = productData.seoMetadata?.socialImage?.trim() || productData.thumbnail;
+
+  return {
+    title: seoTitle,
+    description: seoDescription,
+    keywords: productData.seoMetadata?.pageKeywords?.trim() || undefined,
+    alternates: buildLocalizedAlternates(`/industries/${industrySlug}/${productSlug}`),
+    openGraph: {
+      title: productData.seoMetadata?.socialTitle?.trim() || seoTitle,
+      description: productData.seoMetadata?.socialDescription?.trim() || seoDescription,
+      url: `/in/en/industries/${industrySlug}/${productSlug}`,
+      type: "website",
+      images: socialImage ? [{ url: socialImage }] : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: productData.seoMetadata?.socialTitle?.trim() || seoTitle,
+      description: productData.seoMetadata?.socialDescription?.trim() || seoDescription,
+      images: socialImage ? [socialImage] : undefined,
+    },
+  };
+}
 
 export default async function IndustryProductPage({
   params,
@@ -40,9 +107,41 @@ export default async function IndustryProductPage({
     productSlug,
     productData.title ?? "Product",
   );
+  const pageUrl = toAbsoluteUrl(localizeHref(`/industries/${industrySlug}/${productSlug}`, locale));
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: toAbsoluteUrl(localizeHref("/", locale)),
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Industries",
+        item: toAbsoluteUrl(localizeHref("/industries", locale)),
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: industryData.title,
+        item: toAbsoluteUrl(localizeHref(`/industries/${industrySlug}`, locale)),
+      },
+      {
+        "@type": "ListItem",
+        position: 4,
+        name: productData.title,
+        item: pageUrl,
+      },
+    ],
+  };
 
   return (
     <main className="site-container py-12">
+      <JsonLd data={breadcrumbSchema} />
       <p className="text-sm uppercase tracking-[0.2em] text-[#777]">{tUi(language, "industry_product")}</p>
       <h1 className="mt-3 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-4xl font-bold text-[#0a0a0b]">
         {industryData.title} - {productData.title}

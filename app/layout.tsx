@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
+import JsonLd from "@/app/_components/JsonLd";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -56,14 +58,31 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const requestHeaders = await headers();
+  const htmlLang = requestHeaders.get("x-lang")?.toLowerCase() || "en";
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Autocracy Machinery",
+    url: "https://www.autocracymachinery.com/",
+    potentialAction: {
+      "@type": "SearchAction",
+      target: "https://www.autocracymachinery.com/in/en/blog?q={search_term_string}",
+      "query-input": "required name=search_term_string",
+    },
+  };
+
   return (
-    <html lang="en" className="h-full antialiased">
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html lang={htmlLang} className="h-full antialiased">
+      <body className="min-h-full flex flex-col">
+        <JsonLd data={websiteSchema} />
+        {children}
+      </body>
     </html>
   );
 }
