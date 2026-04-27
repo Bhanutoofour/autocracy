@@ -1,4 +1,4 @@
-@import "../../../styles/varriables";
+@use "../../../styles/varriables" as *;
 
 .mobileMenuContainer {
   width: 100svw;

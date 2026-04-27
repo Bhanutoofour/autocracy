@@ -14,6 +14,9 @@ import Image from "next/image";
 import { AwardsData } from "@/data/recognitionsData";
 import Recognitions from "@/component/sections/recognitions/Recognitions";
 
+const isRemoteImage = (src: string) =>
+  src.startsWith("http://") || src.startsWith("https://");
+
 const AboutUsClient = () => {
   return (
     <div className={styles.aboutUsContainer}>
@@ -30,6 +33,7 @@ const AboutUsClient = () => {
                 width={248}
                 height={226}
                 className={styles.collageImage}
+                unoptimized={isRemoteImage(item)}
               />
             </div>
           );
@@ -46,6 +50,7 @@ const AboutUsClient = () => {
               width={80}
               height={80}
               className={styles.icon}
+              unoptimized={isRemoteImage(ICONS.VISION_ICON)}
             />
           </div>
           <div className={styles.content}>
@@ -66,6 +71,7 @@ const AboutUsClient = () => {
               width={80}
               height={80}
               className={styles.icon}
+              unoptimized={isRemoteImage(ICONS.MISSON_ICON)}
             />
           </div>
           <div className={styles.content}>
@@ -140,6 +146,7 @@ const AboutUsClient = () => {
               width={500}
               height={400}
               className={styles.contentImage}
+              unoptimized={isRemoteImage(ABOUTUSTEAM.TEAMIAMGE_1)}
             />
           </div>
         </div>
@@ -173,6 +180,7 @@ const AboutUsClient = () => {
               width={500}
               height={400}
               className={styles.contentImage}
+              unoptimized={isRemoteImage(ABOUTUSTEAM.TEAMIAMGE_2)}
             />
           </div>
         </div>
@@ -208,6 +216,7 @@ const AboutUsClient = () => {
               width={500}
               height={400}
               className={styles.contentImage}
+              unoptimized={isRemoteImage(ABOUTUSTEAM.TEAMIAMGE_3)}
             />
           </div>
         </div>
@@ -228,6 +237,7 @@ const AboutUsClient = () => {
                   width={400}
                   height={500}
                   className={styles.founderImage}
+                  unoptimized={isRemoteImage(founder.IMAGE)}
                 />
                 <div className={styles.founderOverlay}>
                   <div className={styles.founderInfo}>
@@ -245,6 +255,7 @@ const AboutUsClient = () => {
                       alt="LinkedIn"
                       width={40}
                       height={40}
+                      unoptimized={isRemoteImage(HEADERS_ICON.LinkedIn_YELLOW)}
                     />
                   </a>
                 </div>
@@ -266,6 +277,7 @@ const AboutUsClient = () => {
                       alt="LinkedIn"
                       width={40}
                       height={40}
+                      unoptimized={isRemoteImage(HEADERS_ICON.LinkedIn_YELLOW)}
                     />
                   </a>
                 </div>
@@ -297,6 +309,7 @@ const AboutUsClient = () => {
                   width={400}
                   height={300}
                   className={styles.initiativesImage}
+                  unoptimized={isRemoteImage(image)}
                 />
               </div>
             ))}
@@ -324,6 +337,7 @@ const AboutUsClient = () => {
             width={600}
             height={600}
             className={styles.excellenceImage}
+            unoptimized={isRemoteImage(EXCELLENCE_DATA.SECTION_IMAGE)}
           />
         </div>
       </div>

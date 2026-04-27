@@ -1,4 +1,4 @@
-@import "../../../styles/mixins";
+@use "../../../styles/mixins" as *;
 .rentalSkeleton {
   max-width: 65rem;
   width: 100%;

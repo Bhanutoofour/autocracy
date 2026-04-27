@@ -222,7 +222,7 @@ export const getModelByIndustryProductAndModelNumberSlug = async (
   industrySlug: string,
   productSlug: string,
   modelNumberSegment: string,
-): Promise<{ modelData: ModelObjectTypes; modelId: number } | null> => {
+): Promise<{ modelData: ModelObjectTypes; modelId: number; industryId: number } | null> => {
   try {
     const industryResolved = await getIndustryBySlug(industrySlug);
     if (!industryResolved) return null;
@@ -249,7 +249,7 @@ export const getModelByIndustryProductAndModelNumberSlug = async (
     const modelData = await getModelById(modelRow.id);
     if (!modelData) return null;
 
-    return { modelData, modelId: modelRow.id };
+    return { modelData, modelId: modelRow.id, industryId };
   } catch (error) {
     console.error(
       "Error fetching model by industry + product + model number slug:",

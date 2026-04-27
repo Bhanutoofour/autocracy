@@ -1,5 +1,5 @@
-@import "../../../styles/varriables";
-@import "../../../styles/mixins";
+@use "../../../styles/varriables" as *;
+@use "../../../styles/mixins" as *;
 
 .caraousel {
   width: 100%;

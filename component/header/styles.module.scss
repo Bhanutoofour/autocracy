@@ -1,5 +1,5 @@
-@import "../../styles/mixins";
-@import "../../styles/varriables";
+@use "../../styles/mixins" as *;
+@use "../../styles/varriables" as *;
 
 .navbar {
   width: 100%;

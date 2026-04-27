@@ -21,6 +21,13 @@ type ModelDetailContentProps = {
   contactHref: string;
   brochureHref: string;
   relatedModels: RelatedModelCard[];
+  descriptionBlocksOverride?: ModelDescription[];
+  industryContext?: {
+    industryLabel: string;
+    heading: string;
+    summary: string;
+    highlights: string[];
+  };
 };
 
 export default function ModelDetailContent({
@@ -31,11 +38,14 @@ export default function ModelDetailContent({
   contactHref,
   brochureHref,
   relatedModels,
+  descriptionBlocksOverride,
+  industryContext,
 }: ModelDetailContentProps) {
   const messages = getMessages(language);
   const primaryFeatures = (modelData.keyFeatures || []).slice(0, 8);
   const detailRows = modelData.keyFeatures || [];
-  const hasModelDescriptions = modelData.modelDescription.length > 0;
+  const descriptionBlocks = descriptionBlocksOverride ?? modelData.modelDescription;
+  const hasModelDescriptions = descriptionBlocks.length > 0;
   const specsHeading = modelData.specsTableIntro?.heading?.trim() || "Precision Machines. Project-Ready.";
   const specsParagraph =
     modelData.specsTableIntro?.paragraph?.trim()
@@ -95,9 +105,26 @@ export default function ModelDetailContent({
         ) : null}
       </section>
 
+      {industryContext ? (
+        <section className="mt-8 rounded border border-black/10 bg-[#fbfbfb] px-5 py-6 sm:px-6">
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#66707d]">
+            {industryContext.industryLabel}
+          </p>
+          <h2 className="mt-2 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[30px] font-bold leading-[1.15] text-[#0a0a0b]">
+            {industryContext.heading}
+          </h2>
+          <p className="mt-3 text-[16px] leading-7 text-[#2d3642]">{industryContext.summary}</p>
+          <ul className="mt-4 list-disc space-y-2 pl-5 text-[15px] leading-7 text-[#2d3642]">
+            {industryContext.highlights.map((item, index) => (
+              <li key={`${industryContext.industryLabel}-highlight-${index}`}>{item}</li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+
       {hasModelDescriptions ? (
         <section className="mt-10 space-y-10">
-          {modelData.modelDescription.map((block, index) => (
+          {descriptionBlocks.map((block, index) => (
             <article className="grid gap-6 border-b border-black/10 pb-10 md:grid-cols-2 md:items-center" key={`${block.title}-${index}`}>
               <div className={index % 2 === 1 ? "md:order-2" : ""}>
                 <h2 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[30px] font-bold leading-[1.15] text-[#0a0a0b]">

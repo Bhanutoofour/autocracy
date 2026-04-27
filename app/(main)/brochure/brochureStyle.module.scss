@@ -1,4 +1,4 @@
-@import "../../../styles/mixins";
+@use "../../../styles/mixins" as *;
 .container {
   min-height: calc(100vh - 100px);
   background-color: #ffffff;

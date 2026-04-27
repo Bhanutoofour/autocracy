@@ -1,6 +1,6 @@
-@import "mixins";
+@use "mixins" as *;
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wdth,wght@0,75,100..900;1,75,100..900&display=swap");
-@import "varriables";
+@use "varriables" as *;
 
 @font-face {
   font-family: "DaggerSquare";

@@ -1,4 +1,4 @@
-@import "../../../styles/mixins";
+@use "../../../styles/mixins" as *;
 .dealerContainer {
   max-width: 44rem;
   width: 100%;

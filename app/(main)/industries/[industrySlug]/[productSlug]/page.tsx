@@ -8,8 +8,10 @@ import {
   productSlug as productTitleSlug,
   titleToSlug,
 } from "@/utils/slug";
-import { getRequestContentLanguage } from "@/app/_lib/i18n-server";
+import { getRequestContentLanguage, getRequestLocale } from "@/app/_lib/i18n-server";
+import { localizeHref } from "@/app/_lib/locale-path";
 import { tUi } from "@/app/_lib/i18n";
+import { getIndustryProductContent } from "@/app/_lib/industry-product-content";
 
 type IndustryProductPageProps = {
   params: Promise<{ industrySlug: string; productSlug: string }>;
@@ -19,6 +21,7 @@ export default async function IndustryProductPage({
   params,
 }: IndustryProductPageProps) {
   const language = await getRequestContentLanguage();
+  const locale = await getRequestLocale();
   const { industrySlug, productSlug } = await params;
   const industryResolved = await getIndustryBySlug(industrySlug);
   if (!industryResolved) notFound();
@@ -31,6 +34,12 @@ export default async function IndustryProductPage({
 
   const productData = await getProductById(matchedProduct.id, industryId);
   if (!productData) notFound();
+  const industryProductContent = getIndustryProductContent(
+    industrySlug,
+    industryData.title ?? "Industry",
+    productSlug,
+    productData.title ?? "Product",
+  );
 
   return (
     <main className="site-container py-12">
@@ -44,6 +53,53 @@ export default async function IndustryProductPage({
           {productData.description}
         </p>
       ) : null}
+
+      <section className="mt-8 rounded-lg border border-black/10 bg-[#fafafa] p-5 sm:p-6">
+        <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#6a7481]">
+          {industryProductContent.sectionLabel}
+        </p>
+        <h2 className="mt-2 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[30px] font-bold leading-[1.15] text-[#0a0a0b]">
+          {industryProductContent.headline}
+        </h2>
+        <p className="mt-3 max-w-[920px] text-[16px] leading-7 text-[#2d3642]">
+          {industryProductContent.summary}
+        </p>
+
+        <div className="mt-6 grid gap-4 lg:grid-cols-3">
+          <article className="rounded border border-black/10 bg-white p-4">
+            <h3 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-xl font-bold text-[#0e1116]">
+              {industryProductContent.useCasesHeading}
+            </h3>
+            <ul className="mt-3 list-disc space-y-2 pl-5 text-[15px] leading-7 text-[#2d3642]">
+              {industryProductContent.useCases.map((point, index) => (
+                <li key={`use-case-${index}`}>{point}</li>
+              ))}
+            </ul>
+          </article>
+
+          <article className="rounded border border-black/10 bg-white p-4">
+            <h3 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-xl font-bold text-[#0e1116]">
+              {industryProductContent.executionHeading}
+            </h3>
+            <ul className="mt-3 list-disc space-y-2 pl-5 text-[15px] leading-7 text-[#2d3642]">
+              {industryProductContent.executionPoints.map((point, index) => (
+                <li key={`execution-point-${index}`}>{point}</li>
+              ))}
+            </ul>
+          </article>
+
+          <article className="rounded border border-black/10 bg-white p-4">
+            <h3 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-xl font-bold text-[#0e1116]">
+              {industryProductContent.fitHeading}
+            </h3>
+            <ul className="mt-3 list-disc space-y-2 pl-5 text-[15px] leading-7 text-[#2d3642]">
+              {industryProductContent.fitPoints.map((point, index) => (
+                <li key={`fit-point-${index}`}>{point}</li>
+              ))}
+            </ul>
+          </article>
+        </div>
+      </section>
 
       <div className="mt-10">
         <h2 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-3xl font-bold text-[#0a0a0b]">
@@ -73,7 +129,10 @@ export default async function IndustryProductPage({
                 </p>
                 <Link
                   className="button-gold-text mt-4 inline-flex rounded bg-black px-3 py-2 text-sm font-semibold !text-[#f9c300]"
-                  href={`/industries/${industrySlug}/${productSlug}/${modelNumberSlug(model.modelNumber)}`}
+                  href={localizeHref(
+                    `/industries/${industrySlug}/${productSlug}/${modelNumberSlug(model.modelNumber)}`,
+                    locale,
+                  )}
                 >
                   {tUi(language, "view_model")}
                 </Link>
@@ -90,14 +149,20 @@ export default async function IndustryProductPage({
       <div className="mt-10 flex gap-3">
         <Link
           className="button-gold-text rounded bg-black px-4 py-2 font-semibold !text-[#f9c300]"
-          href={`/industries/${titleToSlug(industryData.title ?? "")}`}
+          href={localizeHref(`/industries/${titleToSlug(industryData.title ?? "")}`, locale)}
         >
           {tUi(language, "back_to_industry")}
         </Link>
-        <Link className="rounded border border-black/25 px-4 py-2 font-semibold" href={`/products/${productTitleSlug(productData.title ?? "")}`}>
+        <Link
+          className="rounded border border-black/25 px-4 py-2 font-semibold"
+          href={localizeHref(`/products/${productTitleSlug(productData.title ?? "")}`, locale)}
+        >
           {tUi(language, "open_product_category")}
         </Link>
-        <Link className="rounded border border-black/25 px-4 py-2 font-semibold" href="/in/en/contact-us">
+        <Link
+          className="rounded border border-black/25 px-4 py-2 font-semibold"
+          href={localizeHref("/contact-us", locale)}
+        >
           {tUi(language, "contact_us")}
         </Link>
       </div>

@@ -1,4 +1,4 @@
-@import "../../../styles/mixins";
+@use "../../../styles/mixins" as *;
 .contactUsContainer {
   display: flex;
   flex-wrap: wrap;

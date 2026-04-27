@@ -1,5 +1,5 @@
-@import "../../../styles/varriables";
-@import "../../../styles/mixins";
+@use "../../../styles/varriables" as *;
+@use "../../../styles/mixins" as *;
 
 .modelContainer {
   padding-top: 1.5rem;

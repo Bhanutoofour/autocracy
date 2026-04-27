@@ -3,8 +3,10 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getProductBySlug } from "@/actions/productAction";
 import { modelNumberSlug } from "@/utils/slug";
-import { getRequestContentLanguage } from "@/app/_lib/i18n-server";
+import { getRequestContentLanguage, getRequestLocale } from "@/app/_lib/i18n-server";
+import { localizeHref } from "@/app/_lib/locale-path";
 import { tUi } from "@/app/_lib/i18n";
+import { getProductLongformContent } from "@/app/_lib/product-longform-content";
 
 type ProductPageProps = {
   params: Promise<{ slug: string }>;
@@ -12,11 +14,18 @@ type ProductPageProps = {
 
 export default async function ProductPage({ params }: ProductPageProps) {
   const language = await getRequestContentLanguage();
+  const locale = await getRequestLocale();
   const { slug } = await params;
   const resolved = await getProductBySlug(slug);
   if (!resolved) notFound();
 
   const { productData } = resolved;
+  const longformContent = getProductLongformContent(
+    slug,
+    productData.title ?? "Product",
+    productData.industries || [],
+    productData.series || [],
+  );
 
   return (
     <main className="site-container py-12">
@@ -50,6 +59,39 @@ export default async function ProductPage({ params }: ProductPageProps) {
         </div>
       </div>
 
+      <section className="mt-8 rounded-lg border border-black/10 bg-[#fafafa] p-5 sm:p-6">
+        <h2 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[30px] font-bold leading-[1.15] text-[#0a0a0b]">
+          {longformContent.headline}
+        </h2>
+        <p className="mt-3 max-w-[920px] text-[16px] leading-7 text-[#2d3642]">
+          {longformContent.summary}
+        </p>
+
+        <div className="mt-6 grid gap-4 lg:grid-cols-2">
+          <article className="rounded border border-black/10 bg-white p-4">
+            <h3 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-xl font-bold text-[#0e1116]">
+              {longformContent.valueHeading}
+            </h3>
+            <ul className="mt-3 list-disc space-y-2 pl-5 text-[15px] leading-7 text-[#2d3642]">
+              {longformContent.valuePoints.map((point, index) => (
+                <li key={`value-point-${index}`}>{point}</li>
+              ))}
+            </ul>
+          </article>
+
+          <article className="rounded border border-black/10 bg-white p-4">
+            <h3 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-xl font-bold text-[#0e1116]">
+              {longformContent.selectionHeading}
+            </h3>
+            <ul className="mt-3 list-disc space-y-2 pl-5 text-[15px] leading-7 text-[#2d3642]">
+              {longformContent.selectionPoints.map((point, index) => (
+                <li key={`selection-point-${index}`}>{point}</li>
+              ))}
+            </ul>
+          </article>
+        </div>
+      </section>
+
       <div className="mt-10">
         <h2 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-3xl font-bold text-[#0a0a0b]">
           {tUi(language, "models")}
@@ -78,7 +120,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 </p>
                 <Link
                   className="button-gold-text mt-4 inline-flex rounded bg-black px-3 py-2 text-sm font-semibold !text-[#f9c300]"
-                  href={`/products/${slug}/${modelNumberSlug(model.modelNumber)}`}
+                  href={localizeHref(`/products/${slug}/${modelNumberSlug(model.modelNumber)}`, locale)}
                 >
                   {tUi(language, "view_model")}
                 </Link>
@@ -91,10 +133,16 @@ export default async function ProductPage({ params }: ProductPageProps) {
       </div>
 
       <div className="mt-10 flex gap-3">
-        <Link className="button-gold-text rounded bg-black px-4 py-2 font-semibold !text-[#f9c300]" href="/in/en/products">
+        <Link
+          className="button-gold-text rounded bg-black px-4 py-2 font-semibold !text-[#f9c300]"
+          href={localizeHref("/products", locale)}
+        >
           {tUi(language, "view_all_products")}
         </Link>
-        <Link className="rounded border border-black/25 px-4 py-2 font-semibold" href="/in/en/contact-us">
+        <Link
+          className="rounded border border-black/25 px-4 py-2 font-semibold"
+          href={localizeHref("/contact-us", locale)}
+        >
           {tUi(language, "contact_us")}
         </Link>
       </div>

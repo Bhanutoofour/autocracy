@@ -1,5 +1,6 @@
-@import "../../../styles/varriables";
-@import "../../../styles/mixins";
+@use "sass:color";
+@use "../../../styles/varriables" as *;
+@use "../../../styles/mixins" as *;
 
 .careersContainer {
   max-width: 100%;
@@ -182,7 +183,7 @@
   display: inline-block;
 
   &:hover {
-    background-color: lighten($secondary-color, 10%);
+    background-color: color.adjust($secondary-color, $lightness: 10%);
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
   }

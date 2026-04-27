@@ -180,6 +180,27 @@ export const modelIndustries = pgTable(
   })
 );
 
+export const industryModelImageOverrides = pgTable(
+  "industry_model_image_overrides",
+  {
+    industryId: integer("industry_id")
+      .references(() => industries.id, { onDelete: "cascade" })
+      .notNull(),
+    modelId: integer("model_id")
+      .references(() => models.id, { onDelete: "cascade" })
+      .notNull(),
+    blockOneImage: text("block_one_image").notNull().default(""),
+    blockOneImageAltText: text("block_one_image_alt_text").notNull().default(""),
+    blockTwoImage: text("block_two_image").notNull().default(""),
+    blockTwoImageAltText: text("block_two_image_alt_text").notNull().default(""),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (table) => ({
+    pk: primaryKey({ columns: [table.industryId, table.modelId] }),
+  }),
+);
+
 export const dealers = pgTable("dealers", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
