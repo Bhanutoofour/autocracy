@@ -97,10 +97,11 @@ export default async function IndustryProductPage({
         <Link className="rounded border border-black/25 px-4 py-2 font-semibold" href={`/products/${productTitleSlug(productData.title ?? "")}`}>
           {tUi(language, "open_product_category")}
         </Link>
-        <Link className="rounded border border-black/25 px-4 py-2 font-semibold" href="/contact-us">
+        <Link className="rounded border border-black/25 px-4 py-2 font-semibold" href="/in/en/contact-us">
           {tUi(language, "contact_us")}
         </Link>
       </div>
     </main>
   );
 }
+

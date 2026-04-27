@@ -3,18 +3,19 @@ import DealerClient from "./DealerClient";
 import { Metadata } from "next";
 import { getRequestContentLanguage } from "@/app/_lib/i18n-server";
 import { tUi } from "@/app/_lib/i18n";
+import { buildLocalizedAlternates } from "@/app/_lib/locale-path";
 
 export const metadata: Metadata = {
   title:
     "Find Authorized Dealers for Trenchers & Utility Equipment - Autocracy Machinery",
   description:
     "Use our dealer locator to connect with certified sales and service partners for trenchers, utility, and infrastructure equipment. Get reliable support, genuine parts, and expert assistance near you.",
-  alternates: { canonical: "https://autocracymachinery.com/find-a-dealer" },
+  alternates: buildLocalizedAlternates("/find-a-dealer"),
   openGraph: {
     title: "Find a Dealer – Autocracy Machinery",
     description:
       "Use our dealer locator to connect with certified sales and service partners for trenchers, utility, and infrastructure equipment.",
-    url: "https://autocracymachinery.com/find-a-dealer",
+    url: "/in/en/find-a-dealer",
     type: "website",
   },
   twitter: {

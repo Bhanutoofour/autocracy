@@ -100,7 +100,7 @@ export default async function Header() {
         <div className={styles.bottomBarContent}>
           <div className={styles.leftSide}>
             <div className={styles.image}>
-              <Link href="/" passHref>
+              <Link href="/in/en" passHref>
                 <Image src={IMAGES.LOGO} alt="logo" width={162} height={37} />
               </Link>
             </div>
@@ -117,3 +117,5 @@ export default async function Header() {
     </header>
   );
 }
+
+

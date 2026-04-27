@@ -100,7 +100,7 @@ export function AnimatedAwardsSection({
 
         <div className="mt-14 grid items-end gap-8 sm:mt-20 sm:gap-10 lg:mt-28 lg:gap-12 lg:grid-cols-[minmax(420px,0.9fr)_1fr]">
           <div className="min-w-0">
-            <div className="relative h-[220px] overflow-hidden bg-[#f2f2f2] sm:h-[247px] lg:h-[247px]">
+            <div className="awards-photo-frame relative overflow-hidden bg-[#f2f2f2]">
               <div className="awards-photo-scroll h-full" ref={photosRef}>
                 {awardsGallery.map((photo) => (
                   <div className="awards-photo-slide relative h-full" key={photo}>
@@ -108,7 +108,7 @@ export function AnimatedAwardsSection({
                       alt="Autocracy Machinery founder meeting the Prime Minister of India at a startup event"
                       className="object-cover"
                       fill
-                      sizes="(min-width: 1024px) 40vw, 100vw"
+                      sizes="(min-width: 1024px) 46vw, (min-width: 640px) calc(100vw - 40px), 100vw"
                       src={`${asset}${photo}`}
                     />
                   </div>
@@ -125,19 +125,19 @@ export function AnimatedAwardsSection({
             <div className="awards-scroll" ref={awardsRef}>
               {awards.map((award) => (
                 <article
-                  className="award-card flex h-[178px] flex-col items-center justify-end border-r border-[#e7e7e7] bg-white px-8 pb-5 text-center"
+                  className="award-card flex flex-col items-center justify-end border-r border-[#e7e7e7] bg-white px-5 pb-5 text-center sm:px-8"
                   key={award.title}
                 >
-                  <div className="relative mb-7 h-[72px] w-[150px]">
+                  <div className="award-logo-slot relative mb-6">
                     <Image
                       alt={award.title}
                       className="object-contain"
                       fill
-                      sizes="150px"
+                      sizes="(max-width: 640px) 120px, 150px"
                       src={`${asset}${award.image}`}
                     />
                   </div>
-                  <h3 className="max-w-[180px] font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-bold leading-[1.25] text-[#111113]">
+                  <h3 className="award-title max-w-[190px] font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-bold leading-[1.25] text-[#111113]">
                     {award.title}
                   </h3>
                 </article>
@@ -251,10 +251,6 @@ export function AnimatedTestimonialsSection({
                 </div>
               </article>
             ))}
-          </div>
-          <div className="mx-auto mt-12 flex w-[270px] max-w-full lg:mx-0">
-            <span className="h-1 w-[84px] bg-[var(--ink)]" />
-            <span className="h-1 flex-1 bg-white" />
           </div>
         </div>
       </div>

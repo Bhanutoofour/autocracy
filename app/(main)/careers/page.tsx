@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import CareersClient from "./CareersClient";
 import { getRequestContentLanguage } from "@/app/_lib/i18n-server";
 import { tUi } from "@/app/_lib/i18n";
+import { buildLocalizedAlternates } from "@/app/_lib/locale-path";
 
 export const metadata: Metadata = {
   title: "Careers at Autocracy Machinery | Join India's Industrial Innovation Team",
@@ -20,12 +21,12 @@ export const metadata: Metadata = {
     "infrastructure machinery jobs",
     "manufacturing company jobs India",
   ],
-  alternates: { canonical: "https://autocracymachinery.com/careers" },
+  alternates: buildLocalizedAlternates("/careers"),
   openGraph: {
     title: "Careers – Autocracy Machinery",
     description:
       "Explore exciting career opportunities at Autocracy Machinery – a leading Indian industrial & infrastructure machinery manufacturer.",
-    url: "https://autocracymachinery.com/careers",
+    url: "/in/en/careers",
     type: "website",
   },
   twitter: {

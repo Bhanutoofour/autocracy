@@ -121,6 +121,7 @@ a {
 }
 
 .awards-scroll {
+  align-items: stretch;
   display: flex;
   gap: 12px;
   max-width: 100%;
@@ -137,7 +138,24 @@ a {
 
 .award-card {
   flex: 0 0 calc((100% - 12px) / 2);
+  min-height: clamp(170px, 20vw, 196px);
   scroll-snap-align: start;
+}
+
+.award-logo-slot {
+  height: clamp(56px, 9vw, 72px);
+  width: clamp(120px, 20vw, 150px);
+}
+
+.award-title {
+  min-height: calc(1.25em * 2);
+}
+
+.awards-photo-frame {
+  aspect-ratio: 2 / 1;
+  max-height: 380px;
+  min-height: 190px;
+  width: 100%;
 }
 
 .awards-photo-scroll {
@@ -202,6 +220,11 @@ a {
 
   .award-card {
     flex-basis: calc((100% - 24px) / 2);
+    min-height: 184px;
+  }
+
+  .awards-photo-frame {
+    min-height: 220px;
   }
 
   .product-card {

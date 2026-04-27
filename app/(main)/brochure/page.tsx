@@ -3,6 +3,7 @@ import BrochureClient from "./BrochureClient";
 import { Metadata } from "next";
 import { getRequestContentLanguage } from "@/app/_lib/i18n-server";
 import { tUi } from "@/app/_lib/i18n";
+import { buildLocalizedAlternates } from "@/app/_lib/locale-path";
 
 export const metadata: Metadata = {
   title:
@@ -16,12 +17,12 @@ export const metadata: Metadata = {
     "infrastructure equipment India",
     "construction & agri machines PDF",
   ],
-  alternates: { canonical: "https://autocracymachinery.com/brochure" },
+  alternates: buildLocalizedAlternates("/brochure"),
   openGraph: {
     title: "Download Brochure – Autocracy Machinery",
     description:
       "Get the latest brochure from Autocracy Machinery – India's manufacturer of trenchers, multi-utility machines & industrial solutions.",
-    url: "https://autocracymachinery.com/brochure",
+    url: "/in/en/brochure",
     type: "website",
   },
   twitter: {

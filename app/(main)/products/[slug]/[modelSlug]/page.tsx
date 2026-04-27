@@ -50,10 +50,11 @@ export default async function ProductModelPage({ params }: ProductModelPageProps
         <Link className="rounded bg-black px-4 py-2 font-semibold text-[#f9c300]" href={`/products/${slug}`}>
           {tUi(language, "back_to_product")}
         </Link>
-        <Link className="rounded border border-black/25 px-4 py-2 font-semibold" href="/contact-us">
+        <Link className="rounded border border-black/25 px-4 py-2 font-semibold" href="/in/en/contact-us">
           {tUi(language, "contact_us")}
         </Link>
       </div>
     </main>
   );
 }
+

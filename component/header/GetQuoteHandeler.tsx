@@ -35,3 +35,4 @@ const GetQuoteHandler: React.FC = () => {
 };
 
 export default GetQuoteHandler;
+

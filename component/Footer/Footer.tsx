@@ -13,21 +13,21 @@ const Footer: React.FC = () => {
     {
       section: "Company",
       links: [
-        { value: "About us", type: "/about-us" },
-        { value: "Careers", type: "/careers" },
-        { value: "FAQs", type: "/faqs" },
-        { value: "Contact us", type: "/contact-us" },
-        { value: "Hire on rent", type: "/hire-rental-industry-equipment" },
-        { value: "Find a dealer", type: "/find-a-dealer" },
+        { value: "About us", type: "/in/en/about-us" },
+        { value: "Careers", type: "/in/en/careers" },
+        { value: "FAQs", type: "/in/en/faqs" },
+        { value: "Contact us", type: "/in/en/contact-us" },
+        { value: "Hire on rent", type: "/in/en/hire-rental-industry-equipment" },
+        { value: "Find a dealer", type: "/in/en/find-a-dealer" },
       ],
     },
     {
       section: "Title1",
       links: [
-        { value: "Products", type: "/products" },
-        { value: "Brochure", type: "/brochure" },
-        { value: "Blog", type: "/blog" },
-        { value: "Videos", type: "/videos" },
+        { value: "Products", type: "/in/en/products" },
+        { value: "Brochure", type: "/in/en/brochure" },
+        { value: "Blog", type: "/in/en/blog" },
+        { value: "Videos", type: "/in/en/videos" },
       ],
     },
     // {
@@ -127,8 +127,8 @@ const Footer: React.FC = () => {
             </a>
           </div>
           <div className={styles.routeItems}>
-            <Link href="/privacy-policy">Privacy Policy</Link>
-            <Link href="/terms-and-conditions">Terms & Conditions</Link>
+            <Link href="/in/en/privacy-policy">Privacy Policy</Link>
+            <Link href="/in/en/terms-and-conditions">Terms & Conditions</Link>
           </div>
         </div>
         <div className={styles.linkContainer}>
@@ -184,3 +184,5 @@ const Footer: React.FC = () => {
   );
 };
 export default Footer;
+
+

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { productSlug } from "@/utils/slug";
 import Image from "next/image";
 import Link from "next/link";
@@ -28,6 +28,34 @@ export default function HomeProductsSection({
 }: HomeProductsSectionProps) {
   const messages = getMessages(language);
   const railRef = useRef<HTMLDivElement | null>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  const updateScrollState = () => {
+    const rail = railRef.current;
+    if (!rail) return;
+    const threshold = 2;
+    setCanScrollLeft(rail.scrollLeft > threshold);
+    setCanScrollRight(rail.scrollLeft + rail.clientWidth < rail.scrollWidth - threshold);
+  };
+
+  useEffect(() => {
+    const rail = railRef.current;
+    if (!rail) return;
+
+    const onScroll = () => updateScrollState();
+    const onResize = () => updateScrollState();
+
+    rail.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onResize);
+    const frame = window.requestAnimationFrame(updateScrollState);
+
+    return () => {
+      rail.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onResize);
+      window.cancelAnimationFrame(frame);
+    };
+  }, [products]);
 
   const scrollByAmount = (direction: "left" | "right") => {
     const rail = railRef.current;
@@ -63,13 +91,18 @@ export default function HomeProductsSection({
           <div className="flex flex-wrap items-center gap-3 sm:gap-5">
             <Link
               className="flex h-12 w-full items-center justify-center border border-[var(--ink)] px-5 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-base font-bold uppercase text-[#0a0a0b] sm:h-[62px] sm:min-w-[234px] sm:w-auto sm:px-7 sm:text-lg"
-              href="/products"
+              href="/in/en/products"
             >
               {messages.home.viewAllProducts}
             </Link>
             <button
               aria-label={messages.common.previousProduct}
-              className="grid size-11 place-items-center border border-[#c7c7c7] bg-transparent font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-semibold leading-none text-[#9ca3af] transition hover:border-[#9ca3af] hover:text-[#6b7280] sm:size-[52px]"
+              className={`grid size-11 place-items-center border font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-semibold leading-none transition sm:size-[52px] ${
+                canScrollLeft
+                  ? "border-[#0a0a0b] bg-transparent text-[#0a0a0b] hover:bg-[#0a0a0b]/5"
+                  : "cursor-not-allowed border-[#c7c7c7] bg-transparent text-[#9ca3af]"
+              }`}
+              disabled={!canScrollLeft}
               onClick={() => scrollByAmount("left")}
               type="button"
             >
@@ -77,7 +110,12 @@ export default function HomeProductsSection({
             </button>
             <button
               aria-label={messages.common.nextProduct}
-              className="grid size-11 place-items-center border border-[#0a0a0b] bg-transparent font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-semibold leading-none text-[#0a0a0b] transition hover:bg-[#0a0a0b]/5 sm:size-[52px]"
+              className={`grid size-11 place-items-center border font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-semibold leading-none transition sm:size-[52px] ${
+                canScrollRight
+                  ? "border-[#0a0a0b] bg-transparent text-[#0a0a0b] hover:bg-[#0a0a0b]/5"
+                  : "cursor-not-allowed border-[#c7c7c7] bg-transparent text-[#9ca3af]"
+              }`}
+              disabled={!canScrollRight}
               onClick={() => scrollByAmount("right")}
               type="button"
             >
@@ -93,7 +131,7 @@ export default function HomeProductsSection({
           {products.map((product) => (
             <Link
               className="product-card group flex h-[340px] flex-col justify-between bg-white px-6 pb-8 pt-8"
-              href={`/products/${productSlug(product.name)}`}
+              href={`/in/en/products/${productSlug(product.name)}`}
               key={`${product.name}-${product.image}`}
             >
               <div className="relative h-[210px] overflow-hidden">
@@ -111,11 +149,9 @@ export default function HomeProductsSection({
             </Link>
           ))}
         </div>
-        <div className="mx-auto mt-12 flex w-[300px] max-w-full">
-          <span className="h-1 w-[80px] bg-[var(--ink)]" />
-          <span className="h-1 flex-1 bg-white" />
-        </div>
       </div>
     </section>
   );
 }
+
+

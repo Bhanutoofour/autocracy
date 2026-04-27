@@ -247,7 +247,7 @@ const HeaderClient: React.FC<HeaderClientProps> = ({
           />
           <p className={styles.caller}>+91 87904 73345</p>
         </a>
-        <Link href="/find-a-dealer" className={styles.barContent}>
+        <Link href="/in/en/find-a-dealer" className={styles.barContent}>
           <Image src={ICONS.SEARCH} alt="Search" width={18} height={18} />
           <p className={styles.dealer}>FIND A DEALER</p>
         </Link>
@@ -264,3 +264,4 @@ const HeaderClient: React.FC<HeaderClientProps> = ({
 };
 
 export default HeaderClient;
+

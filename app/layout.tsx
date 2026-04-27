@@ -20,9 +20,6 @@ export const metadata: Metadata = {
     "telecom trenching equipment",
     "agriculture trenchers",
   ],
-  alternates: {
-    canonical: "/in/en",
-  },
   openGraph: {
     title: "Infrastructure & Environmental Machines Manufacturer India | Autocracy Machinery",
     description:

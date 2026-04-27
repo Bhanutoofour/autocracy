@@ -118,7 +118,7 @@ const DealerDetailsSubmittedModal = ({
               Call us at: +91 87904 73345
             </a>
           </div>
-          <Link href="/" className={styles.findBtn} style={{ width: "100%" }}>
+          <Link href="/in/en" className={styles.findBtn} style={{ width: "100%" }}>
             Explore More
           </Link>
         </div>
@@ -388,3 +388,4 @@ const DealerClient = () => {
 };
 
 export default DealerClient;
+

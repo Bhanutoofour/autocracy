@@ -55,10 +55,10 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
         </div>
       ) : (
         <div className="mt-6 flex gap-3">
-          <Link className="rounded bg-black px-4 py-2 font-semibold text-[#f9c300]" href="/industries">
+          <Link className="rounded bg-black px-4 py-2 font-semibold text-[#f9c300]" href="/in/en/industries">
             {tUi(language, "view_all_industries")}
           </Link>
-          <Link className="rounded border border-black/25 px-4 py-2 font-semibold" href="/products">
+          <Link className="rounded border border-black/25 px-4 py-2 font-semibold" href="/in/en/products">
             {tUi(language, "view_products")}
           </Link>
         </div>
@@ -66,3 +66,4 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
     </main>
   );
 }
+

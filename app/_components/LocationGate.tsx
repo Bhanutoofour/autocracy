@@ -5,7 +5,11 @@ import {
   DEFAULT_LANGUAGE,
   isSupportedLanguage,
 } from "@/app/_lib/locale-config";
-import { getContentLanguageFromPath, getMessages } from "@/app/_lib/i18n";
+import {
+  getContentLanguageFromPath,
+  getMessages,
+  type ContentLanguage,
+} from "@/app/_lib/i18n";
 
 type CountryCode = "IN" | "US" | "CA" | "AU" | "DE" | "LK";
 
@@ -38,7 +42,7 @@ function getCountryLabel(code: CountryCode): string {
 export default function LocationGate() {
   const [open, setOpen] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState<CountryCode>("IN");
-  const [language, setLanguage] = useState<"en" | "hi" | "fr" | "es">("en");
+  const [language, setLanguage] = useState<ContentLanguage>("en");
 
   const selectedLabel = useMemo(
     () => getCountryLabel(selectedCountry),

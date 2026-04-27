@@ -18,6 +18,7 @@ import {
   industryProductToHref,
   productToHref,
 } from "@/app/_lib/siteCatalog";
+import { localizeHref, parseLocaleFromPathname } from "@/app/_lib/locale-path";
 
 type MenuKey = "industries" | "products" | null;
 
@@ -27,12 +28,12 @@ type ProductCard = {
   image: string;
 };
 
-function Logo() {
+function Logo({ homeHref }: { homeHref: string }) {
   return (
     <Link
       aria-label="Autocracy Machinery home"
       className="block w-[168px] sm:w-[190px]"
-      href="/"
+      href={homeHref}
     >
       <Image
         alt="Autocracy Machinery"
@@ -259,6 +260,14 @@ export default function GlobalHeader() {
     [],
   );
   const messages = getMessages(language);
+  const locale = useMemo(
+    () =>
+      typeof window === "undefined"
+        ? parseLocaleFromPathname("/")
+        : parseLocaleFromPathname(window.location.pathname),
+    [],
+  );
+  const toLocalizedHref = (href: string) => localizeHref(href, locale);
 
   const industryProducts = useMemo(() => {
     const labels = INDUSTRY_TO_PRODUCTS[activeIndustry];
@@ -268,16 +277,16 @@ export default function GlobalHeader() {
   }, [activeIndustry]);
 
   const navLinks = [
-    { label: messages.common.aboutUs, href: "/about-us" },
-    { label: messages.common.blogs, href: "/#stories" },
-    { label: messages.common.contactUs, href: "/contact-us" },
+    { label: messages.common.aboutUs, href: toLocalizedHref("/about-us") },
+    { label: messages.common.blogs, href: toLocalizedHref("/#stories") },
+    { label: messages.common.contactUs, href: toLocalizedHref("/contact-us") },
   ];
   const mobileMainMenu = [
-    { label: messages.common.industry, href: "/industries", showArrow: true },
-    { label: messages.common.product, href: "/products", showArrow: true },
-    { label: messages.common.aboutUs, href: "/about-us", showArrow: false },
-    { label: messages.common.blogs, href: "/#stories", showArrow: false },
-    { label: messages.common.contactUs, href: "/contact-us", showArrow: false },
+    { label: messages.common.industry, href: toLocalizedHref("/industries"), showArrow: true },
+    { label: messages.common.product, href: toLocalizedHref("/products"), showArrow: true },
+    { label: messages.common.aboutUs, href: toLocalizedHref("/about-us"), showArrow: false },
+    { label: messages.common.blogs, href: toLocalizedHref("/#stories"), showArrow: false },
+    { label: messages.common.contactUs, href: toLocalizedHref("/contact-us"), showArrow: false },
   ];
   const navItemClass =
     "flex h-6 items-center justify-center gap-1 text-center font-['Roboto_Condensed','Roboto','Arial_Narrow',Arial,sans-serif] text-[14px] font-semibold uppercase leading-[105%] tracking-normal transition";
@@ -298,7 +307,7 @@ export default function GlobalHeader() {
               <Icon className="size-4" name="phone" />
               +91 87904 73345
             </a>
-            <a className="hidden items-center gap-2 md:flex" href="/find-a-dealer">
+            <a className="hidden items-center gap-2 md:flex" href={toLocalizedHref("/find-a-dealer")}>
               <Icon className="size-4" name="search" />
               {messages.common.findDealer}
             </a>
@@ -311,7 +320,7 @@ export default function GlobalHeader() {
       <div className="hidden lg:block" onMouseLeave={() => setActiveMenu(null)}>
         <div className="site-container flex h-[72px] items-center justify-between">
           <div className="flex items-center gap-10">
-            <Logo />
+            <Logo homeHref={toLocalizedHref("/")} />
             <nav className="flex h-6 items-center gap-8 text-[var(--ink)]">
               <button
                 className={`${navItemClass} ${
@@ -356,14 +365,14 @@ export default function GlobalHeader() {
           <div className="flex items-center gap-3">
             <a
               className="flex h-10 items-center justify-center gap-2 border border-[var(--ink)] px-4 text-center font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-semibold uppercase leading-5 tracking-normal text-[#0a0a0b] transition hover:bg-black/5"
-              href="/brochure"
+              href={toLocalizedHref("/brochure")}
             >
               <Icon className="size-5" name="download" />
               {messages.common.brochure}
             </a>
             <a
               className="button-gold-text flex h-10 items-center justify-center bg-[var(--ink)] px-6 text-center font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-semibold uppercase leading-5 tracking-normal transition hover:bg-[#2d2d2d]"
-              href="/contact-us"
+              href={toLocalizedHref("/contact-us")}
               style={{ color: "#f9c300" }}
             >
               {messages.common.getQuote}
@@ -400,7 +409,7 @@ export default function GlobalHeader() {
                         ...card,
                         displayLabel: translateProductLabel(card.label, language),
                       }}
-                      href={industryProductToHref(activeIndustry, card.label)}
+                      href={toLocalizedHref(industryProductToHref(activeIndustry, card.label))}
                       key={`${activeIndustry}-${card.label}`}
                     />
                   ))}
@@ -420,7 +429,7 @@ export default function GlobalHeader() {
                       ...card,
                       displayLabel: translateProductLabel(card.label, language),
                     }}
-                    href={productToHref(card.label)}
+                    href={toLocalizedHref(productToHref(card.label))}
                     key={`product-grid-${card.label}`}
                   />
                 ))}
@@ -440,22 +449,26 @@ export default function GlobalHeader() {
           >
             <Icon className="size-7" name={mobileMenuOpen ? "close" : "menu"} />
           </button>
-          <button
-            aria-label="Search"
-            className="flex h-full items-center justify-end border-l border-black/15 px-4 text-[var(--ink)]"
-            type="button"
-          >
-            <Icon className="size-6" name="search" />
-          </button>
+          <div className="flex h-full items-center justify-end gap-2 border-l border-black/15 px-2">
+            <CountrySwitcherButton className="inline-flex h-8 min-w-[52px] items-center justify-center gap-1 rounded bg-transparent px-1 text-[11px] font-semibold uppercase text-[#0a0a0b]" />
+            <LanguageSwitcherButton className="relative inline-flex h-8 min-w-[52px] items-center rounded bg-transparent px-1 pr-4 text-[11px] font-semibold uppercase text-[#0a0a0b]" />
+            <button
+              aria-label="Search"
+              className="grid size-8 place-items-center text-[var(--ink)]"
+              type="button"
+            >
+              <Icon className="size-6" name="search" />
+            </button>
+          </div>
         </div>
 
         <div className="site-container flex h-[88px] items-center justify-between bg-[#f2f2f2]">
-          <Logo />
+          <Logo homeHref={toLocalizedHref("/")} />
           <a
             className="flex h-[46px] items-center justify-center gap-2 border border-[var(--ink)] bg-[#f2f2f2] px-5 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-semibold uppercase leading-none text-[#0a0a0b]"
-            href="/brochure"
+            href={toLocalizedHref("/brochure")}
           >
-            <Icon className="size-5" name="download" />
+            <Icon className="size-4" name="download" />
             <span className="leading-none">{messages.common.brochure}</span>
           </a>
         </div>
@@ -496,14 +509,14 @@ export default function GlobalHeader() {
                 <div className="grid grid-cols-2 gap-4">
                   <a
                     className="flex h-[62px] items-center justify-center bg-[var(--brand-yellow)] font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-bold uppercase leading-none text-[#0a0a0b]"
-                  href="/contact-us"
+                  href={toLocalizedHref("/contact-us")}
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   {messages.common.getQuote}
                 </a>
                 <a
                     className="flex h-[62px] items-center justify-center gap-2 border border-black/30 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-semibold uppercase leading-none text-[#0a0a0b]"
-                  href="/brochure"
+                  href={toLocalizedHref("/brochure")}
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   <Icon className="size-5" name="download" />

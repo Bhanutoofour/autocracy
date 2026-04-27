@@ -3,17 +3,18 @@ import type { Metadata } from "next";
 import FaqClient from "./FaqClient";
 import { getRequestContentLanguage } from "@/app/_lib/i18n-server";
 import { tUi } from "@/app/_lib/i18n";
+import { buildLocalizedAlternates } from "@/app/_lib/locale-path";
 
 export const metadata: Metadata = {
   title: "Frequently Asked Questions - FAQs – Autocracy Machinery",
   description:
     "Quick answers to common questions about Autocracy Machinery products and services.",
-  alternates: { canonical: "https://autocracymachinery.com/faqs" },
+  alternates: buildLocalizedAlternates("/faqs"),
   openGraph: {
     title: "FAQs – Autocracy Machinery",
     description:
       "Quick answers to common questions about Autocracy Machinery products and services.",
-    url: "https://autocracymachinery.com/faqs",
+    url: "/in/en/faqs",
     type: "website",
   },
   twitter: {

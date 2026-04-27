@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { getMessages } from "@/app/_lib/i18n";
-import { getRequestContentLanguage } from "@/app/_lib/i18n-server";
+import { getRequestContentLanguage, getRequestLocale } from "@/app/_lib/i18n-server";
+import { localizeHref } from "@/app/_lib/locale-path";
 
 function SocialIcon({
   name,
@@ -63,6 +64,8 @@ function SocialIcon({
 
 export default async function UniversalFooter() {
   const language = await getRequestContentLanguage();
+  const locale = await getRequestLocale();
+  const toLocalizedHref = (href: string) => localizeHref(href, locale);
   const messages = getMessages(language);
 
   const footerMenus = [
@@ -124,7 +127,7 @@ export default async function UniversalFooter() {
             <Link
               aria-label="Autocracy Machinery home"
               className="inline-flex items-end gap-2"
-              href="/"
+              href={toLocalizedHref("/")}
             >
               <Image
                 alt="Autocracy brand mark"
@@ -185,13 +188,13 @@ export default async function UniversalFooter() {
             <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3 font-['Roboto',Arial,Helvetica,sans-serif] text-[12px] font-normal leading-[1.5] tracking-normal text-white/95">
               <Link
                 className="transition hover:text-[var(--brand-yellow)]"
-                href="/privacy-policy"
+                href={toLocalizedHref("/privacy-policy")}
               >
                 {messages.footer.privacyPolicy}
               </Link>
               <Link
                 className="transition hover:text-[var(--brand-yellow)]"
-                href="/terms-and-conditions"
+                href={toLocalizedHref("/terms-and-conditions")}
               >
                 {messages.footer.terms}
               </Link>
@@ -215,7 +218,7 @@ export default async function UniversalFooter() {
                         {isInternal ? (
                           <Link
                             className="transition hover:text-[var(--brand-yellow)]"
-                            href={link.href}
+                            href={toLocalizedHref(link.href)}
                           >
                             {link.label}
                           </Link>

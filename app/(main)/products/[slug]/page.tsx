@@ -91,13 +91,14 @@ export default async function ProductPage({ params }: ProductPageProps) {
       </div>
 
       <div className="mt-10 flex gap-3">
-        <Link className="button-gold-text rounded bg-black px-4 py-2 font-semibold !text-[#f9c300]" href="/products">
+        <Link className="button-gold-text rounded bg-black px-4 py-2 font-semibold !text-[#f9c300]" href="/in/en/products">
           {tUi(language, "view_all_products")}
         </Link>
-        <Link className="rounded border border-black/25 px-4 py-2 font-semibold" href="/contact-us">
+        <Link className="rounded border border-black/25 px-4 py-2 font-semibold" href="/in/en/contact-us">
           {tUi(language, "contact_us")}
         </Link>
       </div>
     </main>
   );
 }
+

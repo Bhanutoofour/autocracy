@@ -44,14 +44,14 @@ export function middleware(request: NextRequest) {
   if (country && isSupportedCountry(country) && !language) {
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = `/${country}/${DEFAULT_LANGUAGE}`;
-    return NextResponse.redirect(redirectUrl, 308);
+    return NextResponse.redirect(redirectUrl, 301);
   }
 
   // /{country}/{non-lang}/* => /{country}/en/{non-lang}/*
   if (country && isSupportedCountry(country) && language && !isSupportedLanguage(language)) {
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = `/${country}/${DEFAULT_LANGUAGE}/${segments.slice(1).join("/")}`;
-    return NextResponse.redirect(redirectUrl, 308);
+    return NextResponse.redirect(redirectUrl, 301);
   }
 
   // Backward compatibility + SEO: old URLs redirect to /in/en/*
@@ -60,7 +60,7 @@ export function middleware(request: NextRequest) {
     pathname === "/"
       ? `/${DEFAULT_COUNTRY}/${DEFAULT_LANGUAGE}`
       : `/${DEFAULT_COUNTRY}/${DEFAULT_LANGUAGE}${pathname}`;
-  return NextResponse.redirect(redirectUrl, 308);
+  return NextResponse.redirect(redirectUrl, 301);
 }
 
 export const config = {

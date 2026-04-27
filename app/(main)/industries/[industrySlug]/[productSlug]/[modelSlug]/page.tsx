@@ -63,10 +63,11 @@ export default async function IndustryProductModelPage({
         >
           {tUi(language, "back_to_industry_product")}
         </Link>
-        <Link className="rounded border border-black/25 px-4 py-2 font-semibold" href="/contact-us">
+        <Link className="rounded border border-black/25 px-4 py-2 font-semibold" href="/in/en/contact-us">
           {tUi(language, "contact_us")}
         </Link>
       </div>
     </main>
   );
 }
+
