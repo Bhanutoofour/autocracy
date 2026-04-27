@@ -80,7 +80,7 @@ export default async function UniversalFooter() {
     [
       { label: messages.footer.products, href: "/products" },
       { label: messages.footer.brochure, href: "/brochure" },
-      { label: messages.footer.blog, href: "/#stories" },
+      { label: messages.footer.blog, href: "/blog" },
       { label: messages.footer.videos, href: "/#stories" },
     ],
     [

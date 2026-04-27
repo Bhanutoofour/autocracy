@@ -9,6 +9,7 @@ import UniversalFooter from "./_components/UniversalFooter";
 import { titleToSlug } from "@/utils/slug";
 import { getActiveIndustries } from "@/actions/industryAction";
 import { getActiveProducts } from "@/actions/productAction";
+import { getActiveBlogs } from "@/actions/blogAction";
 import {
   AnimatedAwardsSection,
   AnimatedTestimonialsSection,
@@ -18,8 +19,15 @@ import {
   type ContentLanguage,
   translateIndustryLabel,
 } from "@/app/_lib/i18n";
-import { getRequestContentLanguage } from "@/app/_lib/i18n-server";
-import { buildLocalizedAlternates } from "@/app/_lib/locale-path";
+import {
+  getRequestContentLanguage,
+  getRequestLocale,
+} from "@/app/_lib/i18n-server";
+import {
+  buildLocalizedAlternates,
+  localizeHref,
+} from "@/app/_lib/locale-path";
+import { resolveBlogImageSrc, toExcerpt } from "@/app/_lib/blog-utils";
 
 export const metadata: Metadata = {
   alternates: buildLocalizedAlternates("/"),
@@ -525,34 +533,42 @@ const awardsGallery = [
   "1712120617244.jpg",
 ];
 
-const stories = [
+const fallbackStories = [
   {
-    logo: "6f79ddcbbf2d6df60bdc72d10ee750b4062fe76d.png",
+    image: "6f79ddcbbf2d6df60bdc72d10ee750b4062fe76d.png",
     title: "The Right Machine For The Right Job",
     excerpt:
       "Autocracy Machinery is Indiaâ€™s leading manufacturer of speciality construction, agricultural and infrastructure machinery...",
   },
   {
-    logo: "4c8d790d9f0e269594d166de2a1f2bc31756cb7d.png",
+    image: "4c8d790d9f0e269594d166de2a1f2bc31756cb7d.png",
     title: "New age for agriculture, infrastructure sector",
     excerpt:
       "Autocracy Machinery was recognised for delivering purpose-built heavy machinery for agriculture and infrastructure...",
   },
   {
-    logo: "e01088c2bc9dc1e016102c3d92b7aa506b5fe0d8.png",
+    image: "e01088c2bc9dc1e016102c3d92b7aa506b5fe0d8.png",
     title:
       "15 Women-led Startups Pitched to 11 Investors in 3rd Edn. of TiE Women Pitch Competition",
     excerpt:
       "Visakhapatnam: In an industry where there is a rare presence of women, Santhoshi Buddh showcased innovation...",
   },
   {
-    logo: "28fe76fafbd6a96b61c2da01d6e43907611ed888.png",
+    image: "28fe76fafbd6a96b61c2da01d6e43907611ed888.png",
     title:
       "Santoshi, who stepped into an impossible field, overcame criticism, a...",
     excerpt:
       "Autocracy Machinery was featured among promising women-led startups showcasing engineering excellence and resilience...",
   },
 ];
+
+type HomeStoryCard = {
+  id: string;
+  title: string;
+  excerpt: string;
+  imageSrc: string;
+  href: string;
+};
 
 function Logo() {
   return (
@@ -711,7 +727,7 @@ function Header() {
     { label: "Products", href: "/in/en#products" },
     { label: "Company", href: "/in/en/about-us" },
     { label: "About Us", href: "/in/en/about-us" },
-    { label: "Blogs", href: "/in/en#stories" },
+    { label: "Blogs", href: "/in/en/blog" },
     { label: "Contact Us", href: "/in/en/contact-us" },
   ];
 
@@ -977,7 +993,13 @@ function Certifications({ language }: { language: ContentLanguage }) {
   );
 }
 
-function Stories({ language }: { language: ContentLanguage }) {
+function Stories({
+  language,
+  stories,
+}: {
+  language: ContentLanguage;
+  stories: HomeStoryCard[];
+}) {
   const messages = getMessages(language);
   return (
     <section className="bg-white py-16 lg:py-20" id="stories">
@@ -989,30 +1011,32 @@ function Stories({ language }: { language: ContentLanguage }) {
         <div className="mt-10 flex gap-5 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {stories.map((story) => (
             <article
-              className="flex h-[354px] w-[86vw] flex-none flex-col border border-[#d5d5d5] bg-white px-6 py-7 sm:w-[44vw] sm:px-7 lg:w-[calc((100%-60px)/4)]"
-              key={story.title}
+              className="flex h-[410px] w-[86vw] flex-none flex-col overflow-hidden border border-[#d5d5d5] bg-white sm:w-[44vw] lg:w-[calc((100%-60px)/4)]"
+              key={story.id}
             >
-              <div className="relative h-[42px] w-[190px]">
+              <Link className="relative block h-[180px] w-full bg-[#f3f4f6]" href={story.href}>
                 <Image
-                  alt=""
-                  className="object-contain object-left"
+                  alt={story.title}
+                  className="object-cover"
                   fill
-                  sizes="190px"
-                  src={`${asset}${story.logo}`}
+                  sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                  src={story.imageSrc}
                 />
+              </Link>
+              <div className="flex flex-1 flex-col px-6 py-7 sm:px-7">
+                <h3 className="line-clamp-2 max-w-[270px] font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[20px] font-bold leading-[1.25] text-[#1c1c1d]">
+                  <Link href={story.href}>{story.title}</Link>
+                </h3>
+                <p className="mt-5 line-clamp-3 max-w-[270px] text-[16px] font-normal leading-[1.55] text-[#55565a]">
+                  {story.excerpt}
+                </p>
+                <Link
+                  className="mt-auto text-[16px] font-medium leading-5 text-[#2f64b7]"
+                  href={story.href}
+                >
+                  {messages.common.readMore}
+                </Link>
               </div>
-              <h3 className="mt-8 max-w-[270px] font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[20px] font-bold leading-[1.25] text-[#1c1c1d]">
-                {story.title}
-              </h3>
-              <p className="mt-5 max-w-[270px] text-[16px] font-normal leading-[1.55] text-[#55565a]">
-                {story.excerpt}
-              </p>
-              <a
-                className="mt-auto text-[16px] font-medium leading-5 text-[#2f64b7]"
-                href="/in/en/about-us"
-              >
-                {messages.common.readMore}
-              </a>
             </article>
           ))}
         </div>
@@ -1066,6 +1090,7 @@ const organizationSchema = {
 
 export default async function Home() {
   const language = await getRequestContentLanguage();
+  const locale = await getRequestLocale();
   const localized = localizedHomeCopy[language as keyof typeof localizedHomeCopy];
   const strictLocalized = language === "en" ? null : localized;
 
@@ -1094,11 +1119,19 @@ export default async function Home() {
   }));
   let homeIndustries: { title: string; image: string }[] = fallbackIndustries;
   let homeProducts: { name: string; image: string }[] = fallbackProducts;
+  let homeStories: HomeStoryCard[] = fallbackStories.map((story, index) => ({
+    id: `fallback-story-${index + 1}`,
+    title: story.title,
+    excerpt: story.excerpt,
+    imageSrc: `${asset}${story.image}`,
+    href: localizeHref("/blog", locale),
+  }));
 
   try {
-    const [dbIndustries, dbProducts] = await Promise.all([
+    const [dbIndustries, dbProducts, dbBlogs] = await Promise.all([
       getActiveIndustries(),
       getActiveProducts(),
+      getActiveBlogs(),
     ]);
 
     if (Array.isArray(dbIndustries) && dbIndustries.length > 0) {
@@ -1112,6 +1145,16 @@ export default async function Home() {
       homeProducts = dbProducts.map((product) => ({
         name: product.title ?? "",
         image: product.thumbnail ?? "",
+      }));
+    }
+
+    if (Array.isArray(dbBlogs) && dbBlogs.length > 0) {
+      homeStories = dbBlogs.slice(0, 6).map((blog) => ({
+        id: `db-story-${blog.id}`,
+        title: blog.title ?? "Untitled blog",
+        excerpt: toExcerpt(blog.description || blog.content, 150),
+        imageSrc: resolveBlogImageSrc(blog.banner),
+        href: localizeHref(`/blog/${blog.slug}`, locale),
       }));
     }
   } catch {
@@ -1143,7 +1186,7 @@ export default async function Home() {
         label={awardsLabelCopy}
       />
       <Certifications language={language} />
-      <Stories language={language} />
+      <Stories language={language} stories={homeStories} />
       <AnimatedTestimonialsSection
         description={testimonialDescriptionCopy}
         heading={testimonialHeadingCopy}

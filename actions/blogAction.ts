@@ -197,15 +197,17 @@ export async function getActiveBlogs() {
   }
 }
 
-export async function revalidateBlogData() {
+export async function revalidateBlogData(slug?: string) {
   try {
-    // Revalidate the blogs page
+    // Revalidate blog listing and optionally a detail page
     const { revalidatePath } = await import("next/cache");
-    revalidatePath("/blogs");
+    revalidatePath("/blog");
+    if (slug?.trim()) {
+      revalidatePath(`/blog/${slug.trim()}`);
+    }
     return true;
   } catch (error) {
     console.error("Error revalidating blog data:", error);
     return false;
   }
 }
-

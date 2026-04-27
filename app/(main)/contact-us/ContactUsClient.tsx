@@ -1,8 +1,7 @@
 "use client";
+
 import React, { useMemo, useState } from "react";
 import styles from "./contactStyles.module.scss";
-import Image from "next/image";
-import { ICONS } from "@/constants/Images/images";
 import {
   FormCheckbox,
   FormInput,
@@ -135,6 +134,34 @@ const contactCopy: Record<
   },
 };
 
+type ContactInfoIconName = "address" | "email" | "phone";
+
+function ContactInfoIcon({ name }: { name: ContactInfoIconName }) {
+  if (name === "address") {
+    return (
+      <svg aria-hidden="true" className={styles.infoIcon} fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+        <path d="M12 22s7-6.8 7-13a7 7 0 1 0-14 0c0 6.2 7 13 7 13Z" />
+        <circle cx="12" cy="9" r="2.5" />
+      </svg>
+    );
+  }
+
+  if (name === "email") {
+    return (
+      <svg aria-hidden="true" className={styles.infoIcon} fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+        <rect height="14" rx="2" width="20" x="2" y="5" />
+        <path d="m3 7 9 7 9-7" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg aria-hidden="true" className={styles.infoIcon} fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24">
+      <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.4 19.4 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.6a2 2 0 0 1-.5 2.1L8.1 9.6a16 16 0 0 0 6.3 6.3l1.2-1.2a2 2 0 0 1 2.1-.5c.8.3 1.7.6 2.6.7A2 2 0 0 1 22 16.9Z" />
+    </svg>
+  );
+}
+
 const ContactUsClient = () => {
   const language = useMemo(
     () =>
@@ -155,6 +182,36 @@ const ContactUsClient = () => {
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
+  const contactDetails = [
+    {
+      id: "address",
+      icon: "address" as const,
+      label: "Address",
+      content: (
+        <p>
+          Plot No.72/A, I.D.A. Phase-1, Lane-3, B N Reddy Nagar, Cherlapalli,
+          Hyderabad, Telangana 500051, India
+        </p>
+      ),
+    },
+    {
+      id: "email",
+      icon: "email" as const,
+      label: "Email",
+      content: (
+        <a href="mailto:sales@autocracymachinery.com">
+          sales@autocracymachinery.com
+        </a>
+      ),
+    },
+    {
+      id: "phone",
+      icon: "phone" as const,
+      label: "Phone",
+      content: <a href="tel:+918790473345">+91 87904 73345</a>,
+    },
+  ];
+
   const onSubmit = async () => {
     if (!formData.name || !formData.email || !formData.mobileNumber) return;
     setLoading(true);
@@ -168,7 +225,6 @@ const ContactUsClient = () => {
         comments: formData.comments,
       });
       setFormSubmitted(true);
-      // You can add a success state/thank you here
     } catch (e) {
       console.error("Error submitting contact-us form:", e);
     } finally {
@@ -176,94 +232,109 @@ const ContactUsClient = () => {
     }
   };
 
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    void onSubmit();
+  };
+
   return (
     <div className={styles.contactUsContainer}>
-      <h1>{copy.title}</h1>
-      <div className={styles.contactForm}>
-        <div className={styles.contactSect}>
-          <FormInput
-            label={copy.fullName}
-            required
-            selectedValue={formData.name}
-            onChange={(e) => setFormData({ ...formData, name: e })}
-          />
-          <FormInput
-            label={copy.email}
-            required
-            selectedValue={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e })}
-          />
-        </div>
-        <div className={styles.contactSect}>
-          <FormInput
-            label={copy.mobile}
-            isMobileNumber
-            required
-            selectedValue={formData.mobileNumber}
-            onChange={(e) => setFormData({ ...formData, mobileNumber: e })}
-          />
-          <FormSelect
-            label={copy.enquiryType}
-            options={[
-              "Sales Enquiry",
-              "Spares / Parts Enquiry",
-              "Rental / Hire Enquiry",
-              "After-Sales Support",
-              "General / Others",
-            ]}
-            selectedValue={formData.enquiry}
-            onChange={(e) => setFormData({ ...formData, enquiry: e })}
-          />
-        </div>
-        <div className={styles.commentSec}>
-          <label htmlFor="comment">{copy.comments}</label>
-          <textarea
-            id="comment"
-            rows={6}
-            cols={50}
-            className={styles.textArea}
-            onChange={(e) =>
-              setFormData({ ...formData, comments: e.target.value })
-            }
-          ></textarea>
-        </div>
-        <FormCheckbox
-          label={copy.agreement}
-          selectedValue={formData.agreed}
-          onChange={(value) => setFormData({ ...formData, agreed: value })}
-        />
+      <div className={styles.pageHeader}>
+        <h1>{copy.title}</h1>
+        <p>
+          Have a project in mind? Share your requirements and our team will get
+          back to you with the right machine recommendations.
+        </p>
       </div>
-      <button
-        className={styles.contactSubmit}
-        disabled={formSubmitted || loading}
-        onClick={onSubmit}
-      >
-        {formSubmitted ? copy.submitted : copy.submit}
-      </button>
-      <div className={styles.addressBlock}>
-        <div className={styles.companyAddress}>
-          <h3>Autocracy Machinery Pvt. Ltd.</h3>
-          <p>
-            Plot No.72/A, I.D.A. Phase-1, Lane-3, B N Reddy Nagar, Cherlapalli,
-            Hyderabad, Telangana – 500051, India
+
+      <div className={styles.contentGrid}>
+        <aside className={styles.infoPanel}>
+          <h2>Reach Us</h2>
+          <p className={styles.infoIntro}>
+            We are available for product enquiries, rental support, and after-sales assistance.
           </p>
-        </div>
-        <div className={styles.companyContact}>
-          <div className={styles.contactInfo}>
-            <Image
-              src={ICONS.WHATSAPP}
-              alt="Whatsapp Number"
-              width={16}
-              height={16}
+
+          <div className={styles.infoList}>
+            {contactDetails.map((item) => (
+              <div className={styles.infoRow} key={item.id}>
+                <div className={styles.iconWrapper}>
+                  <ContactInfoIcon name={item.icon} />
+                </div>
+                <div className={styles.infoContent}>
+                  <h3>{item.label}</h3>
+                  {item.content}
+                </div>
+              </div>
+            ))}
+          </div>
+        </aside>
+
+        <div className={styles.formPanel}>
+          <form className={styles.contactForm} onSubmit={handleSubmit}>
+            <div className={styles.contactSect}>
+              <FormInput
+                label={copy.fullName}
+                labelBold
+                required
+                selectedValue={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e })}
+              />
+              <FormInput
+                label={copy.email}
+                labelBold
+                required
+                selectedValue={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e })}
+              />
+            </div>
+            <div className={styles.contactSect}>
+              <FormInput
+                label={copy.mobile}
+                labelBold
+                isMobileNumber
+                required
+                selectedValue={formData.mobileNumber}
+                onChange={(e) => setFormData({ ...formData, mobileNumber: e })}
+              />
+              <FormSelect
+                label={copy.enquiryType}
+                labelBold
+                options={[
+                  "Sales Enquiry",
+                  "Spares / Parts Enquiry",
+                  "Rental / Hire Enquiry",
+                  "After-Sales Support",
+                  "General / Others",
+                ]}
+                selectedValue={formData.enquiry}
+                onChange={(e) => setFormData({ ...formData, enquiry: e })}
+              />
+            </div>
+            <div className={styles.commentSec}>
+              <label htmlFor="comment">{copy.comments}</label>
+              <textarea
+                id="comment"
+                rows={6}
+                cols={50}
+                className={styles.textArea}
+                onChange={(e) =>
+                  setFormData({ ...formData, comments: e.target.value })
+                }
+              ></textarea>
+            </div>
+            <FormCheckbox
+              label={copy.agreement}
+              selectedValue={formData.agreed}
+              onChange={(value) => setFormData({ ...formData, agreed: value })}
             />
-            <a href="tel:+918790473345">+91 87904 73345</a>
-          </div>
-          <div className={styles.contactInfo}>
-            <Image src={ICONS.WHATSAPP} alt="email id" width={16} height={16} />
-            <a href="mailto:sales@autocracymachinery.com">
-              sales@autocracymachinery.com
-            </a>
-          </div>
+            <button
+              className={styles.contactSubmit}
+              disabled={formSubmitted || loading}
+              type="submit"
+            >
+              {formSubmitted ? copy.submitted : copy.submit}
+            </button>
+          </form>
         </div>
       </div>
     </div>

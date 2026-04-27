@@ -278,14 +278,14 @@ export default function GlobalHeader() {
 
   const navLinks = [
     { label: messages.common.aboutUs, href: toLocalizedHref("/about-us") },
-    { label: messages.common.blogs, href: toLocalizedHref("/#stories") },
+    { label: messages.common.blogs, href: toLocalizedHref("/blog") },
     { label: messages.common.contactUs, href: toLocalizedHref("/contact-us") },
   ];
   const mobileMainMenu = [
     { label: messages.common.industry, href: toLocalizedHref("/industries"), showArrow: true },
     { label: messages.common.product, href: toLocalizedHref("/products"), showArrow: true },
     { label: messages.common.aboutUs, href: toLocalizedHref("/about-us"), showArrow: false },
-    { label: messages.common.blogs, href: toLocalizedHref("/#stories"), showArrow: false },
+    { label: messages.common.blogs, href: toLocalizedHref("/blog"), showArrow: false },
     { label: messages.common.contactUs, href: toLocalizedHref("/contact-us"), showArrow: false },
   ];
   const navItemClass =

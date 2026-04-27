@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { getActiveBlogs } from "@/actions/blogAction";
 import {
   INDUSTRIES,
   INDUSTRY_TO_PRODUCTS,
@@ -18,6 +19,7 @@ const STATIC_PATHS = [
   "/",
   "/about-us",
   "/brochure",
+  "/blog",
   "/careers",
   "/contact-us",
   "/faqs",
@@ -38,9 +40,22 @@ function getCatalogPaths(): string[] {
   return [...productPaths, ...industryPaths, ...industryProductPaths];
 }
 
-export default function sitemap(): MetadataRoute.Sitemap {
+async function getBlogPaths(): Promise<string[]> {
+  try {
+    const activeBlogs = await getActiveBlogs();
+    return activeBlogs
+      .map((blog) => blog.slug?.trim())
+      .filter((slug): slug is string => Boolean(slug))
+      .map((slug) => `/blog/${slug}`);
+  } catch {
+    return [];
+  }
+}
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const lastModified = new Date();
-  const allPaths = [...new Set([...STATIC_PATHS, ...getCatalogPaths()])];
+  const blogPaths = await getBlogPaths();
+  const allPaths = [...new Set([...STATIC_PATHS, ...getCatalogPaths(), ...blogPaths])];
 
   return allPaths.map((path) => {
     const canonicalPath = withLocalePath(path, {

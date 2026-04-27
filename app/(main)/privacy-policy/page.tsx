@@ -1,8 +1,8 @@
 import React from "react";
 import { PRIVACY_POLICY } from "@/data/privacyPolicy";
-import RenderContent from "@/component/sections/renderContent/RenderContent";
 import type { Metadata } from "next";
 import { buildLocalizedAlternates } from "@/app/_lib/locale-path";
+import LegalDocumentPage from "@/app/_components/LegalDocumentPage";
 
 export const metadata: Metadata = {
   title: "Privacy Policy | Autocracy Machinery Official Website",
@@ -25,7 +25,14 @@ export const metadata: Metadata = {
 };
 
 const PrivacyPolicy = () => {
-  return <RenderContent data={PRIVACY_POLICY} />;
+  return (
+    <LegalDocumentPage
+      contactHeading="Contact Us"
+      contactIntro="If you have any questions about this Privacy Policy or our data practices, please contact us:"
+      data={PRIVACY_POLICY}
+      lastUpdated="April 27, 2026"
+    />
+  );
 };
 
 export default PrivacyPolicy;

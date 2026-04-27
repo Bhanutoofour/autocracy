@@ -1,8 +1,7 @@
-import RenderContent from "@/component/sections/renderContent/RenderContent";
 import { TERMS_AND_CONDITIONS } from "@/data/termsCondition";
-import React from "react";
 import type { Metadata } from "next";
 import { buildLocalizedAlternates } from "@/app/_lib/locale-path";
+import LegalDocumentPage from "@/app/_components/LegalDocumentPage";
 
 export const metadata: Metadata = {
   title: "Terms And Conditions - Autocracy Machinery",
@@ -25,7 +24,14 @@ export const metadata: Metadata = {
 };
 
 const TermsAndConditions = () => {
-  return <RenderContent data={TERMS_AND_CONDITIONS} />;
+  return (
+    <LegalDocumentPage
+      contactHeading="Contact Information"
+      contactIntro="For questions about these Terms and Conditions, please contact us:"
+      data={TERMS_AND_CONDITIONS}
+      lastUpdated="April 27, 2026"
+    />
+  );
 };
 
 export default TermsAndConditions;

@@ -11,6 +11,7 @@ interface FormSelectProps {
   onChange: (value: string) => void;
   required?: boolean;
   disabled?: boolean;
+  labelBold?: boolean;
 }
 interface FormInputProps {
   label: string;
@@ -22,6 +23,7 @@ interface FormInputProps {
   type?: string;
   isMobileNumber?: boolean;
   stylesheet?: object;
+  labelBold?: boolean;
 }
 interface FormCheckboxProps {
   label: string;
@@ -46,10 +48,11 @@ export const FormSelect: React.FC<FormSelectProps> = ({
   selectedValue,
   onChange,
   disabled = false,
+  labelBold = false,
 }) => {
   return (
     <div className={styles.selectWrapper}>
-      <label className={styles.label}>
+      <label className={`${styles.label} ${labelBold ? styles.labelBold : ""}`}>
         {label}
         {required && <span className={styles.required}>*</span>}
       </label>
@@ -83,6 +86,7 @@ export const FormInput: React.FC<FormInputProps> = ({
   type = "text",
   isMobileNumber,
   stylesheet,
+  labelBold = false,
 }) => {
   const [open, setOpen] = useState<boolean>(false);
   const [selectedCountry, setSelectedCountry] = useState<Country | null>({
@@ -105,7 +109,7 @@ export const FormInput: React.FC<FormInputProps> = ({
 
   return (
     <div className={styles.formInputWrapper} style={{ ...stylesheet }}>
-      <label className={styles.label}>
+      <label className={`${styles.label} ${labelBold ? styles.labelBold : ""}`}>
         {label} {required && <span className={styles.required}>*</span>}
       </label>
 
