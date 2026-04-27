@@ -2,12 +2,13 @@
 
 import {
   DEFAULT_COUNTRY,
-  DEFAULT_LANGUAGE,
+  getCountryLanguageOptions,
+  getNormalizedLanguageForCountry,
   isSupportedCountry,
   isSupportedLanguage,
+  type SupportedCountry,
 } from "@/app/_lib/locale-config";
 import {
-  CONTENT_LANGUAGES,
   getContentLanguage,
   type ContentLanguage,
 } from "@/app/_lib/i18n";
@@ -34,10 +35,18 @@ function parsePath(pathname: string) {
   const hasLanguage = Boolean(language && isSupportedLanguage(language));
 
   return {
-    country: hasCountry ? country : DEFAULT_COUNTRY,
-    language: hasLanguage ? language : DEFAULT_LANGUAGE,
+    country: hasCountry ? (country as SupportedCountry) : DEFAULT_COUNTRY,
+    language: hasLanguage ? language : undefined,
     remainder: hasCountry ? (hasLanguage ? segments.slice(2) : segments.slice(1)) : segments,
   };
+}
+
+function readStoredLanguage(): string | null {
+  try {
+    return window.localStorage.getItem(STORAGE_KEY);
+  } catch {
+    return null;
+  }
 }
 
 export default function LanguageSwitcherButton({
@@ -45,22 +54,45 @@ export default function LanguageSwitcherButton({
 }: {
   className?: string;
 }) {
+  const fallbackPathData: {
+    country: SupportedCountry;
+    language: string | undefined;
+    remainder: string[];
+  } = { country: DEFAULT_COUNTRY, language: undefined, remainder: [] };
   const pathData =
     typeof window !== "undefined"
       ? parsePath(window.location.pathname)
-      : { country: DEFAULT_COUNTRY, language: DEFAULT_LANGUAGE, remainder: [] as string[] };
-  const language = getContentLanguage(pathData.language);
+      : fallbackPathData;
+  const allowedLanguages = getCountryLanguageOptions(pathData.country);
+  const language = getContentLanguage(
+    getNormalizedLanguageForCountry(pathData.country, pathData.language),
+  );
 
   const handleChange = (nextLanguage: ContentLanguage) => {
     const { country, remainder } = parsePath(window.location.pathname);
-    const nextPath = `/${country}/${nextLanguage}${remainder.length ? `/${remainder.join("/")}` : ""}`;
+    const normalizedLanguage = getNormalizedLanguageForCountry(
+      country,
+      nextLanguage,
+    );
+    const nextPath = `/${country}/${normalizedLanguage}${remainder.length ? `/${remainder.join("/")}` : ""}`;
     const nextUrl = `${nextPath}${window.location.search}${window.location.hash}`;
 
-    window.localStorage.setItem(STORAGE_KEY, nextLanguage);
+    try {
+      window.localStorage.setItem(STORAGE_KEY, normalizedLanguage);
+    } catch {
+      // Ignore storage write failures in restrictive browser modes.
+    }
     if (nextUrl !== `${window.location.pathname}${window.location.search}${window.location.hash}`) {
       window.location.assign(nextUrl);
     }
   };
+
+  const storedLanguage =
+    typeof window !== "undefined" ? readStoredLanguage() : null;
+  const resolvedLanguage = getNormalizedLanguageForCountry(
+    pathData.country,
+    storedLanguage ?? language,
+  );
 
   return (
     <label
@@ -79,7 +111,10 @@ export default function LanguageSwitcherButton({
       <select
         onChange={(event) => {
           const next = event.target.value.toLowerCase();
-          if (isSupportedLanguage(next) && CONTENT_LANGUAGES.includes(next as ContentLanguage)) {
+          if (
+            isSupportedLanguage(next) &&
+            allowedLanguages.includes(next as (typeof allowedLanguages)[number])
+          ) {
             handleChange(next as ContentLanguage);
           }
         }}
@@ -96,11 +131,11 @@ export default function LanguageSwitcherButton({
           minWidth: "52px",
           paddingRight: "18px",
         }}
-        value={language}
+        value={resolvedLanguage}
       >
-        {CONTENT_LANGUAGES.map((lang) => (
+        {allowedLanguages.map((lang) => (
           <option key={lang} value={lang}>
-            {LANGUAGE_CODES[lang]}
+            {LANGUAGE_CODES[getContentLanguage(lang)]}
           </option>
         ))}
       </select>

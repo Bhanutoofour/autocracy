@@ -2,8 +2,12 @@
 
 import { useEffect, useMemo, useState } from "react";
 import {
-  DEFAULT_LANGUAGE,
+  getDefaultLanguageForCountry,
+  getNormalizedLanguageForCountry,
+  isLiveCountry,
+  isSupportedCountry,
   isSupportedLanguage,
+  type SupportedCountry,
 } from "@/app/_lib/locale-config";
 import {
   getContentLanguageFromPath,
@@ -11,32 +15,32 @@ import {
   type ContentLanguage,
 } from "@/app/_lib/i18n";
 
-type CountryCode = "IN" | "US" | "CA" | "AU" | "DE" | "LK";
-
 type CountryOption = {
-  code: CountryCode;
+  code: SupportedCountry;
   label: string;
 };
 
 const COUNTRY_OPTIONS: CountryOption[] = [
-  { code: "IN", label: "India (English website)" },
-  { code: "US", label: "United States" },
-  { code: "CA", label: "Canada" },
-  { code: "AU", label: "Australia" },
-  { code: "DE", label: "Germany" },
-  { code: "LK", label: "Sri Lanka" },
+  { code: "in", label: "India" },
+  { code: "ae", label: "United Arab Emirates" },
+  { code: "us", label: "United States" },
+  { code: "ca", label: "Canada" },
+  { code: "au", label: "Australia" },
+  { code: "de", label: "Germany" },
+  { code: "lk", label: "Sri Lanka" },
 ];
 
 const STORAGE_KEY = "autocracy:selected-country";
 const LANGUAGE_STORAGE_KEY = "autocracy:selected-language";
 const SESSION_POPUP_KEY = "autocracy:country-popup-shown";
-const COUNTRY_SEGMENTS = COUNTRY_OPTIONS.map((item) => item.code.toLowerCase());
 
-function isSupportedCountry(value: string): value is CountryCode {
-  return COUNTRY_OPTIONS.some((item) => item.code === value);
+function normalizeCountryCode(value: string | null | undefined): SupportedCountry | null {
+  const normalized = (value ?? "").trim().toLowerCase();
+  if (!normalized || !isSupportedCountry(normalized)) return null;
+  return normalized;
 }
 
-function getCountryLabel(code: CountryCode): string {
+function getCountryLabel(code: SupportedCountry): string {
   return COUNTRY_OPTIONS.find((item) => item.code === code)?.label ?? code;
 }
 
@@ -74,13 +78,14 @@ function writeSessionStorage(key: string, value: string) {
 
 export default function LocationGate() {
   const [open, setOpen] = useState(false);
-  const [selectedCountry, setSelectedCountry] = useState<CountryCode>("IN");
+  const [selectedCountry, setSelectedCountry] = useState<SupportedCountry>("in");
   const [language, setLanguage] = useState<ContentLanguage>("en");
 
   const selectedLabel = useMemo(
     () => getCountryLabel(selectedCountry),
     [selectedCountry],
   );
+  const isSelectedCountryLive = isLiveCountry(selectedCountry);
   const messages = getMessages(language);
 
   useEffect(() => {
@@ -89,14 +94,13 @@ export default function LocationGate() {
     const init = async () => {
       if (typeof window === "undefined") return;
 
-      const savedCountry = readLocalStorage(STORAGE_KEY);
-      const hasSavedCountry =
-        Boolean(savedCountry) && isSupportedCountry(savedCountry as string);
+      const savedCountry = normalizeCountryCode(readLocalStorage(STORAGE_KEY));
+      const hasSavedCountry = Boolean(savedCountry);
       const shownThisSession = readSessionStorage(SESSION_POPUP_KEY) === "1";
 
       setLanguage(getContentLanguageFromPath(window.location.pathname));
 
-      if (savedCountry && isSupportedCountry(savedCountry)) {
+      if (savedCountry) {
         setSelectedCountry(savedCountry);
       }
 
@@ -114,9 +118,9 @@ export default function LocationGate() {
         if (!response.ok) return;
 
         const data = (await response.json()) as { country_code?: string };
-        const code = (data.country_code ?? "").toUpperCase();
+        const code = normalizeCountryCode(data.country_code);
 
-        if (active && isSupportedCountry(code)) {
+        if (active && code) {
           setSelectedCountry(code);
         }
       } catch {
@@ -133,8 +137,8 @@ export default function LocationGate() {
 
   useEffect(() => {
     const openCountrySelector = () => {
-      const savedCountry = readLocalStorage(STORAGE_KEY);
-      if (savedCountry && isSupportedCountry(savedCountry)) {
+      const savedCountry = normalizeCountryCode(readLocalStorage(STORAGE_KEY));
+      if (savedCountry) {
         setSelectedCountry(savedCountry);
       }
       setOpen(true);
@@ -147,21 +151,32 @@ export default function LocationGate() {
   }, []);
 
   const handleConfirm = () => {
+    if (!isSelectedCountryLive) {
+      return;
+    }
+
     writeLocalStorage(STORAGE_KEY, selectedCountry);
     window.dispatchEvent(new Event("country-updated"));
     setOpen(false);
 
-    const nextCountry = selectedCountry.toLowerCase();
+    const nextCountry = selectedCountry;
     const current = window.location.pathname;
     const pathSegments = current.split("/").filter(Boolean);
     const firstSegment = pathSegments[0]?.toLowerCase();
     const secondSegment = pathSegments[1]?.toLowerCase();
     const savedLanguage = (readLocalStorage(LANGUAGE_STORAGE_KEY) ?? "").toLowerCase();
-    const nextLanguage =
+    const preferredLanguage =
       (savedLanguage && isSupportedLanguage(savedLanguage) && savedLanguage) ||
       (secondSegment && isSupportedLanguage(secondSegment) && secondSegment) ||
-      DEFAULT_LANGUAGE;
-    const baseSegments = COUNTRY_SEGMENTS.includes(firstSegment)
+      getDefaultLanguageForCountry(nextCountry);
+    const nextLanguage = getNormalizedLanguageForCountry(
+      nextCountry,
+      preferredLanguage,
+    );
+
+    writeLocalStorage(LANGUAGE_STORAGE_KEY, nextLanguage);
+    const hasCountryPrefix = Boolean(firstSegment && isSupportedCountry(firstSegment));
+    const baseSegments = hasCountryPrefix
       ? (secondSegment && isSupportedLanguage(secondSegment)
           ? pathSegments.slice(2)
           : pathSegments.slice(1))
@@ -176,6 +191,9 @@ export default function LocationGate() {
   };
 
   const handleCancel = () => {
+    if (!isSelectedCountryLive) {
+      setSelectedCountry("in");
+    }
     setOpen(false);
   };
 
@@ -202,8 +220,8 @@ export default function LocationGate() {
                   className="h-[56px] w-full appearance-none rounded-xl border border-black/20 bg-[#efefef] px-4 pr-12 font-['Roboto',Arial,Helvetica,sans-serif] text-[18px] font-normal text-[#0a0a0b] outline-none focus:border-black/35 sm:px-6 sm:pr-14 sm:text-[20px]"
                   id="country-select"
                   onChange={(event) => {
-                    const value = event.target.value;
-                    if (isSupportedCountry(value)) {
+                    const value = normalizeCountryCode(event.target.value);
+                    if (value) {
                       setSelectedCountry(value);
                     }
                   }}
@@ -233,11 +251,16 @@ export default function LocationGate() {
 
               <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <button
-                  className="h-[54px] rounded-md bg-[#f7b322] font-['Roboto',Arial,Helvetica,sans-serif] text-[18px] font-extrabold text-[#0a0a0b] transition hover:brightness-95 sm:text-[20px]"
+                  className={`h-[54px] rounded-md font-['Roboto',Arial,Helvetica,sans-serif] text-[18px] font-extrabold text-[#0a0a0b] transition sm:text-[20px] ${
+                    isSelectedCountryLive
+                      ? "bg-[#f7b322] hover:brightness-95"
+                      : "cursor-not-allowed bg-[#d6d6d6]"
+                  }`}
+                  disabled={!isSelectedCountryLive}
                   onClick={handleConfirm}
                   type="button"
                 >
-                  {messages.locationGate.confirm}
+                  {isSelectedCountryLive ? messages.locationGate.confirm : "Coming Soon"}
                 </button>
                 <button
                   className="h-[54px] rounded-md border border-black/45 bg-transparent font-['Roboto',Arial,Helvetica,sans-serif] text-[18px] font-bold text-[#0a0a0b] transition hover:bg-black/5 sm:text-[20px]"
@@ -252,6 +275,11 @@ export default function LocationGate() {
                 {messages.locationGate.autoDetected}{" "}
                 <span className="font-semibold">{selectedLabel}</span>
               </p>
+              {!isSelectedCountryLive ? (
+                <p className="mt-3 rounded-md border border-[#f0c36d] bg-[#fff3d9] px-3 py-2 text-sm font-semibold text-[#8a5b00]">
+                  We are coming soon in {selectedLabel}. Please continue with India for now.
+                </p>
+              ) : null}
             </div>
           </div>
         </div>
