@@ -14,6 +14,14 @@ const COUNTRY_LABELS: Record<string, string> = {
   LK: "LK",
 };
 
+function readStoredCountry(): string | null {
+  try {
+    return window.localStorage.getItem(STORAGE_KEY);
+  } catch {
+    return null;
+  }
+}
+
 export default function CountrySwitcherButton({
   className,
 }: {
@@ -28,7 +36,7 @@ export default function CountrySwitcherButton({
         setCountryCode(segment);
         return;
       }
-      const saved = window.localStorage.getItem(STORAGE_KEY) ?? "IN";
+      const saved = readStoredCountry() ?? "IN";
       setCountryCode(COUNTRY_LABELS[saved] ?? "IN");
     };
 

@@ -9,12 +9,14 @@ import {
   modelIndustries,
 } from "@/db/schema";
 import { eq, inArray } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag, unstable_cache } from "next/cache";
 import { productSlug } from "@/utils/slug";
 import { getActiveIndustries } from "@/actions/industryAction";
 
-export const getActiveProducts = async (): Promise<ActiveProduct[]> => {
-  try {
+const PRODUCT_CACHE_REVALIDATE_SECONDS = 300;
+
+const getActiveProductsCached = unstable_cache(
+  async (): Promise<ActiveProduct[]> => {
     const result = await db
       .select({
         id: products.id,
@@ -27,12 +29,21 @@ export const getActiveProducts = async (): Promise<ActiveProduct[]> => {
       .where(eq(products.active, true))
       .orderBy(products.id);
 
-    const processedResult = result.map((product) => ({
+    return result.map((product) => ({
       ...product,
       active: !!product.active,
     }));
+  },
+  ["public-active-products"],
+  {
+    revalidate: PRODUCT_CACHE_REVALIDATE_SECONDS,
+    tags: ["products"],
+  }
+);
 
-    return processedResult;
+export const getActiveProducts = async (): Promise<ActiveProduct[]> => {
+  try {
+    return getActiveProductsCached();
   } catch (error) {
     console.error("Error fetching active products:", error);
     return [];
@@ -89,6 +100,7 @@ export const getProductsWithIndustries = async (): Promise<
 
 // Revalidate the home page when product data changes
 export const revalidateProductData = async () => {
+  revalidateTag("products", "max");
   revalidatePath("/");
 };
 

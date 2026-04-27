@@ -3,11 +3,13 @@
 import db from "@/db/drizzle";
 import { industries, productIndustries, products } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag, unstable_cache } from "next/cache";
 import { titleToSlug } from "@/utils/slug";
 
-export const getActiveIndustries = async (): Promise<ActiveIndustry[]> => {
-  try {
+const INDUSTRY_CACHE_REVALIDATE_SECONDS = 300;
+
+const getActiveIndustriesCached = unstable_cache(
+  async (): Promise<ActiveIndustry[]> => {
     const result = await db
       .select({
         id: industries.id,
@@ -37,7 +39,6 @@ export const getActiveIndustries = async (): Promise<ActiveIndustry[]> => {
       .where(eq(industries.active, true))
       .orderBy(industries.id, products.id);
 
-    // Use Map for more efficient grouping - SAME OUTPUT, BETTER PERFORMANCE
     const industryMap = new Map<number, ActiveIndustry>();
 
     for (const row of result) {
@@ -45,7 +46,7 @@ export const getActiveIndustries = async (): Promise<ActiveIndustry[]> => {
         industryMap.set(row.id, {
           id: row.id,
           title: row.title,
-          active: row.active ?? true, // Ensure boolean type
+          active: row.active ?? true,
           thumbnail: row.thumbnail,
           thumbnailAltText: row.thumbnailAltText,
           products: [],
@@ -54,7 +55,6 @@ export const getActiveIndustries = async (): Promise<ActiveIndustry[]> => {
 
       const industry = industryMap.get(row.id)!;
       if (row.products && row.products.id) {
-        // Check if product already exists to avoid duplicates
         const productExists = industry.products.some(
           (p) => p.id === row.products!.id
         );
@@ -64,9 +64,18 @@ export const getActiveIndustries = async (): Promise<ActiveIndustry[]> => {
       }
     }
 
-    const groupedIndustries = Array.from(industryMap.values());
+    return Array.from(industryMap.values());
+  },
+  ["public-active-industries"],
+  {
+    revalidate: INDUSTRY_CACHE_REVALIDATE_SECONDS,
+    tags: ["industries"],
+  }
+);
 
-    return groupedIndustries;
+export const getActiveIndustries = async (): Promise<ActiveIndustry[]> => {
+  try {
+    return getActiveIndustriesCached();
   } catch (error) {
     console.error("Error fetching active industries:", error);
     return [];
@@ -75,6 +84,7 @@ export const getActiveIndustries = async (): Promise<ActiveIndustry[]> => {
 
 // Revalidate the home page when industry data changes
 export const revalidateIndustryData = async () => {
+  revalidateTag("industries", "max");
   revalidatePath("/");
 };
 

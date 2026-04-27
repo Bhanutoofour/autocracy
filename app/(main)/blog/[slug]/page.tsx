@@ -20,7 +20,7 @@ import {
   toExcerpt,
 } from "@/app/_lib/blog-utils";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 300;
 
 type BlogDetailPageProps = {
   params: Promise<{ slug: string }>;

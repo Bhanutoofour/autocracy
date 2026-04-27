@@ -9,7 +9,7 @@ import {
   productIndustries,
 } from "@/db/schema";
 import { eq, ilike, and } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag, unstable_cache } from "next/cache";
 import {
   modelSlug,
   titleToSlug,
@@ -19,15 +19,17 @@ import {
 import { getProductById, getActiveProducts } from "@/actions/productAction";
 import { getIndustryBySlug } from "@/actions/industryAction";
 
-export const getActiveModels = async (): Promise<
-  {
-    id: number;
-    modelNumber: string;
-    modelTitle: string;
-    productName: string;
-  }[]
-> => {
-  try {
+const MODEL_CACHE_REVALIDATE_SECONDS = 300;
+
+const getActiveModelsCached = unstable_cache(
+  async (): Promise<
+    {
+      id: number;
+      modelNumber: string;
+      modelTitle: string;
+      productName: string;
+    }[]
+  > => {
     const result = await db
       .select({
         id: models.id,
@@ -40,14 +42,30 @@ export const getActiveModels = async (): Promise<
       .where(eq(models.active, true))
       .orderBy(models.id);
 
-    const processedResult = result.map((model) => ({
+    return result.map((model) => ({
       id: model.id,
       modelNumber: model.modelNumber,
       modelTitle: model.modelTitle,
       productName: model.productName,
     }));
+  },
+  ["public-active-models"],
+  {
+    revalidate: MODEL_CACHE_REVALIDATE_SECONDS,
+    tags: ["models"],
+  }
+);
 
-    return processedResult;
+export const getActiveModels = async (): Promise<
+  {
+    id: number;
+    modelNumber: string;
+    modelTitle: string;
+    productName: string;
+  }[]
+> => {
+  try {
+    return getActiveModelsCached();
   } catch (error) {
     console.error("Error fetching active models:", error);
     throw error;
@@ -440,5 +458,6 @@ export const getRentalModel = async (): Promise<RentalModelTypes[]> => {
 
 // Revalidate the home page when model data changes
 export const revalidateModelData = async () => {
+  revalidateTag("models", "max");
   revalidatePath("/");
 };

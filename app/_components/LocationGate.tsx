@@ -29,6 +29,7 @@ const COUNTRY_OPTIONS: CountryOption[] = [
 
 const STORAGE_KEY = "autocracy:selected-country";
 const LANGUAGE_STORAGE_KEY = "autocracy:selected-language";
+const SESSION_POPUP_KEY = "autocracy:country-popup-shown";
 const COUNTRY_SEGMENTS = COUNTRY_OPTIONS.map((item) => item.code.toLowerCase());
 
 function isSupportedCountry(value: string): value is CountryCode {
@@ -37,6 +38,38 @@ function isSupportedCountry(value: string): value is CountryCode {
 
 function getCountryLabel(code: CountryCode): string {
   return COUNTRY_OPTIONS.find((item) => item.code === code)?.label ?? code;
+}
+
+function readLocalStorage(key: string): string | null {
+  try {
+    return window.localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+
+function writeLocalStorage(key: string, value: string) {
+  try {
+    window.localStorage.setItem(key, value);
+  } catch {
+    // Ignore storage write failures in restrictive browser modes.
+  }
+}
+
+function readSessionStorage(key: string): string | null {
+  try {
+    return window.sessionStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+
+function writeSessionStorage(key: string, value: string) {
+  try {
+    window.sessionStorage.setItem(key, value);
+  } catch {
+    // Ignore storage write failures in restrictive browser modes.
+  }
 }
 
 export default function LocationGate() {
@@ -54,20 +87,25 @@ export default function LocationGate() {
     let active = true;
 
     const init = async () => {
-      const savedCountry =
-        typeof window !== "undefined"
-          ? window.localStorage.getItem(STORAGE_KEY)
-          : null;
-      if (typeof window !== "undefined") {
-        setLanguage(getContentLanguageFromPath(window.location.pathname));
-      }
+      if (typeof window === "undefined") return;
+
+      const savedCountry = readLocalStorage(STORAGE_KEY);
+      const hasSavedCountry =
+        Boolean(savedCountry) && isSupportedCountry(savedCountry as string);
+      const shownThisSession = readSessionStorage(SESSION_POPUP_KEY) === "1";
+
+      setLanguage(getContentLanguageFromPath(window.location.pathname));
 
       if (savedCountry && isSupportedCountry(savedCountry)) {
         setSelectedCountry(savedCountry);
-        return;
       }
 
-      setOpen(true);
+      if (!hasSavedCountry || !shownThisSession) {
+        setOpen(true);
+        writeSessionStorage(SESSION_POPUP_KEY, "1");
+      }
+
+      if (hasSavedCountry) return;
 
       try {
         const response = await fetch("https://ipapi.co/json/", {
@@ -95,7 +133,7 @@ export default function LocationGate() {
 
   useEffect(() => {
     const openCountrySelector = () => {
-      const savedCountry = window.localStorage.getItem(STORAGE_KEY);
+      const savedCountry = readLocalStorage(STORAGE_KEY);
       if (savedCountry && isSupportedCountry(savedCountry)) {
         setSelectedCountry(savedCountry);
       }
@@ -109,7 +147,7 @@ export default function LocationGate() {
   }, []);
 
   const handleConfirm = () => {
-    window.localStorage.setItem(STORAGE_KEY, selectedCountry);
+    writeLocalStorage(STORAGE_KEY, selectedCountry);
     window.dispatchEvent(new Event("country-updated"));
     setOpen(false);
 
@@ -118,7 +156,7 @@ export default function LocationGate() {
     const pathSegments = current.split("/").filter(Boolean);
     const firstSegment = pathSegments[0]?.toLowerCase();
     const secondSegment = pathSegments[1]?.toLowerCase();
-    const savedLanguage = (window.localStorage.getItem(LANGUAGE_STORAGE_KEY) ?? "").toLowerCase();
+    const savedLanguage = (readLocalStorage(LANGUAGE_STORAGE_KEY) ?? "").toLowerCase();
     const nextLanguage =
       (savedLanguage && isSupportedLanguage(savedLanguage) && savedLanguage) ||
       (secondSegment && isSupportedLanguage(secondSegment) && secondSegment) ||

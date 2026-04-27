@@ -15,7 +15,7 @@ import {
   toExcerpt,
 } from "@/app/_lib/blog-utils";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "Blog | Autocracy Machinery",

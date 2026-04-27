@@ -10,7 +10,7 @@ function isPublicAsset(pathname: string): boolean {
   return /\.[^/]+$/.test(pathname);
 }
 
-export function middleware(request: NextRequest) {
+function handleLocaleProxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (
@@ -61,6 +61,10 @@ export function middleware(request: NextRequest) {
       ? `/${DEFAULT_COUNTRY}/${DEFAULT_LANGUAGE}`
       : `/${DEFAULT_COUNTRY}/${DEFAULT_LANGUAGE}${pathname}`;
   return NextResponse.redirect(redirectUrl, 301);
+}
+
+export function proxy(request: NextRequest) {
+  return handleLocaleProxy(request);
 }
 
 export const config = {
