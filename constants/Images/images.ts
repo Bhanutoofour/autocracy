@@ -1,4 +1,10 @@
-const baseURl = process.env.NEXT_PUBLIC_CDN_URL;
+const DEFAULT_CDN_URL = "https://d3du1kxieyd1np.cloudfront.net";
+const configuredCdnUrl = process.env.NEXT_PUBLIC_CDN_URL?.trim();
+const baseURl = (
+  configuredCdnUrl && /^https?:\/\//.test(configuredCdnUrl)
+    ? configuredCdnUrl
+    : DEFAULT_CDN_URL
+).replace(/\/+$/, "");
 export const IMAGES = {
   LOGO: `${baseURl}/assets/icons/logo.svg`,
   ARROW_BLACK_RIGHT: `${baseURl}/assets/icons/arrow_black_right.svg`,
