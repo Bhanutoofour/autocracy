@@ -34,6 +34,24 @@ export function normalizeUrlPathSegment(s: string): string {
     .toLowerCase();
 }
 
+const PRODUCT_SLUG_ALIASES: Record<string, string> = {
+  "wheel-trenchers": "wheel-trencher",
+};
+
+export function normalizeProductSlugSegment(s: string): string {
+  const normalized = normalizeUrlPathSegment(s);
+  const directAlias = PRODUCT_SLUG_ALIASES[normalized];
+  if (directAlias) return directAlias;
+
+  for (const [alias, canonical] of Object.entries(PRODUCT_SLUG_ALIASES)) {
+    if (normalized.endsWith(`-${alias}`)) {
+      return `${normalized.slice(0, -alias.length)}${canonical}`;
+    }
+  }
+
+  return normalized;
+}
+
 /**
  * Model page slug: productName-modelTitle-modelNumber (same as ModelCard / page).
  */
@@ -56,7 +74,7 @@ export function productSlug(
   productTitle: string,
   industryTitle?: string
 ): string {
-  const p = titleToSlug(productTitle);
+  const p = normalizeProductSlugSegment(titleToSlug(productTitle));
   if (!industryTitle) return p;
   return `${titleToSlug(industryTitle)}-${p}`;
 }

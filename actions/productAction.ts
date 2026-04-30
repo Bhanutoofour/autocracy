@@ -11,7 +11,7 @@ import {
 import { eq, inArray } from "drizzle-orm";
 import { revalidatePath, revalidateTag, unstable_cache } from "next/cache";
 import { productSlug } from "@/utils/slug";
-import { normalizeUrlPathSegment } from "@/utils/slug";
+import { normalizeProductSlugSegment } from "@/utils/slug";
 import { getActiveIndustries } from "@/actions/industryAction";
 import { type ContentLanguage } from "@/app/_lib/i18n";
 import { localizeDbText } from "@/app/_lib/db-localization";
@@ -167,7 +167,7 @@ export const revalidateProductData = async () => {
 };
 
 function normalizeProductSlug(s: string): string {
-  return normalizeUrlPathSegment(s);
+  return normalizeProductSlugSegment(s);
 }
 
 export const getProductBySlug = async (
