@@ -7,7 +7,7 @@ import {
 import { getRequestContentLanguage, getRequestLocale } from "@/app/_lib/i18n-server";
 import { buildLocalizedAlternates, localizeHref, toAbsoluteUrl } from "@/app/_lib/locale-path";
 import { tUi, translateIndustryLabel } from "@/app/_lib/i18n";
-import ModelDetailContent from "@/app/_components/ModelDetailContent";
+import IndustryModelDetailTemplate from "@/app/_components/model-detail/IndustryModelDetailTemplate";
 import { modelNumberSlug } from "@/utils/slug";
 import { findIndustryLabel } from "@/app/_lib/siteCatalog";
 import { getIndustryModelNarrative } from "@/app/_lib/industry-model-copy";
@@ -43,12 +43,10 @@ export async function generateMetadata({
   }
 
   const { modelData } = resolved;
-  const fallbackTitle = `${modelData.modelTitle} ${modelData.modelNumber} | ${modelData.productName} | Autocracy Machinery`;
-  const seoTitle = modelData.seoMetadata?.pageTitle?.trim() || fallbackTitle;
+  const industryLabel = findIndustryLabel(industrySlug) || industrySlug.replace(/-/g, " ");
+  const seoTitle = `${modelData.modelTitle} ${modelData.modelNumber} for ${industryLabel} | ${modelData.productName} | Autocracy Machinery`;
   const seoDescription =
-    modelData.seoMetadata?.pageDescription?.trim()
-    || modelData.seoDescription?.trim()
-    || `${modelData.modelTitle} (${modelData.modelNumber}) details for ${modelData.productName} applications.`;
+    `${modelData.modelTitle} (${modelData.modelNumber}) for ${industryLabel.toLowerCase()} ${modelData.productName.toLowerCase()} applications, specifications, project fit, and Autocracy Machinery support.`;
   const socialImage = modelData.seoMetadata?.socialImage?.trim() || modelData.coverImage;
 
   return {
@@ -57,16 +55,16 @@ export async function generateMetadata({
     keywords: modelData.seoMetadata?.pageKeywords?.trim() || undefined,
     alternates: buildLocalizedAlternates(`/industries/${industrySlug}/${productSlug}/${modelSlug}`),
     openGraph: {
-      title: modelData.seoMetadata?.socialTitle?.trim() || seoTitle,
-      description: modelData.seoMetadata?.socialDescription?.trim() || seoDescription,
+      title: seoTitle,
+      description: seoDescription,
       url: `/in/en/industries/${industrySlug}/${productSlug}/${modelSlug}`,
       type: "website",
       images: socialImage ? [{ url: socialImage }] : undefined,
     },
     twitter: {
       card: "summary_large_image",
-      title: modelData.seoMetadata?.socialTitle?.trim() || seoTitle,
-      description: modelData.seoMetadata?.socialDescription?.trim() || seoDescription,
+      title: seoTitle,
+      description: seoDescription,
       images: socialImage ? [socialImage] : undefined,
     },
   };
@@ -175,7 +173,7 @@ export default async function IndustryProductModelPage({
     <>
       <JsonLd data={breadcrumbSchema} />
       <JsonLd data={productSchema} />
-      <ModelDetailContent
+      <IndustryModelDetailTemplate
         backHref={localizeHref(`/industries/${industrySlug}/${productSlug}`, locale)}
         backLabel={tUi(language, "back_to_industry_product")}
         brochureHref={modelData.brochure || localizeHref("/brochure", locale)}

@@ -30,6 +30,11 @@ const remotePatterns: NonNullable<NextConfig["images"]>["remotePatterns"] = [
     protocol: "https",
     hostname: "d3du1kxieyd1np.cloudfront.net",
   },
+  {
+    protocol: "https",
+    hostname: "img.youtube.com",
+    pathname: "/vi/**",
+  },
 ];
 
 const cdnRemotePattern = getCdnRemotePattern();

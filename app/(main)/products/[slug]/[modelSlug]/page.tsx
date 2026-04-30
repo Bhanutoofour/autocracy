@@ -7,7 +7,7 @@ import {
 import { getRequestContentLanguage, getRequestLocale } from "@/app/_lib/i18n-server";
 import { buildLocalizedAlternates, localizeHref, toAbsoluteUrl } from "@/app/_lib/locale-path";
 import { tUi } from "@/app/_lib/i18n";
-import ModelDetailContent from "@/app/_components/ModelDetailContent";
+import ProductModelDetailTemplate from "@/app/_components/model-detail/ProductModelDetailTemplate";
 import { modelNumberSlug } from "@/utils/slug";
 import JsonLd from "@/app/_components/JsonLd";
 
@@ -127,7 +127,7 @@ export default async function ProductModelPage({ params }: ProductModelPageProps
     <>
       <JsonLd data={breadcrumbSchema} />
       <JsonLd data={productSchema} />
-      <ModelDetailContent
+      <ProductModelDetailTemplate
         backHref={localizeHref(`/products/${slug}`, locale)}
         backLabel={tUi(language, "back_to_product")}
         brochureHref={modelData.brochure || localizeHref("/brochure", locale)}
