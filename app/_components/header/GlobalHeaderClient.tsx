@@ -15,12 +15,28 @@ import {
   INDUSTRIES,
   INDUSTRY_TO_PRODUCTS,
   PRODUCTS,
+  industryToHref,
   industryProductToHref,
   productToHref,
 } from "@/app/_lib/siteCatalog";
 import { localizeHref, type LocaleContext } from "@/app/_lib/locale-path";
 
 type MenuKey = "industries" | "products" | null;
+type MobilePanel = "main" | "industries" | "products";
+
+type MobileMainMenuItem =
+  | {
+      label: string;
+      panel: Exclude<MobilePanel, "main">;
+      href?: never;
+      showArrow: true;
+    }
+  | {
+      label: string;
+      href: string;
+      panel?: never;
+      showArrow: false;
+    };
 
 type ProductCard = {
   label: string;
@@ -257,6 +273,7 @@ export default function GlobalHeaderClient({ language, locale }: GlobalHeaderCli
     "OFC Telecommunications",
   );
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobilePanel, setMobilePanel] = useState<MobilePanel>("main");
   const messages = getMessages(language);
   const toLocalizedHref = (href: string) => localizeHref(href, locale);
 
@@ -272,9 +289,9 @@ export default function GlobalHeaderClient({ language, locale }: GlobalHeaderCli
     { label: messages.common.blogs, href: toLocalizedHref("/blog") },
     { label: messages.common.contactUs, href: toLocalizedHref("/contact-us") },
   ];
-  const mobileMainMenu = [
-    { label: messages.common.industry, href: toLocalizedHref("/industries"), showArrow: true },
-    { label: messages.common.product, href: toLocalizedHref("/products"), showArrow: true },
+  const mobileMainMenu: MobileMainMenuItem[] = [
+    { label: messages.common.industry, panel: "industries", showArrow: true },
+    { label: messages.common.product, panel: "products", showArrow: true },
     { label: messages.common.aboutUs, href: toLocalizedHref("/about-us"), showArrow: false },
     { label: messages.common.blogs, href: toLocalizedHref("/blog"), showArrow: false },
     { label: messages.common.contactUs, href: toLocalizedHref("/contact-us"), showArrow: false },
@@ -294,6 +311,21 @@ export default function GlobalHeaderClient({ language, locale }: GlobalHeaderCli
       document.body.style.overflow = "";
     };
   }, [mobileMenuOpen]);
+
+  const toggleMobileMenu = () => {
+    if (mobileMenuOpen) {
+      setMobilePanel("main");
+      setMobileMenuOpen(false);
+      return;
+    }
+
+    setMobileMenuOpen(true);
+  };
+
+  const closeMobileMenu = () => {
+    setMobilePanel("main");
+    setMobileMenuOpen(false);
+  };
 
   return (
     <header className="sticky top-0 z-50 border-b border-black/10 bg-white">
@@ -441,7 +473,7 @@ export default function GlobalHeaderClient({ language, locale }: GlobalHeaderCli
           <button
             aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
             className="flex h-full items-center px-4 text-[var(--ink)]"
-            onClick={() => setMobileMenuOpen((prev) => !prev)}
+            onClick={toggleMobileMenu}
             type="button"
           >
             <Icon className="size-7" name={mobileMenuOpen ? "close" : "menu"} />
@@ -471,56 +503,115 @@ export default function GlobalHeaderClient({ language, locale }: GlobalHeaderCli
         </div>
 
         {mobileMenuOpen ? (
-          <div className="fixed inset-x-0 bottom-0 top-12 z-50 bg-[#efefef]">
+          <div
+            className={`fixed inset-x-0 bottom-0 top-12 z-50 ${
+              mobilePanel === "main" ? "bg-[#efefef]" : "bg-white"
+            }`}
+          >
             <div className="flex h-full flex-col">
-              <div className="px-9 pt-9">
-                <nav className="grid gap-3">
-                  {mobileMainMenu.map((item) => (
-                    <Link
-                      className="flex h-[50px] items-center justify-between font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[16px] font-bold uppercase leading-none text-[#0a0a0b]"
-                      href={item.href}
-                      key={item.label}
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      {item.label}
-                      {item.showArrow ? (
-                        <Icon className="size-7" name="arrow-right" />
-                      ) : null}
-                    </Link>
-                  ))}
-                </nav>
-              </div>
+              {mobilePanel === "main" ? (
+                <>
+                  <div className="px-9 pt-9">
+                    <nav className="grid gap-3">
+                      {mobileMainMenu.map((item) =>
+                        item.panel ? (
+                          <button
+                            className="flex h-[50px] items-center justify-between font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[16px] font-bold uppercase leading-none text-[#0a0a0b]"
+                            key={item.label}
+                            onClick={() => setMobilePanel(item.panel)}
+                            type="button"
+                          >
+                            {item.label}
+                            <Icon className="size-7" name="arrow-right" />
+                          </button>
+                        ) : (
+                          <Link
+                            className="flex h-[50px] items-center justify-between font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[16px] font-bold uppercase leading-none text-[#0a0a0b]"
+                            href={item.href}
+                            key={item.label}
+                            onClick={closeMobileMenu}
+                          >
+                            {item.label}
+                            {item.showArrow ? (
+                              <Icon className="size-7" name="arrow-right" />
+                            ) : null}
+                          </Link>
+                        ),
+                      )}
+                    </nav>
+                  </div>
 
-              <div className="mt-auto px-6 pb-8">
-                <div className="mb-4 flex items-center justify-between rounded border border-black/20 px-3 py-2">
-                  <CountrySwitcherButton />
-                  <LanguageSwitcherButton />
-                </div>
-                <a
-                  className="mb-6 inline-flex items-center gap-2 font-['Roboto',Arial,Helvetica,sans-serif] text-[16px] font-semibold text-[#0a0a0b]"
-                  href="tel:+918790473345"
-                >
-                  <Icon className="size-7" name="phone" />
-                  +91 87904 73345
-                </a>
-                <div className="grid grid-cols-2 gap-4">
-                  <a
-                    className="flex h-[62px] items-center justify-center bg-[var(--brand-yellow)] font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-bold uppercase leading-none text-[#0a0a0b]"
-                    href={toLocalizedHref("/contact-us")}
-                    onClick={() => setMobileMenuOpen(false)}
+                  <div className="mt-auto px-6 pb-8">
+                    <div className="mb-4 flex items-center justify-between rounded border border-black/20 px-3 py-2">
+                      <CountrySwitcherButton />
+                      <LanguageSwitcherButton />
+                    </div>
+                    <a
+                      className="mb-6 inline-flex items-center gap-2 font-['Roboto',Arial,Helvetica,sans-serif] text-[16px] font-semibold text-[#0a0a0b]"
+                      href="tel:+918790473345"
+                    >
+                      <Icon className="size-7" name="phone" />
+                      +91 87904 73345
+                    </a>
+                    <div className="grid grid-cols-2 gap-4">
+                      <a
+                        className="flex h-[62px] items-center justify-center bg-[var(--brand-yellow)] font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-bold uppercase leading-none text-[#0a0a0b]"
+                        href={toLocalizedHref("/contact-us")}
+                        onClick={closeMobileMenu}
+                      >
+                        {messages.common.getQuote}
+                      </a>
+                      <a
+                        className="flex h-[62px] items-center justify-center gap-2 border border-black/30 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-semibold uppercase leading-none text-[#0a0a0b]"
+                        href={toLocalizedHref("/brochure")}
+                        onClick={closeMobileMenu}
+                      >
+                        <Icon className="size-5" name="download" />
+                        <span>{messages.common.brochure}</span>
+                      </a>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <div className="h-full overflow-y-auto bg-white px-8 pb-10 pt-7">
+                  <button
+                    className="flex h-11 items-center gap-4 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-bold uppercase leading-none text-[#0a0a0b]"
+                    onClick={() => setMobilePanel("main")}
+                    type="button"
                   >
-                    {messages.common.getQuote}
-                  </a>
-                  <a
-                    className="flex h-[62px] items-center justify-center gap-2 border border-black/30 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-semibold uppercase leading-none text-[#0a0a0b]"
-                    href={toLocalizedHref("/brochure")}
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    <Icon className="size-5" name="download" />
-                    <span>{messages.common.brochure}</span>
-                  </a>
+                    <Icon className="size-8 rotate-180" name="arrow-right" />
+                    {mobilePanel === "industries"
+                      ? messages.common.industry
+                      : messages.common.product}
+                  </button>
+
+                  <nav className="mt-8 grid gap-4">
+                    {mobilePanel === "industries"
+                      ? INDUSTRIES.map((industry) => (
+                          <Link
+                            className="flex min-h-[44px] items-center justify-between gap-4 py-2 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[18px] font-bold leading-[1.15] text-[#0a0a0b]"
+                            href={toLocalizedHref(industryToHref(industry))}
+                            key={industry}
+                            onClick={closeMobileMenu}
+                          >
+                            <span>{translateIndustryLabel(industry, language)}</span>
+                            <Icon className="size-7 shrink-0" name="arrow-right" />
+                          </Link>
+                        ))
+                      : MENU_PRODUCTS.map((card) => (
+                          <Link
+                            className="flex min-h-[44px] items-center justify-between gap-4 py-2 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[18px] font-bold leading-[1.15] text-[#0a0a0b]"
+                            href={toLocalizedHref(productToHref(card.label))}
+                            key={card.label}
+                            onClick={closeMobileMenu}
+                          >
+                            <span>{translateProductLabel(card.label, language)}</span>
+                            <Icon className="size-7 shrink-0" name="arrow-right" />
+                          </Link>
+                        ))}
+                  </nav>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         ) : null}
