@@ -9,6 +9,21 @@ import { localizeDbHtml, localizeDbText } from "@/app/_lib/db-localization";
 
 const BLOG_CACHE_REVALIDATE_SECONDS = 300;
 
+function formatBlogDataError(error: unknown): string {
+  if (error instanceof Error) {
+    const cause = "cause" in error ? (error as { cause?: unknown }).cause : undefined;
+    const causeMessage =
+      cause instanceof Error ? `; cause: ${cause.name}: ${cause.message}` : "";
+    return `${error.name}: ${error.message}${causeMessage}`;
+  }
+
+  return String(error);
+}
+
+function warnBlogDataError(context: string, error: unknown) {
+  console.warn(`${context}: ${formatBlogDataError(error)}`);
+}
+
 function localizeBlog<T extends Record<string, unknown>>(blog: T, language: ContentLanguage): T {
   return {
     ...blog,
@@ -194,7 +209,7 @@ async function fetchActiveBlogs(language: ContentLanguage = "en") {
 
 const getBlogBySlugCached = unstable_cache(
   async (slug: string, language: ContentLanguage) => fetchBlogBySlug(slug, language),
-  ["public-blog-by-slug"],
+  ["public-blog-by-slug-v2"],
   {
     revalidate: BLOG_CACHE_REVALIDATE_SECONDS,
     tags: ["blogs"],
@@ -203,14 +218,14 @@ const getBlogBySlugCached = unstable_cache(
 
 const getRelatedBlogsCached = unstable_cache(
   async (
-    currentBlogId: number,
-    industryIds: number[],
-    productIds: number[],
-    modelIds: number[],
-    limit: number,
-    language: ContentLanguage,
+  currentBlogId: number,
+  industryIds: number[],
+  productIds: number[],
+  modelIds: number[],
+  limit: number,
+  language: ContentLanguage,
   ) => fetchRelatedBlogs(currentBlogId, industryIds, productIds, modelIds, limit, language),
-  ["public-related-blogs"],
+  ["public-related-blogs-v2"],
   {
     revalidate: BLOG_CACHE_REVALIDATE_SECONDS,
     tags: ["blogs"],
@@ -219,7 +234,7 @@ const getRelatedBlogsCached = unstable_cache(
 
 const getActiveBlogsCached = unstable_cache(
   async (language: ContentLanguage) => fetchActiveBlogs(language),
-  ["public-active-blogs"],
+  ["public-active-blogs-v2"],
   {
     revalidate: BLOG_CACHE_REVALIDATE_SECONDS,
     tags: ["blogs"],
@@ -228,9 +243,9 @@ const getActiveBlogsCached = unstable_cache(
 
 export async function getBlogBySlug(slug: string, language: ContentLanguage = "en") {
   try {
-    return getBlogBySlugCached(slug, language);
+    return await getBlogBySlugCached(slug, language);
   } catch (error) {
-    console.error("Error fetching blog by slug:", error);
+    warnBlogDataError("Error fetching blog by slug", error);
     return null;
   }
 }
@@ -244,7 +259,7 @@ export async function getRelatedBlogs(
   language: ContentLanguage = "en",
 ) {
   try {
-    return getRelatedBlogsCached(
+    return await getRelatedBlogsCached(
       currentBlogId,
       industryIds,
       productIds,
@@ -253,16 +268,16 @@ export async function getRelatedBlogs(
       language,
     );
   } catch (error) {
-    console.error("Error fetching related blogs:", error);
+    warnBlogDataError("Error fetching related blogs", error);
     return [];
   }
 }
 
 export async function getActiveBlogs(language: ContentLanguage = "en") {
   try {
-    return getActiveBlogsCached(language);
+    return await getActiveBlogsCached(language);
   } catch (error) {
-    console.error("Error fetching blogs:", error);
+    warnBlogDataError("Error fetching blogs", error);
     return [];
   }
 }

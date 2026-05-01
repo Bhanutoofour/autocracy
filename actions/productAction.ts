@@ -18,6 +18,21 @@ import { localizeDbText } from "@/app/_lib/db-localization";
 
 const PRODUCT_CACHE_REVALIDATE_SECONDS = 300;
 
+function formatProductDataError(error: unknown): string {
+  if (error instanceof Error) {
+    const cause = "cause" in error ? (error as { cause?: unknown }).cause : undefined;
+    const causeMessage =
+      cause instanceof Error ? `; cause: ${cause.name}: ${cause.message}` : "";
+    return `${error.name}: ${error.message}${causeMessage}`;
+  }
+
+  return String(error);
+}
+
+function warnProductDataError(context: string, error: unknown) {
+  console.warn(`${context}: ${formatProductDataError(error)}`);
+}
+
 const getActiveProductsCached = unstable_cache(
   async (): Promise<ActiveProduct[]> => {
     const result = await db
@@ -37,7 +52,7 @@ const getActiveProductsCached = unstable_cache(
       active: !!product.active,
     }));
   },
-  ["public-active-products"],
+  ["public-active-products-v2"],
   {
     revalidate: PRODUCT_CACHE_REVALIDATE_SECONDS,
     tags: ["products"],
@@ -97,7 +112,7 @@ export const getActiveProducts = async (
     const rows = await getActiveProductsCached();
     return rows.map((product) => localizeProductCard(product, language));
   } catch (error) {
-    console.error("Error fetching active products:", error);
+    warnProductDataError("Error fetching active products", error);
     return [];
   }
 };
@@ -156,8 +171,8 @@ export const getProductsWithIndustries = async (
 
     return productsWithIndustries;
   } catch (error) {
-    console.error("Error fetching products with industries:", error);
-    throw error;
+    warnProductDataError("Error fetching products with industries", error);
+    return [];
   }
 };
 
@@ -231,7 +246,7 @@ export const getProductBySlug = async (
       industryId: matched.industryId,
     };
   } catch (error) {
-    console.error("Error fetching product by slug:", error);
+    warnProductDataError("Error fetching product by slug", error);
     return null;
   }
 };
@@ -340,7 +355,7 @@ export const getProductById = async (
 
     return resultData;
   } catch (error) {
-    console.error("Error fetching product by id:", error);
-    throw error;
+    warnProductDataError("Error fetching product by id", error);
+    return null;
   }
 };

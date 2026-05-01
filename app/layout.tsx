@@ -78,7 +78,7 @@ export default async function RootLayout({
   };
 
   return (
-    <html lang={htmlLang} className="h-full antialiased">
+    <html lang={htmlLang} className="h-full antialiased" data-scroll-behavior="smooth">
       <body className="min-h-full flex flex-col">
         <JsonLd data={websiteSchema} />
         {children}

@@ -14,6 +14,17 @@ const HINDI_SLIDE_DESCRIPTION_FALLBACK =
   "\u0939\u093f\u0902\u0926\u0940 \u0935\u093f\u0935\u0930\u0923 \u0909\u092a\u0932\u092c\u094d\u0927 \u0928\u0939\u0940\u0902 \u0939\u0948\u0964";
 const HINDI_HERO_IMAGE_ALT = "\u0939\u0940\u0930\u094b \u091b\u0935\u093f";
 
+function formatHeroDataError(error: unknown): string {
+  if (error instanceof Error) {
+    const cause = "cause" in error ? (error as { cause?: unknown }).cause : undefined;
+    const causeMessage =
+      cause instanceof Error ? `; cause: ${cause.name}: ${cause.message}` : "";
+    return `${error.name}: ${error.message}${causeMessage}`;
+  }
+
+  return String(error);
+}
+
 const heroHindiTitleMap: Record<string, string> = {
   "single chain trencher": "\u0938\u093f\u0902\u0917\u0932 \u091a\u0947\u0928 \u091f\u094d\u0930\u0947\u0902\u091a\u0930",
   "solar padding machine": "\u0938\u094b\u0932\u0930 \u092a\u0948\u0921\u093f\u0902\u0917 \u092e\u0936\u0940\u0928",
@@ -110,8 +121,8 @@ export const getHeroSections = async (
       }),
     }));
   } catch (error) {
-    console.error("Error fetching hero sections:", error);
-    throw error;
+    console.warn(`Error fetching hero sections: ${formatHeroDataError(error)}`);
+    return [];
   }
 };
 

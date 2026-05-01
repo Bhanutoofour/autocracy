@@ -11,6 +11,21 @@ import { localizeDbText } from "@/app/_lib/db-localization";
 
 const INDUSTRY_CACHE_REVALIDATE_SECONDS = 300;
 
+function formatIndustryDataError(error: unknown): string {
+  if (error instanceof Error) {
+    const cause = "cause" in error ? (error as { cause?: unknown }).cause : undefined;
+    const causeMessage =
+      cause instanceof Error ? `; cause: ${cause.name}: ${cause.message}` : "";
+    return `${error.name}: ${error.message}${causeMessage}`;
+  }
+
+  return String(error);
+}
+
+function warnIndustryDataError(context: string, error: unknown) {
+  console.warn(`${context}: ${formatIndustryDataError(error)}`);
+}
+
 const getActiveIndustriesCached = unstable_cache(
   async (): Promise<ActiveIndustry[]> => {
     const result = await db
@@ -69,7 +84,7 @@ const getActiveIndustriesCached = unstable_cache(
 
     return Array.from(industryMap.values());
   },
-  ["public-active-industries"],
+  ["public-active-industries-v2"],
   {
     revalidate: INDUSTRY_CACHE_REVALIDATE_SECONDS,
     tags: ["industries"],
@@ -114,7 +129,7 @@ export const getActiveIndustries = async (
     const rows = await getActiveIndustriesCached();
     return rows.map((industry) => localizeActiveIndustry(industry, language));
   } catch (error) {
-    console.error("Error fetching active industries:", error);
+    warnIndustryDataError("Error fetching active industries", error);
     return [];
   }
 };
@@ -147,7 +162,7 @@ export const getIndustryBySlug = async (
 
     return { industryData, industryId: matched.id };
   } catch (error) {
-    console.error("Error fetching industry by slug:", error);
+    warnIndustryDataError("Error fetching industry by slug", error);
     return null;
   }
 };
@@ -239,7 +254,7 @@ export const getIndustryById = async (
 
     return resultData;
   } catch (error) {
-    console.error("Error fetching industry by ID:", error);
-    throw error;
+    warnIndustryDataError("Error fetching industry by ID", error);
+    return null;
   }
 };
