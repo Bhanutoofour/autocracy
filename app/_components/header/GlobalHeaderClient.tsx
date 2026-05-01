@@ -511,29 +511,29 @@ export default function GlobalHeaderClient({ language, locale }: GlobalHeaderCli
             <div className="flex h-full flex-col">
               {mobilePanel === "main" ? (
                 <>
-                  <div className="px-9 pt-9">
-                    <nav className="grid gap-3">
+                  <div className="px-5 pt-7 min-[360px]:px-9 min-[360px]:pt-9">
+                    <nav className="grid gap-2 min-[360px]:gap-3">
                       {mobileMainMenu.map((item) =>
                         item.panel ? (
                           <button
-                            className="flex h-[50px] items-center justify-between font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[16px] font-bold uppercase leading-none text-[#0a0a0b]"
+                            className="flex h-12 items-center justify-between gap-3 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[15px] font-bold uppercase leading-none text-[#0a0a0b] min-[360px]:h-[50px] min-[360px]:text-[16px]"
                             key={item.label}
                             onClick={() => setMobilePanel(item.panel)}
                             type="button"
                           >
                             {item.label}
-                            <Icon className="size-7" name="arrow-right" />
+                            <Icon className="size-6 shrink-0 min-[360px]:size-7" name="arrow-right" />
                           </button>
                         ) : (
                           <Link
-                            className="flex h-[50px] items-center justify-between font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[16px] font-bold uppercase leading-none text-[#0a0a0b]"
+                            className="flex h-12 items-center justify-between gap-3 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[15px] font-bold uppercase leading-none text-[#0a0a0b] min-[360px]:h-[50px] min-[360px]:text-[16px]"
                             href={item.href}
                             key={item.label}
                             onClick={closeMobileMenu}
                           >
                             {item.label}
                             {item.showArrow ? (
-                              <Icon className="size-7" name="arrow-right" />
+                              <Icon className="size-6 shrink-0 min-[360px]:size-7" name="arrow-right" />
                             ) : null}
                           </Link>
                         ),
@@ -541,7 +541,7 @@ export default function GlobalHeaderClient({ language, locale }: GlobalHeaderCli
                     </nav>
                   </div>
 
-                  <div className="mt-auto px-6 pb-8">
+                  <div className="mt-auto px-4 pb-[calc(1.5rem+env(safe-area-inset-bottom))] min-[360px]:px-6 min-[360px]:pb-[calc(2rem+env(safe-area-inset-bottom))]">
                     <div className="mb-4 flex items-center justify-between rounded border border-black/20 px-3 py-2">
                       <CountrySwitcherButton />
                       <LanguageSwitcherButton />
@@ -553,60 +553,66 @@ export default function GlobalHeaderClient({ language, locale }: GlobalHeaderCli
                       <Icon className="size-7" name="phone" />
                       +91 87904 73345
                     </a>
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 gap-2 min-[360px]:gap-4">
                       <a
-                        className="flex h-[62px] items-center justify-center bg-[var(--brand-yellow)] font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-bold uppercase leading-none text-[#0a0a0b]"
+                        className="flex h-14 min-w-0 items-center justify-center bg-[var(--brand-yellow)] px-2 text-center font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[12px] font-bold uppercase leading-none text-[#0a0a0b] min-[360px]:h-[62px] min-[360px]:text-[14px]"
                         href={toLocalizedHref("/contact-us")}
                         onClick={closeMobileMenu}
                       >
                         {messages.common.getQuote}
                       </a>
                       <a
-                        className="flex h-[62px] items-center justify-center gap-2 border border-black/30 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-semibold uppercase leading-none text-[#0a0a0b]"
+                        className="flex h-14 min-w-0 items-center justify-center gap-1 border border-black/30 px-2 text-center font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[12px] font-semibold uppercase leading-none text-[#0a0a0b] min-[360px]:h-[62px] min-[360px]:gap-2 min-[360px]:text-[14px]"
                         href={toLocalizedHref("/brochure")}
                         onClick={closeMobileMenu}
                       >
-                        <Icon className="size-5" name="download" />
-                        <span>{messages.common.brochure}</span>
+                        <Icon className="size-4 shrink-0 min-[360px]:size-5" name="download" />
+                        <span className="min-w-0 break-words">{messages.common.brochure}</span>
                       </a>
                     </div>
                   </div>
                 </>
               ) : (
-                <div className="h-full overflow-y-auto bg-white px-8 pb-10 pt-7">
+                <div className="h-full overflow-y-auto bg-white px-5 pb-[calc(2rem+env(safe-area-inset-bottom))] pt-6 min-[390px]:px-8 min-[390px]:pb-[calc(2.5rem+env(safe-area-inset-bottom))] min-[390px]:pt-7">
                   <button
-                    className="flex h-11 items-center gap-4 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-bold uppercase leading-none text-[#0a0a0b]"
+                    className="flex min-h-11 w-full min-w-0 items-center gap-3 text-left font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[22px] font-bold uppercase leading-[1.05] text-[#0a0a0b] min-[390px]:gap-4 min-[390px]:text-[24px]"
                     onClick={() => setMobilePanel("main")}
                     type="button"
                   >
-                    <Icon className="size-8 rotate-180" name="arrow-right" />
-                    {mobilePanel === "industries"
-                      ? messages.common.industry
-                      : messages.common.product}
+                    <Icon className="size-7 shrink-0 rotate-180 min-[390px]:size-8" name="arrow-right" />
+                    <span className="min-w-0 break-words">
+                      {mobilePanel === "industries"
+                        ? messages.common.industry
+                        : messages.common.product}
+                    </span>
                   </button>
 
-                  <nav className="mt-8 grid gap-4">
+                  <nav className="mt-6 grid gap-3 min-[390px]:mt-8 min-[390px]:gap-4">
                     {mobilePanel === "industries"
                       ? INDUSTRIES.map((industry) => (
                           <Link
-                            className="flex min-h-[44px] items-center justify-between gap-4 py-2 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[18px] font-bold leading-[1.15] text-[#0a0a0b]"
+                            className="flex min-h-[44px] w-full min-w-0 items-center justify-between gap-2 py-2 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[16px] font-bold leading-[1.15] text-[#0a0a0b] min-[390px]:gap-4 min-[390px]:text-[18px]"
                             href={toLocalizedHref(industryToHref(industry))}
                             key={industry}
                             onClick={closeMobileMenu}
                           >
-                            <span>{translateIndustryLabel(industry, language)}</span>
-                            <Icon className="size-7 shrink-0" name="arrow-right" />
+                            <span className="min-w-0 break-words pr-2">
+                              {translateIndustryLabel(industry, language)}
+                            </span>
+                            <Icon className="size-6 shrink-0 min-[390px]:size-7" name="arrow-right" />
                           </Link>
                         ))
                       : MENU_PRODUCTS.map((card) => (
                           <Link
-                            className="flex min-h-[44px] items-center justify-between gap-4 py-2 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[18px] font-bold leading-[1.15] text-[#0a0a0b]"
+                            className="flex min-h-[44px] w-full min-w-0 items-center justify-between gap-2 py-2 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[16px] font-bold leading-[1.15] text-[#0a0a0b] min-[390px]:gap-4 min-[390px]:text-[18px]"
                             href={toLocalizedHref(productToHref(card.label))}
                             key={card.label}
                             onClick={closeMobileMenu}
                           >
-                            <span>{translateProductLabel(card.label, language)}</span>
-                            <Icon className="size-7 shrink-0" name="arrow-right" />
+                            <span className="min-w-0 break-words pr-2">
+                              {translateProductLabel(card.label, language)}
+                            </span>
+                            <Icon className="size-6 shrink-0 min-[390px]:size-7" name="arrow-right" />
                           </Link>
                         ))}
                   </nav>
