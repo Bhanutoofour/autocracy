@@ -645,7 +645,7 @@ function IndustriesSection({
                 src={resolveIndustryImage(industry.image)}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-black/5" />
-              <h3 className="absolute inset-x-0 bottom-0 p-5 align-bottom font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-semibold leading-[1.2] tracking-normal text-white">
+              <h3 className="absolute inset-x-0 bottom-0 max-w-full p-4 pb-5 align-bottom font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[20px] font-semibold leading-[1.08] tracking-normal text-white [overflow-wrap:anywhere] sm:p-5 sm:text-[24px] sm:leading-[1.16]">
                 {translateIndustryLabel(industry.title, language)}
               </h3>
             </Link>
