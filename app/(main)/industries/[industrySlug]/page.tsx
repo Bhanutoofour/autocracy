@@ -64,13 +64,69 @@ function getIndustryExperienceContent(
   industrySlug: string,
   industryTitle: string,
   products: IndustryProductCard[],
+  language: string,
 ): IndustryExperienceContent {
+  const isHindi = language === "hi";
   const productTitles = getProductTitleList(products);
   const categorySummary = productTitles.length
     ? productTitles.slice(0, 3).join(", ")
-    : "field-ready equipment categories";
+    : isHindi
+      ? "फील्ड-रेडी उपकरण श्रेणियां"
+      : "field-ready equipment categories";
 
   if (industrySlug === "ofc-telecommunications") {
+    if (isHindi) {
+      return {
+        eyebrow: "टेलीकॉम इंफ्रास्ट्रक्चर",
+        heroLead:
+          "संकरी गलियों, लंबे रूट और स्थिर ट्रेंच गुणवत्ता के लिए चुने गए उपकरणों के साथ OFC ट्रेंचिंग, डक्ट लेइंग और लास्ट-माइल टेलीकॉम कार्य की योजना तेज बनाएं।",
+        heroHighlights: [
+          { value: `${products.length}`, label: "संबंधित श्रेणियां" },
+          { value: "OFC", label: "रूट-रेडी फोकस" },
+          { value: "डक्ट + केबल", label: "डिप्लॉयमेंट फिट" },
+        ],
+        applicationHeading: "OFC रूट निष्पादन के लिए निर्मित",
+        applicationSummary:
+          "टेलीकॉम टीमों को फील्ड डिप्लॉयमेंट से पहले स्थिर ट्रेंच ज्योमेट्री, व्यावहारिक साइट मोबिलिटी और तेज मॉडल शॉर्टलिस्टिंग की जरूरत होती है। यह पेज उन्हीं निर्णयों के लिए सही Autocracy उपकरण श्रेणियां दिखाता है।",
+        applicationPillars: [
+          {
+            title: "लंबे रूट की उत्पादकता",
+            body:
+              "ट्रेंचर्स और कॉम्पैक्ट उपकरण ग्रामीण, अर्ध-शहरी और हाईवे-साइड फाइबर रूट पर दोहराए जाने वाले ट्रेंच सेक्शन में मदद करते हैं।",
+          },
+          {
+            title: "संकरी जगहों में काम",
+            body:
+              "वॉक-बिहाइंड और यूटिलिटी-केंद्रित विकल्प तंग सड़कों, सर्विस लेन और सीमित लास्ट-माइल क्षेत्रों में काम आसान बनाते हैं।",
+          },
+          {
+            title: "बेहतर इंस्टॉलेशन हैंडओवर",
+            body:
+              "नियंत्रित ट्रेंच गहराई और साफ रूट तैयारी डक्ट, केबल और रेस्टोरेशन कार्य में रीवर्क कम करती है।",
+          },
+        ],
+        planningSteps: [
+          {
+            title: "रूट की स्थिति समझें",
+            body: "मिट्टी का व्यवहार, रूट लंबाई, सड़क पहुंच, ट्रेंच आयाम और रेस्टोरेशन जरूरतें साझा करें।",
+          },
+          {
+            title: "श्रेणी चुनें",
+            body: `${categorySummary} की तुलना रूट प्रकार, उपलब्ध टीम और डिप्लॉयमेंट गति के आधार पर करें।`,
+          },
+          {
+            title: "मॉडल शॉर्टलिस्ट करें",
+            body: "कोटेशन से पहले स्पेसिफिकेशन, मीडिया और फिटमेंट गाइडेंस के लिए श्रेणी से मॉडल पेज तक जाएं।",
+          },
+        ],
+        assurancePoints: [
+          "श्रेणी-आधारित नेविगेशन खरीद टीमों को विकल्प तेजी से तुलना करने में मदद करता है।",
+          "मॉडल पेज फील्ड प्लानिंग और मंजूरी के लिए स्पेसिफिकेशन समीक्षा में मदद करते हैं।",
+          "Autocracy रूट और उत्पादकता जरूरतों के आधार पर कॉन्फ़िगरेशन सुझा सकता है।",
+        ],
+      };
+    }
+
     return {
       eyebrow: "Telecom Infrastructure",
       heroLead:
@@ -118,6 +174,58 @@ function getIndustryExperienceContent(
         "Category-first navigation helps procurement teams compare options quickly.",
         "Model pages support specification review for field planning and approvals.",
         "Autocracy can recommend configurations based on route and productivity needs.",
+      ],
+    };
+  }
+
+  if (isHindi) {
+    return {
+      eyebrow: "उद्योग समाधान",
+      heroLead:
+        `${industryTitle} परियोजनाओं में भरोसेमंद उपकरण चयन, स्पष्ट एप्लिकेशन फिट और ऐसी सहायता चाहिए जो साइट की स्थिति को सही मॉडल कॉन्फ़िगरेशन से जोड़े।`,
+      heroHighlights: [
+        { value: `${products.length}`, label: "उपकरण श्रेणियां" },
+        { value: "फील्ड", label: "एप्लिकेशन फोकस" },
+        { value: "मॉडल", label: "चयन सहायता" },
+      ],
+      applicationHeading: `${industryTitle} उपकरण योजना`,
+      applicationSummary:
+        `Autocracy ${industryTitle} उपकरणों को श्रेणी के आधार पर व्यवस्थित करता है, ताकि टीमें एप्लिकेशन फिट, रूट जरूरत, आउटपुट अपेक्षा और मॉडल उपलब्धता की तुलना आसानी से कर सकें।`,
+      applicationPillars: [
+        {
+          title: "एप्लिकेशन फिट",
+          body:
+            "उपकरण श्रेणियां वास्तविक परियोजना जरूरतों के अनुसार समूहित हैं, जिससे उद्योग आवश्यकता से मॉडल शॉर्टलिस्ट तक पहुंचना आसान होता है।",
+        },
+        {
+          title: "फील्ड उत्पादकता",
+          body:
+            "चयन प्रक्रिया साइट स्थिति, एक्सेस सीमा, आउटपुट लक्ष्य और इंस्टॉलेशन हैंडओवर पर ध्यान बनाए रखती है।",
+        },
+        {
+          title: "व्यावहारिक सहायता",
+          body:
+            "मॉडल डिटेल पेज और पूछताछ मार्ग ब्रोशर, स्पेसिफिकेशन और परियोजना-विशिष्ट सुझावों में मदद करते हैं।",
+        },
+      ],
+      planningSteps: [
+        {
+          title: "वर्क जोन तय करें",
+          body: "उपकरण चुनने से पहले भूभाग, पहुंच, अपेक्षित आउटपुट, समयसीमा और इंस्टॉलेशन जरूरतें समझें।",
+        },
+        {
+          title: "श्रेणियों की तुलना करें",
+          body: `${categorySummary} की समीक्षा करें और साइट व परियोजना वर्कफ़्लो के अनुरूप श्रेणी चुनें।`,
+        },
+        {
+          title: "मॉडल फिट कन्फर्म करें",
+          body: "स्पेसिफिकेशन, उपलब्धता और कॉन्फ़िगरेशन के लिए मॉडल पेज और Autocracy टीम की मदद लें।",
+        },
+      ],
+      assurancePoints: [
+        "स्पष्ट श्रेणी नेविगेशन संबंधित उपकरण खोजने में लगने वाला समय कम करता है।",
+        "उद्योग पेज परियोजना संदर्भ को मॉडल-स्तर की जानकारी से जोड़ते हैं।",
+        "Enquiry flow व्यावहारिक फील्ड स्थिति के आधार पर सुझावों में मदद करता है।",
       ],
     };
   }
@@ -173,7 +281,37 @@ function getIndustryExperienceContent(
   };
 }
 
-function buildIndustryFaqs(industryTitle: string) {
+function buildIndustryFaqs(industryTitle: string, language: string) {
+  if (language === "hi") {
+    return [
+      {
+        question: `${industryTitle} के लिए कौन-कौन सी उपकरण श्रेणियां उपलब्ध हैं?`,
+        answer:
+          "उपलब्ध श्रेणियां इस पेज पर दिखाई गई हैं। हर श्रेणी संबंधित मॉडल, एप्लिकेशन नोट्स और मॉडल-स्तर की जानकारी से जुड़ी है।",
+      },
+      {
+        question: `${industryTitle} परियोजना के लिए उपकरण कैसे चुनें?`,
+        answer:
+          "एप्लिकेशन, भूभाग, आउटपुट जरूरत, उपलब्ध कैरियर, एक्सेस सीमा और समयसीमा से शुरुआत करें। Autocracy इन जरूरतों के अनुसार श्रेणी और मॉडल चुनने में मदद कर सकता है।",
+      },
+      {
+        question: "क्या एक श्रेणी कई एप्लिकेशन में उपयोग हो सकती है?",
+        answer:
+          "हां। कई Autocracy श्रेणियां कई उपयोग मामलों में काम आती हैं, लेकिन मॉडल चयन उत्पादकता, जमीन की स्थिति और इंस्टॉलेशन जरूरतों के अनुसार होना चाहिए।",
+      },
+      {
+        question: "क्या मैं अपनी परियोजना के लिए सुझाव मांग सकता हूं?",
+        answer:
+          "हां। contact page पर अपनी परियोजना की जानकारी साझा करें और टीम उपयुक्त उपकरण श्रेणियां और मॉडल सुझा सकती है।",
+      },
+      {
+        question: "क्या ब्रोशर और कोटेशन सहायता उपलब्ध है?",
+        answer:
+          "हां। Autocracy परियोजना एप्लिकेशन और साइट स्थिति समझने के बाद ब्रोशर, मॉडल गाइडेंस और कोटेशन सहायता देता है।",
+      },
+    ];
+  }
+
   return [
     {
       question: `Which equipment categories are available for ${industryTitle}?`,
@@ -256,14 +394,63 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
   const { industrySlug } = await params;
   const resolved = await getIndustryBySlug(industrySlug, language);
   if (!resolved) notFound();
+  const sourceResolved =
+    language === "en" ? resolved : (await getIndustryBySlug(industrySlug, "en")) ?? resolved;
 
   const { industryData } = resolved;
   const products = industryData.products;
-  const faqs = buildIndustryFaqs(industryData.title);
+  const sourceProductById = new Map(
+    sourceResolved.industryData.products.map((product) => [product.id, product]),
+  );
+  const productRouteSlug = (product: IndustryProductCard) =>
+    titleToSlug(sourceProductById.get(product.id)?.title ?? product.title ?? "");
+  const isHindi = language === "hi";
+  const pageText = {
+    home: isHindi ? "होम" : "Home",
+    viewCategories: isHindi ? "श्रेणियां देखें" : "View Categories",
+    imageCaptionTitle: isHindi
+      ? "एप्लिकेशन-आधारित उपकरण चयन"
+      : "Application-led equipment selection",
+    imageCaptionBody: isHindi
+      ? "रूट प्लानिंग, साइट एक्सेस, उत्पादकता और मॉडल फिट के लिए तैयार।"
+      : "Built for route planning, site access, productivity, and model fit.",
+    equipmentCategories: isHindi
+      ? `${industryData.title} के लिए उपकरण श्रेणियां`
+      : `Equipment Categories for ${industryData.title}`,
+    equipmentCategoriesBody: isHindi
+      ? "उद्योग की जरूरत से उत्पाद श्रेणी तक जाएं, फिर मॉडल-स्तर के स्पेसिफिकेशन और फिटमेंट गाइडेंस देखें।"
+      : "Move from industry requirement to product category, then into model-level specifications and fitment guidance.",
+    categoryLabel: (index: number) =>
+      isHindi ? `श्रेणी ${index + 1}` : `Category ${index + 1}`,
+    productIntro: (productTitle: string) =>
+      isHindi
+        ? `${industryData.title} में ${productTitle} के मॉडल, एप्लिकेशन नोट्स और स्पेसिफिकेशन देखें।`
+        : `Explore models, application notes, and specifications for ${productTitle.toLowerCase()} in ${industryData.title}.`,
+    selectionWorkflow: isHindi ? "चयन प्रक्रिया" : "Selection Workflow",
+    selectionHeading: isHindi
+      ? "परियोजना रूट से मशीन शॉर्टलिस्ट तक"
+      : "From project route to machine shortlist",
+    selectionBody: isHindi
+      ? "एक स्पष्ट चयन प्रक्रिया प्रोजेक्ट, खरीद और साइट टीमों को फील्ड कार्य से पहले बेहतर तालमेल बनाने में मदद करती है।"
+      : "A cleaner selection path helps project, procurement, and site teams align before committing equipment to field work.",
+    advantage: isHindi ? "Autocracy लाभ" : "Autocracy Advantage",
+    advantageHeading: isHindi
+      ? "फील्ड टीमों के लिए व्यावहारिक उपकरण गाइडेंस"
+      : "Practical equipment guidance for field teams",
+    ctaHeading: isHindi
+      ? `${industryData.title} परियोजना के लिए उपकरण चाहिए?`
+      : `Need equipment for your ${industryData.title} project?`,
+    ctaBody: isHindi
+      ? "श्रेणी फिट, साइट स्थिति और डिलीवरी जरूरतें कन्फर्म करने के लिए हमारी टीम से संपर्क करें।"
+      : "Contact our team to confirm category fit, site conditions, and delivery requirements.",
+    faqHeading: isHindi ? "अक्सर पूछे जाने वाले प्रश्न" : "Frequently Asked Questions",
+  };
+  const faqs = buildIndustryFaqs(industryData.title, language);
   const industryExperience = getIndustryExperienceContent(
     industrySlug,
     industryData.title,
     products,
+    language,
   );
   const contentSummary =
     industryData.seoDescription?.trim()
@@ -286,13 +473,13 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
       {
         "@type": "ListItem",
         position: 1,
-        name: "Home",
+        name: pageText.home,
         item: toAbsoluteUrl(localizeHref("/", locale)),
       },
       {
         "@type": "ListItem",
         position: 2,
-        name: "Industries",
+        name: tUi(language, "industries"),
         item: toAbsoluteUrl(localizeHref("/industries", locale)),
       },
       {
@@ -312,11 +499,11 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
         <div className="site-container py-4">
           <nav className="flex flex-wrap items-center gap-2 font-['Roboto',Arial,Helvetica,sans-serif] text-[14px] leading-5 text-[#5b6572]">
             <Link className="transition hover:text-[#0a0a0b]" href={localizeHref("/", locale)}>
-              Home
+              {pageText.home}
             </Link>
             <span>/</span>
             <Link className="transition hover:text-[#0a0a0b]" href={localizeHref("/industries", locale)}>
-              Industries
+              {tUi(language, "industries")}
             </Link>
             <span>/</span>
             <span className="font-semibold text-[#0a0a0b]">{industryData.title}</span>
@@ -349,7 +536,7 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
                 className="inline-flex min-h-[50px] items-center justify-center border border-white/35 px-5 py-3 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-bold uppercase tracking-[0.04em] text-white"
                 href="#industry-categories"
               >
-                View Categories
+                {pageText.viewCategories}
               </Link>
             </div>
             <div className="mt-10 grid gap-3 sm:grid-cols-3">
@@ -379,10 +566,10 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
               <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(0,0,0,0.34))]" />
               <div className="absolute bottom-0 left-0 right-0 border-t border-white/15 bg-black/70 px-5 py-4">
                 <p className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[18px] font-bold uppercase leading-6 text-white">
-                  Application-led equipment selection
+                  {pageText.imageCaptionTitle}
                 </p>
                 <p className="mt-1 font-['Roboto',Arial,Helvetica,sans-serif] text-[13px] leading-5 text-white/70">
-                  Built for route planning, site access, productivity, and model fit.
+                  {pageText.imageCaptionBody}
                 </p>
               </div>
             </div>
@@ -394,10 +581,10 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
         <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <h2 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] !text-[34px] font-bold leading-tight text-[#0a0a0b] sm:!text-[40px]">
-              Equipment Categories for {industryData.title}
+              {pageText.equipmentCategories}
             </h2>
             <p className="mt-2 max-w-[720px] font-['Roboto',Arial,Helvetica,sans-serif] text-[16px] font-normal leading-6 tracking-normal text-[#5b6572]">
-              Move from industry requirement to product category, then into model-level specifications and fitment guidance.
+              {pageText.equipmentCategoriesBody}
             </p>
           </div>
           <Link
@@ -412,12 +599,12 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
             {products.map((product, index) => (
               <Link
                 className="group flex min-h-[460px] flex-col overflow-hidden border border-black/10 bg-white transition hover:-translate-y-1 hover:border-[#f9c300] hover:shadow-xl"
-                href={localizeHref(`/industries/${industrySlug}/${titleToSlug(product.title ?? "")}`, locale)}
+                href={localizeHref(`/industries/${industrySlug}/${productRouteSlug(product)}`, locale)}
                 key={product.id}
               >
                 <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#f3f3f3]">
                   <span className="absolute left-4 top-4 z-10 bg-black px-3 py-1 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[12px] font-bold uppercase tracking-[0.08em] text-[var(--brand-yellow)]">
-                    Category {index + 1}
+                    {pageText.categoryLabel(index)}
                   </span>
                   <Image
                     alt={product.thumbnailAltText || product.title || "Product"}
@@ -432,7 +619,7 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
                     {product.title}
                   </h3>
                   <p className="mt-2 font-['Roboto',Arial,Helvetica,sans-serif] text-[15px] font-normal leading-6 tracking-normal text-[#384351]">
-                    Explore models, application notes, and specifications for {product.title?.toLowerCase()} in {industryData.title}.
+                    {pageText.productIntro(product.title ?? tUi(language, "product"))}
                   </p>
                   <div className="mt-auto pt-6">
                     <span className="inline-flex h-12 items-center justify-center gap-2 bg-[#020406] px-6 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-semibold uppercase leading-5 tracking-[1px] text-[var(--brand-yellow)] transition group-hover:bg-[#1a1a1a]">
@@ -495,13 +682,13 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
         <div className="site-container grid gap-10 py-10 sm:py-12 lg:grid-cols-[0.75fr_1.25fr] lg:py-16">
           <div>
             <p className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-bold uppercase leading-5 tracking-[0.24em] text-[#6b6f76]">
-              Selection Workflow
+              {pageText.selectionWorkflow}
             </p>
             <h2 className="mt-3 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] !text-[36px] font-bold leading-[1.12] tracking-normal text-[#0a0a0b] sm:!text-[44px]">
-              From project route to machine shortlist
+              {pageText.selectionHeading}
             </h2>
             <p className="mt-4 max-w-[620px] font-['Roboto',Arial,Helvetica,sans-serif] text-[16px] font-normal leading-7 tracking-normal text-[#1f2937]">
-              A cleaner selection path helps project, procurement, and site teams align before committing equipment to field work.
+              {pageText.selectionBody}
             </p>
           </div>
           <div className="grid gap-4">
@@ -528,10 +715,10 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
         <div className="site-container grid gap-8 py-10 sm:py-12 lg:grid-cols-[1fr_1fr] lg:items-center lg:py-16">
           <div>
             <p className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-bold uppercase leading-5 tracking-[0.24em] text-[#6b6f76]">
-              Autocracy Advantage
+              {pageText.advantage}
             </p>
             <h2 className="mt-3 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] !text-[36px] font-bold leading-[1.12] tracking-normal text-[#0a0a0b] sm:!text-[44px]">
-              Practical equipment guidance for field teams
+              {pageText.advantageHeading}
             </h2>
           </div>
           <div className="grid gap-3">
@@ -553,10 +740,10 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
         <div className="site-container grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
           <div>
             <h2 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] !text-[32px] font-bold uppercase leading-tight tracking-normal sm:!text-[42px]">
-              Need equipment for your {industryData.title} project?
+              {pageText.ctaHeading}
             </h2>
             <p className="mt-4 max-w-2xl font-['Roboto',Arial,Helvetica,sans-serif] text-[16px] font-normal leading-7 text-white/75">
-              Contact our team to confirm category fit, site conditions, and delivery requirements.
+              {pageText.ctaBody}
             </p>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap lg:justify-end">
@@ -580,7 +767,7 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
       <section className="border-y border-black/10 bg-[var(--section-gray)] py-10 sm:py-14 lg:py-20">
         <div className="site-container">
           <h2 className="text-center font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] !text-[30px] font-bold leading-[1.15] tracking-normal text-[#0a0a0b] sm:!text-[36px]">
-            Frequently Asked Questions
+            {pageText.faqHeading}
           </h2>
           <div className="mx-auto mt-10 grid max-w-[1120px] gap-6">
             {faqs.map((faq, index) => (

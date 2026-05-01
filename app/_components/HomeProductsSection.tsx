@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { productSlug } from "@/utils/slug";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -13,16 +12,19 @@ import {
 type ProductItem = {
   name: string;
   image: string;
+  href: string;
 };
 
 type HomeProductsSectionProps = {
   products: ProductItem[];
+  productsHref: string;
   assetBasePath: string;
   language: ContentLanguage;
 };
 
 export default function HomeProductsSection({
   products,
+  productsHref,
   assetBasePath,
   language,
 }: HomeProductsSectionProps) {
@@ -91,7 +93,7 @@ export default function HomeProductsSection({
           <div className="flex flex-wrap items-center gap-3 sm:gap-5">
             <Link
               className="flex h-12 w-full items-center justify-center border border-[var(--ink)] px-5 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-base font-bold uppercase text-[#0a0a0b] sm:h-[62px] sm:min-w-[234px] sm:w-auto sm:px-7 sm:text-lg"
-              href="/in/en/products"
+              href={productsHref}
             >
               {messages.home.viewAllProducts}
             </Link>
@@ -131,7 +133,7 @@ export default function HomeProductsSection({
           {products.map((product) => (
             <Link
               className="product-card group flex h-[340px] flex-col justify-between bg-white px-6 pb-8 pt-8"
-              href={`/in/en/products/${productSlug(product.name)}`}
+              href={product.href}
               key={`${product.name}-${product.image}`}
             >
               <div className="relative h-[210px] overflow-hidden">

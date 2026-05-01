@@ -20,6 +20,10 @@ type IndustryProductPageProps = {
   params: Promise<{ industrySlug: string; productSlug: string }>;
 };
 
+type IndustryProductSummary = NonNullable<
+  Awaited<ReturnType<typeof getIndustryBySlug>>
+>["industryData"]["products"][number];
+
 function ArrowRightIcon({ className = "h-5 w-5" }: { className?: string }) {
   return (
     <svg aria-hidden="true" className={className} fill="none" viewBox="0 0 24 24">
@@ -58,7 +62,48 @@ function matchesProductSlug(dbTitle: string, routeSlug: string): boolean {
   return false;
 }
 
-function buildIndustryProductFaqs(industryTitle: string, productTitle: string) {
+function findProductByRouteSlug(
+  products: IndustryProductSummary[],
+  routeSlug: string,
+): IndustryProductSummary | undefined {
+  return products.find((product) => matchesProductSlug(product.title ?? "", routeSlug));
+}
+
+function buildIndustryProductFaqs(
+  industryTitle: string,
+  productTitle: string,
+  language: string,
+) {
+  if (language === "hi") {
+    return [
+      {
+        question: `${industryTitle} के लिए कौन सा ${productTitle} मॉडल उपयुक्त है?`,
+        answer:
+          "सही मॉडल साइट स्थिति, आउटपुट लक्ष्य, चौड़ाई या गहराई की जरूरत, रूट एक्सेस और उपलब्ध कैरियर उपकरण पर निर्भर करता है। Autocracy एप्लिकेशन के अनुसार मॉडल शॉर्टलिस्ट करने में मदद कर सकता है।",
+      },
+      {
+        question: `क्या ${productTitle} कई ${industryTitle} परियोजनाओं में उपयोग हो सकता है?`,
+        answer:
+          "हां। कॉन्फ़िगरेशन के अनुसार मॉडल की उपयुक्तता बदल सकती है, लेकिन सही चयन होने पर यह श्रेणी अलग-अलग वर्क जोन, परियोजना आकार और संचालन स्थितियों में उपयोगी हो सकती है।",
+      },
+      {
+        question: "उपलब्ध मॉडलों की तुलना कैसे करें?",
+        answer:
+          "मॉडल सीरीज, मशीन प्रकार, मुख्य विशेषताएं, हॉर्सपावर या कैरियर अनुकूलता और एप्लिकेशन फिट की तुलना करें। मॉडल कार्ड और डिटेल पेज पहली स्तर की तुलना देते हैं।",
+      },
+      {
+        question: "क्या मैं परियोजना-विशिष्ट सुझाव मांग सकता हूं?",
+        answer:
+          "हां। परियोजना स्थान, भूभाग, अपेक्षित दैनिक आउटपुट, इंस्टॉलेशन जरूरत और समयसीमा साझा करें ताकि टीम व्यावहारिक कॉन्फ़िगरेशन सुझा सके।",
+      },
+      {
+        question: "क्या ब्रोशर और कोटेशन सहायता उपलब्ध है?",
+        answer:
+          "हां। ब्रोशर, मूल्य मार्गदर्शन, मॉडल उपलब्धता और एप्लिकेशन-आधारित सुझावों के लिए संपर्क विकल्प का उपयोग करें।",
+      },
+    ];
+  }
+
   return [
     {
       question: `Which ${productTitle} model is suitable for ${industryTitle}?`,
@@ -160,17 +205,26 @@ export default async function IndustryProductPage({
   const copyLanguage = language === "hi" ? "hi" : "en";
   const locale = await getRequestLocale();
   const { industrySlug, productSlug } = await params;
-  let industryResolved = await getIndustryBySlug(industrySlug, language);
-  if (!industryResolved && language !== "en") {
-    industryResolved = await getIndustryBySlug(industrySlug, "en");
-  }
-  if (!industryResolved) notFound();
+  const sourceIndustryResolved = await getIndustryBySlug(industrySlug, "en");
+  if (!sourceIndustryResolved) notFound();
 
-  const { industryData, industryId } = industryResolved;
-  const matchedProduct = industryData.products.find(
-    (product) => matchesProductSlug(product.title ?? "", productSlug),
-  );
+  let localizedIndustryResolved = sourceIndustryResolved;
+  if (language !== "en") {
+    localizedIndustryResolved =
+      (await getIndustryBySlug(industrySlug, language)) ?? sourceIndustryResolved;
+  }
+
+  const matchedProduct =
+    findProductByRouteSlug(sourceIndustryResolved.industryData.products, productSlug)
+    ?? findProductByRouteSlug(localizedIndustryResolved.industryData.products, productSlug);
   if (!matchedProduct?.id) notFound();
+
+  const { industryData } = localizedIndustryResolved;
+  const { industryId } = sourceIndustryResolved;
+  const sourceProduct =
+    sourceIndustryResolved.industryData.products.find((product) => product.id === matchedProduct.id)
+    ?? matchedProduct;
+  const canonicalProductSlug = productTitleSlug(sourceProduct.title ?? productSlug);
 
   let productData = await getProductById(matchedProduct.id, industryId, language);
   if (!productData && language !== "en") {
@@ -184,7 +238,31 @@ export default async function IndustryProductPage({
     productData.title ?? "Product",
     copyLanguage,
   );
-  const pageUrl = toAbsoluteUrl(localizeHref(`/industries/${industrySlug}/${productSlug}`, locale));
+  const isHindi = language === "hi";
+  const pageText = {
+    home: isHindi ? "होम" : "Home",
+    heading: isHindi
+      ? `${industryData.title} के लिए ${productData.title}`
+      : `${productData.title} for ${industryData.title}`,
+    availableModelsHeading: isHindi
+      ? `उपलब्ध ${productData.title} मॉडल`
+      : `Available ${productData.title} Models`,
+    availableModelsBody: isHindi
+      ? `${industryData.title} एप्लिकेशन और साइट स्थिति के अनुरूप मॉडल।`
+      : `Models matched to ${industryData.title} applications and site conditions.`,
+    allSeries: isHindi ? "सभी सीरीज" : "All Series",
+    allModels: isHindi ? "सभी मॉडल" : "All Models",
+    ctaHeading: isHindi
+      ? `${industryData.title} परियोजना के लिए ${productData.title} चाहिए?`
+      : `Need ${productData.title} for your ${industryData.title} project?`,
+    ctaBody: isHindi
+      ? "मॉडल फिट, साइट स्थिति और डिलीवरी जरूरतें कन्फर्म करने के लिए हमारी टीम से संपर्क करें।"
+      : "Contact our team to confirm model fit, site conditions, and delivery requirements.",
+    faqHeading: isHindi ? "अक्सर पूछे जाने वाले प्रश्न" : "Frequently Asked Questions",
+  };
+  const pageUrl = toAbsoluteUrl(
+    localizeHref(`/industries/${industrySlug}/${canonicalProductSlug}`, locale),
+  );
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -192,13 +270,13 @@ export default async function IndustryProductPage({
       {
         "@type": "ListItem",
         position: 1,
-        name: "Home",
+        name: pageText.home,
         item: toAbsoluteUrl(localizeHref("/", locale)),
       },
       {
         "@type": "ListItem",
         position: 2,
-        name: "Industries",
+        name: tUi(language, "industries"),
         item: toAbsoluteUrl(localizeHref("/industries", locale)),
       },
       {
@@ -218,7 +296,8 @@ export default async function IndustryProductPage({
 
   const heroImage = productData.generalImage || productData.thumbnail;
   const heroImageAlt = productData.generalImageAltText || productData.thumbnailAltText || productData.title;
-  const faqs = buildIndustryProductFaqs(industryData.title, productData.title);
+  const heroDescription = isHindi ? industryProductContent.summary : productData.description;
+  const faqs = buildIndustryProductFaqs(industryData.title, productData.title, language);
 
   return (
     <main className="category-template bg-white">
@@ -227,9 +306,9 @@ export default async function IndustryProductPage({
       <div className="border-b border-black/10 bg-[#f5f5f5]">
         <div className="site-container py-4">
           <nav className="flex flex-wrap items-center gap-2 font-['Roboto',Arial,Helvetica,sans-serif] text-[14px] font-normal leading-5 tracking-normal text-[#5b6572]">
-            <Link href={localizeHref("/", locale)} className="transition hover:text-[#0a0a0b]">Home</Link>
+            <Link href={localizeHref("/", locale)} className="transition hover:text-[#0a0a0b]">{pageText.home}</Link>
             <span>/</span>
-            <Link href={localizeHref("/industries", locale)} className="transition hover:text-[#0a0a0b]">Industries</Link>
+            <Link href={localizeHref("/industries", locale)} className="transition hover:text-[#0a0a0b]">{tUi(language, "industries")}</Link>
             <span>/</span>
             <Link href={localizeHref(`/industries/${industrySlug}`, locale)} className="transition hover:text-[#0a0a0b]">
               {industryData.title}
@@ -245,11 +324,11 @@ export default async function IndustryProductPage({
           <div>
             <p className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-semibold uppercase leading-5 tracking-[0.35em] text-[#6b6f76]">{tUi(language, "industry_product")}</p>
             <h1 className="mt-4 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[42px] font-bold uppercase leading-none tracking-normal text-[#0a0a0b] sm:text-[58px] lg:text-[72px]">
-              {productData.title} for {industryData.title}
+              {pageText.heading}
             </h1>
-            {productData.description ? (
+            {heroDescription ? (
               <p className="mt-5 max-w-[880px] font-['Roboto',Arial,Helvetica,sans-serif] text-[14px] font-normal leading-[1.5] tracking-normal text-[#1f2937] sm:mt-6">
-                {productData.description}
+                {heroDescription}
               </p>
             ) : null}
             <div className="mt-7 flex flex-wrap gap-3">
@@ -278,15 +357,15 @@ export default async function IndustryProductPage({
         <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <h2 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[30px] font-bold leading-[1.15] tracking-normal text-[#0a0a0b] sm:text-[36px]">
-              Available {productData.title} Models
+              {pageText.availableModelsHeading}
             </h2>
             <p className="mt-2 font-['Roboto',Arial,Helvetica,sans-serif] text-[16px] font-normal leading-6 tracking-normal text-[#5b6572]">
-              Models matched to {industryData.title} applications and site conditions.
+              {pageText.availableModelsBody}
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
-            <div className="rounded border border-black/15 bg-white px-4 py-2 font-['Roboto',Arial,Helvetica,sans-serif] text-[14px] font-normal leading-5 text-[#2d3642]">All Series</div>
-            <div className="rounded border border-black/15 bg-white px-4 py-2 font-['Roboto',Arial,Helvetica,sans-serif] text-[14px] font-normal leading-5 text-[#2d3642]">All Models</div>
+            <div className="rounded border border-black/15 bg-white px-4 py-2 font-['Roboto',Arial,Helvetica,sans-serif] text-[14px] font-normal leading-5 text-[#2d3642]">{pageText.allSeries}</div>
+            <div className="rounded border border-black/15 bg-white px-4 py-2 font-['Roboto',Arial,Helvetica,sans-serif] text-[14px] font-normal leading-5 text-[#2d3642]">{pageText.allModels}</div>
           </div>
         </div>
         {productData.models.length > 0 ? (
@@ -397,10 +476,10 @@ export default async function IndustryProductPage({
       <section className="bg-black py-10 text-white sm:py-12 lg:py-16">
         <div className="site-container text-center">
           <h2 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[32px] font-bold uppercase leading-tight sm:text-[42px]">
-            Need {productData.title} for your {industryData.title} project?
+            {pageText.ctaHeading}
           </h2>
           <p className="mx-auto mt-4 max-w-2xl font-['Roboto',Arial,Helvetica,sans-serif] text-[16px] font-normal leading-7 text-white/75">
-            Contact our team to confirm model fit, site conditions, and delivery requirements.
+            {pageText.ctaBody}
           </p>
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row sm:flex-wrap">
             <Link
@@ -412,13 +491,13 @@ export default async function IndustryProductPage({
             </Link>
             <Link
               className="inline-flex min-h-[48px] items-center justify-center rounded border border-white/35 px-5 py-3 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-bold uppercase tracking-[0.04em] text-white"
-              href={localizeHref(`/products/${productTitleSlug(productData.title ?? "")}`, locale)}
+              href={localizeHref(`/products/${canonicalProductSlug}`, locale)}
             >
               {tUi(language, "open_product_category")}
             </Link>
             <Link
               className="inline-flex min-h-[48px] items-center justify-center rounded border border-white/35 px-5 py-3 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-bold uppercase tracking-[0.04em] text-white"
-              href={localizeHref(`/industries/${titleToSlug(industryData.title ?? "")}`, locale)}
+              href={localizeHref(`/industries/${industrySlug}`, locale)}
             >
               {tUi(language, "back_to_industry")}
             </Link>
@@ -429,7 +508,7 @@ export default async function IndustryProductPage({
       <section className="border-y border-black/10 bg-[var(--section-gray)] py-10 sm:py-14 lg:py-20">
         <div className="site-container">
           <h2 className="text-center font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[30px] font-bold leading-[1.15] tracking-normal text-[#0a0a0b] sm:text-[36px]">
-            Frequently Asked Questions
+            {pageText.faqHeading}
           </h2>
           <div className="mx-auto mt-10 grid max-w-[1120px] gap-6">
             {faqs.map((faq, index) => (

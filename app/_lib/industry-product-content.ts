@@ -271,6 +271,44 @@ function fallbackContent(industryTitle: string, productTitle: string): IndustryP
   };
 }
 
+function hindiContent(industryTitle: string, productTitle: string): IndustryProductContent {
+  const localizedIndustryTitle = localizeDbText(industryTitle, "hi", {
+    strictHindi: true,
+    isLabel: true,
+    fallback: "उद्योग",
+  });
+  const localizedProductTitle = localizeDbText(productTitle, "hi", {
+    strictHindi: true,
+    isLabel: true,
+    fallback: "उत्पाद",
+  });
+
+  return {
+    sectionLabel: localizedIndustryTitle,
+    headline: `${localizedIndustryTitle} के लिए ${localizedProductTitle}`,
+    summary:
+      `${localizedIndustryTitle} परियोजनाओं में ${localizedProductTitle} का उपयोग स्थिर आउटपुट, नियंत्रित ट्रेंचिंग और तेज निष्पादन के लिए किया जाता है।`,
+    useCasesHeading: "सामान्य उपयोग",
+    useCases: [
+      `${localizedIndustryTitle} परियोजनाओं में यूटिलिटी ट्रेंचिंग कार्य`,
+      "दोहराने योग्य ट्रेंच प्रोफाइल के साथ बेहतर इंस्टॉलेशन गुणवत्ता",
+      "फील्ड उत्पादकता बढ़ाने के लिए तेज और नियंत्रित निष्पादन",
+    ],
+    executionHeading: "निष्पादन प्राथमिकताएं",
+    executionPoints: [
+      "आगे के कार्यों के लिए स्थिर गहराई और चौड़ाई",
+      "कम रीवर्क के साथ अधिक विश्वसनीय परियोजना प्रगति",
+      "कठिन समयसीमा में बेहतर शेड्यूल नियंत्रण",
+    ],
+    fitHeading: "यह कॉन्फ़िगरेशन क्यों उपयुक्त है",
+    fitPoints: [
+      "वास्तविक साइट परिस्थितियों में भरोसेमंद प्रदर्शन",
+      "टीमों के लिए स्थिर और कार्यान्वयन-तैयार आउटपुट",
+      "परियोजना गुणवत्ता और उत्पादकता में समग्र सुधार",
+    ],
+  };
+}
+
 export function getIndustryProductContent(
   industrySlug: string,
   industryTitle: string,
@@ -279,6 +317,10 @@ export function getIndustryProductContent(
   language: SupportedCopyLanguage = "en",
 ): IndustryProductContent {
   if (language === "hi") {
+    return hindiContent(industryTitle, productTitle);
+  }
+
+  if (false) {
     const localizedIndustryTitle = localizeDbText(industryTitle, "hi", {
       strictHindi: true,
       isLabel: true,

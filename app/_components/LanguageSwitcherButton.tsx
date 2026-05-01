@@ -116,7 +116,7 @@ export default function LanguageSwitcherButton({
               position: "relative",
               display: "inline-flex",
               alignItems: "center",
-              minWidth: "52px",
+              minWidth: "38px",
             }
       }
     >
@@ -141,9 +141,9 @@ export default function LanguageSwitcherButton({
           appearance: "none",
           WebkitAppearance: "none",
           MozAppearance: "none",
-          width: "100%",
-          minWidth: "52px",
-          paddingRight: "18px",
+          width: "auto",
+          minWidth: "2.35em",
+          paddingRight: "16px",
         }}
         value={resolvedLanguage}
       >
@@ -159,7 +159,7 @@ export default function LanguageSwitcherButton({
           width: "14px",
           height: "14px",
           position: "absolute",
-          right: 0,
+          right: "1px",
           pointerEvents: "none",
         }}
         fill="none"

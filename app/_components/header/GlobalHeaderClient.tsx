@@ -303,7 +303,7 @@ export default function GlobalHeaderClient({ language, locale }: GlobalHeaderCli
   const topBarSwitcherClass =
     "inline-flex h-8 min-w-[52px] items-center justify-center gap-1 rounded bg-transparent px-1 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-semibold uppercase leading-[105%] tracking-[0] text-[#0a0a0b]";
   const topBarLanguageClass =
-    "relative inline-flex h-8 min-w-[52px] items-center rounded bg-transparent px-1 pr-4 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-semibold uppercase leading-[105%] tracking-[0] text-[#0a0a0b]";
+    "relative inline-flex h-8 min-w-[38px] items-center rounded bg-transparent px-1 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-semibold uppercase leading-[105%] tracking-[0] text-[#0a0a0b]";
 
   useEffect(() => {
     document.body.style.overflow = mobileMenuOpen ? "hidden" : "";
@@ -480,7 +480,7 @@ export default function GlobalHeaderClient({ language, locale }: GlobalHeaderCli
           </button>
           <div className="flex h-full items-center justify-end gap-2 border-l border-black/15 px-2">
             <CountrySwitcherButton className="inline-flex h-8 min-w-[52px] items-center justify-center gap-1 rounded bg-transparent px-1 text-[11px] font-semibold uppercase text-[#0a0a0b]" />
-            <LanguageSwitcherButton className="relative inline-flex h-8 min-w-[52px] items-center rounded bg-transparent px-1 pr-4 text-[11px] font-semibold uppercase text-[#0a0a0b]" />
+            <LanguageSwitcherButton className="relative inline-flex h-8 min-w-[38px] items-center rounded bg-transparent px-1 text-[11px] font-semibold uppercase text-[#0a0a0b]" />
             <button
               aria-label="Search"
               className="grid size-8 place-items-center text-[var(--ink)]"

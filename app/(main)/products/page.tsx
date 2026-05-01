@@ -30,7 +30,13 @@ export const metadata: Metadata = {
 export default async function ProductsListingPage() {
   const language = await getRequestContentLanguage();
   const locale = await getRequestLocale();
-  const products = await getActiveProducts(language);
+  const [products, sourceProducts] = await Promise.all([
+    getActiveProducts(language),
+    language === "en" ? getActiveProducts(language) : getActiveProducts("en"),
+  ]);
+  const sourceProductById = new Map(sourceProducts.map((product) => [product.id, product]));
+  const productRouteSlug = (product: (typeof products)[number]) =>
+    productSlug(sourceProductById.get(product.id)?.title ?? product.title ?? "");
 
   return (
     <main className="site-container py-12">
@@ -42,7 +48,7 @@ export default async function ProductsListingPage() {
           {products.map((product) => (
             <Link
               className="rounded-md border border-black/15 bg-white p-4 transition hover:border-black/35"
-              href={localizeHref(`/products/${productSlug(product.title ?? "")}`, locale)}
+              href={localizeHref(`/products/${productRouteSlug(product)}`, locale)}
               key={product.id}
             >
               <div className="relative h-[180px] w-full overflow-hidden rounded bg-[#f5f5f5]">

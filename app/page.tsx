@@ -7,7 +7,7 @@ import GlobalHeader from "./_components/GlobalHeader";
 import HomeProductsSection from "./_components/HomeProductsSection";
 import HomeHeroSlider from "./_components/HomeHeroSlider";
 import UniversalFooter from "./_components/UniversalFooter";
-import { titleToSlug } from "@/utils/slug";
+import { productSlug, titleToSlug } from "@/utils/slug";
 import { getActiveIndustries } from "@/actions/industryAction";
 import { getActiveProducts } from "@/actions/productAction";
 import { getActiveBlogs } from "@/actions/blogAction";
@@ -120,7 +120,7 @@ const fallbackProducts = [
   },
 ];
 
-const industryHref = (industryTitle: string) =>
+const industryPath = (industryTitle: string) =>
   `/industries/${titleToSlug(industryTitle)}`;
 
 const strengths = [
@@ -604,9 +604,11 @@ function Header() {
 
 function IndustriesSection({
   industries,
+  industriesHref,
   language,
 }: {
-  industries: { title: string; image: string }[];
+  industries: { title: string; image: string; href: string }[];
+  industriesHref: string;
   language: ContentLanguage;
 }) {
   const messages = getMessages(language);
@@ -632,7 +634,7 @@ function IndustriesSection({
           {industries.map((industry, index) => (
             <Link
               className="group relative block h-[180px] overflow-hidden rounded-lg bg-[#312e33] sm:h-[250px]"
-              href={industryHref(industry.title)}
+              href={industry.href}
               key={`${industry.title}-${index}`}
             >
               <Image
@@ -652,7 +654,7 @@ function IndustriesSection({
         <div className="mt-10 flex justify-center">
           <Link
             className="button-gold-text figma-button bg-[var(--ink)]"
-            href="/in/en/industries"
+            href={industriesHref}
             style={{ color: "#f9c300" }}
           >
             {messages.home.viewAllIndustries}
@@ -865,8 +867,18 @@ export default async function Home() {
         : strictLocalized?.testimonialQuotes[index] ?? "",
   }));
   const storiesSeed = language === "hi" ? fallbackStoriesHi : fallbackStories;
-  let homeIndustries: { title: string; image: string }[] = fallbackIndustries;
-  let homeProducts: { name: string; image: string }[] = fallbackProducts;
+  let homeIndustries: { title: string; image: string; href: string }[] = fallbackIndustries.map(
+    (industry) => ({
+      ...industry,
+      href: localizeHref(industryPath(industry.title), locale),
+    }),
+  );
+  let homeProducts: { name: string; image: string; href: string }[] = fallbackProducts.map(
+    (product) => ({
+      ...product,
+      href: localizeHref(`/products/${productSlug(product.name)}`, locale),
+    }),
+  );
   let homeStories: HomeStoryCard[] = storiesSeed.map((story, index) => ({
     id: `fallback-story-${index + 1}`,
     title: story.title,
@@ -876,16 +888,24 @@ export default async function Home() {
   }));
 
   try {
-    const [dbIndustries, dbProducts, dbBlogs] = await Promise.all([
+    const [dbIndustries, dbProducts, dbBlogs, sourceIndustries, sourceProducts] = await Promise.all([
       getActiveIndustries(language),
       getActiveProducts(language),
       getActiveBlogs(language),
+      language === "en" ? getActiveIndustries(language) : getActiveIndustries("en"),
+      language === "en" ? getActiveProducts(language) : getActiveProducts("en"),
     ]);
+    const sourceIndustryById = new Map(sourceIndustries.map((industry) => [industry.id, industry]));
+    const sourceProductById = new Map(sourceProducts.map((product) => [product.id, product]));
 
     if (Array.isArray(dbIndustries) && dbIndustries.length > 0) {
       homeIndustries = dbIndustries.map((industry) => ({
         title: industry.title ?? "",
         image: industry.thumbnail ?? "",
+        href: localizeHref(
+          industryPath(sourceIndustryById.get(industry.id)?.title ?? industry.title ?? ""),
+          locale,
+        ),
       }));
     }
 
@@ -893,6 +913,10 @@ export default async function Home() {
       homeProducts = dbProducts.map((product) => ({
         name: product.title ?? "",
         image: product.thumbnail ?? "",
+        href: localizeHref(
+          `/products/${productSlug(sourceProductById.get(product.id)?.title ?? product.title ?? "")}`,
+          locale,
+        ),
       }));
     }
 
@@ -954,10 +978,15 @@ export default async function Home() {
         ctaLabel={getMessages(language).common.getQuote}
         slides={resolvedHeroSlides}
       />
-      <IndustriesSection industries={homeIndustries} language={language} />
+      <IndustriesSection
+        industries={homeIndustries}
+        industriesHref={localizeHref("/industries", locale)}
+        language={language}
+      />
       <HomeProductsSection
         assetBasePath={asset}
         language={language}
+        productsHref={localizeHref("/products", locale)}
         products={homeProducts}
       />
       <Strengths items={strengthsCopy} language={language} />

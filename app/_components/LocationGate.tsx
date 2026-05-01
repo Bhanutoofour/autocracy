@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   getDefaultLanguageForCountry,
+  getCountryLanguageOptions,
   getNormalizedLanguageForCountry,
   isLiveCountry,
   isSupportedCountry,
@@ -10,6 +11,7 @@ import {
   type SupportedCountry,
 } from "@/app/_lib/locale-config";
 import {
+  getContentLanguage,
   getContentLanguageFromPath,
   getMessages,
   type ContentLanguage,
@@ -18,6 +20,12 @@ import {
 type CountryOption = {
   code: SupportedCountry;
   label: string;
+};
+
+type LanguageOption = {
+  code: ContentLanguage;
+  label: string;
+  hindiLabel: string;
 };
 
 const COUNTRY_OPTIONS: CountryOption[] = [
@@ -30,6 +38,18 @@ const COUNTRY_OPTIONS: CountryOption[] = [
   { code: "lk", label: "Sri Lanka" },
 ];
 
+const LANGUAGE_LABELS: Record<ContentLanguage, LanguageOption> = {
+  en: { code: "en", label: "English", hindiLabel: "अंग्रेज़ी" },
+  hi: { code: "hi", label: "Hindi", hindiLabel: "हिंदी" },
+  fr: { code: "fr", label: "French", hindiLabel: "फ्रेंच" },
+  es: { code: "es", label: "Spanish", hindiLabel: "स्पेनिश" },
+  de: { code: "de", label: "German", hindiLabel: "जर्मन" },
+  ar: { code: "ar", label: "Arabic", hindiLabel: "अरबी" },
+  zh: { code: "zh", label: "Chinese", hindiLabel: "चीनी" },
+  ja: { code: "ja", label: "Japanese", hindiLabel: "जापानी" },
+  bn: { code: "bn", label: "Bengali", hindiLabel: "बंगाली" },
+};
+
 const STORAGE_KEY = "autocracy:selected-country";
 const LANGUAGE_STORAGE_KEY = "autocracy:selected-language";
 
@@ -41,6 +61,34 @@ function normalizeCountryCode(value: string | null | undefined): SupportedCountr
 
 function getCountryLabel(code: SupportedCountry): string {
   return COUNTRY_OPTIONS.find((item) => item.code === code)?.label ?? code;
+}
+
+function normalizeLanguageForCountry(
+  country: SupportedCountry,
+  language?: string | null,
+): ContentLanguage {
+  return getContentLanguage(getNormalizedLanguageForCountry(country, language));
+}
+
+function getLanguageOptions(country: SupportedCountry): LanguageOption[] {
+  const seen = new Set<ContentLanguage>();
+  return getCountryLanguageOptions(country)
+    .map((code) => getContentLanguage(code))
+    .filter((code) => {
+      if (seen.has(code)) return false;
+      seen.add(code);
+      return true;
+    })
+    .map((code) => LANGUAGE_LABELS[code])
+    .filter((option): option is LanguageOption => Boolean(option));
+}
+
+function getLanguageLabel(option: LanguageOption, uiLanguage: ContentLanguage): string {
+  return uiLanguage === "hi" ? option.hindiLabel : option.label;
+}
+
+function getSelectLanguageLabel(language: ContentLanguage): string {
+  return language === "hi" ? "भाषा चुनें" : "Select Language";
 }
 
 function readLocalStorage(key: string): string | null {
@@ -68,8 +116,13 @@ export default function LocationGate() {
     () => getCountryLabel(selectedCountry),
     [selectedCountry],
   );
+  const languageOptions = useMemo(
+    () => getLanguageOptions(selectedCountry),
+    [selectedCountry],
+  );
+  const selectedLanguage = normalizeLanguageForCountry(selectedCountry, language);
   const isSelectedCountryLive = isLiveCountry(selectedCountry);
-  const messages = getMessages(language);
+  const messages = getMessages(selectedLanguage);
 
   useEffect(() => {
     let active = true;
@@ -79,8 +132,16 @@ export default function LocationGate() {
 
       const savedCountry = normalizeCountryCode(readLocalStorage(STORAGE_KEY));
       const hasSavedCountry = Boolean(savedCountry);
+      const currentPathSegments = window.location.pathname.split("/").filter(Boolean);
+      const pathLanguage = currentPathSegments[1]?.toLowerCase();
+      const savedLanguage = (readLocalStorage(LANGUAGE_STORAGE_KEY) ?? "").toLowerCase();
+      const preferredLanguage =
+        (pathLanguage && isSupportedLanguage(pathLanguage) && pathLanguage) ||
+        (savedLanguage && isSupportedLanguage(savedLanguage) && savedLanguage) ||
+        getDefaultLanguageForCountry(savedCountry ?? "in");
+      const initialCountry = savedCountry ?? "in";
 
-      setLanguage(getContentLanguageFromPath(window.location.pathname));
+      setLanguage(normalizeLanguageForCountry(initialCountry, preferredLanguage));
 
       if (savedCountry) {
         setSelectedCountry(savedCountry);
@@ -103,6 +164,9 @@ export default function LocationGate() {
 
         if (active && code) {
           setSelectedCountry(code);
+          setLanguage((currentLanguage) =>
+            normalizeLanguageForCountry(code, currentLanguage),
+          );
         }
       } catch {
         // Keep India as fallback if IP country detection fails.
@@ -119,9 +183,16 @@ export default function LocationGate() {
   useEffect(() => {
     const openCountrySelector = () => {
       const savedCountry = normalizeCountryCode(readLocalStorage(STORAGE_KEY));
-      if (savedCountry) {
-        setSelectedCountry(savedCountry);
-      }
+      const nextCountry = savedCountry ?? selectedCountry;
+      const savedLanguage = (readLocalStorage(LANGUAGE_STORAGE_KEY) ?? "").toLowerCase();
+      const pathLanguage = getContentLanguageFromPath(window.location.pathname);
+      setSelectedCountry(nextCountry);
+      setLanguage(
+        normalizeLanguageForCountry(
+          nextCountry,
+          savedLanguage && isSupportedLanguage(savedLanguage) ? savedLanguage : pathLanguage,
+        ),
+      );
       setOpen(true);
     };
 
@@ -129,7 +200,7 @@ export default function LocationGate() {
     return () => {
       window.removeEventListener("open-country-selector", openCountrySelector);
     };
-  }, []);
+  }, [selectedCountry]);
 
   const handleConfirm = () => {
     if (!isSelectedCountryLive) {
@@ -145,14 +216,9 @@ export default function LocationGate() {
     const pathSegments = current.split("/").filter(Boolean);
     const firstSegment = pathSegments[0]?.toLowerCase();
     const secondSegment = pathSegments[1]?.toLowerCase();
-    const savedLanguage = (readLocalStorage(LANGUAGE_STORAGE_KEY) ?? "").toLowerCase();
-    const preferredLanguage =
-      (savedLanguage && isSupportedLanguage(savedLanguage) && savedLanguage) ||
-      (secondSegment && isSupportedLanguage(secondSegment) && secondSegment) ||
-      getDefaultLanguageForCountry(nextCountry);
     const nextLanguage = getNormalizedLanguageForCountry(
       nextCountry,
-      preferredLanguage,
+      selectedLanguage,
     );
 
     writeLocalStorage(LANGUAGE_STORAGE_KEY, nextLanguage);
@@ -204,6 +270,9 @@ export default function LocationGate() {
                     const value = normalizeCountryCode(event.target.value);
                     if (value) {
                       setSelectedCountry(value);
+                      setLanguage((currentLanguage) =>
+                        normalizeLanguageForCountry(value, currentLanguage),
+                      );
                     }
                   }}
                   value={selectedCountry}
@@ -211,6 +280,46 @@ export default function LocationGate() {
                   {COUNTRY_OPTIONS.map((country) => (
                     <option key={country.code} value={country.code}>
                       {country.label}
+                    </option>
+                  ))}
+                </select>
+                <span className="pointer-events-none absolute inset-y-0 right-4 grid place-items-center text-[#2f3237] sm:right-5">
+                  <svg
+                    aria-hidden="true"
+                    className="h-5 w-5"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2.25"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="m6 9 6 6 6-6" />
+                  </svg>
+                </span>
+              </div>
+
+              <label
+                className="mb-3 mt-5 block font-['Roboto',Arial,Helvetica,sans-serif] text-[14px] font-normal text-[#20242a] sm:text-[16px]"
+                htmlFor="language-select"
+              >
+                {getSelectLanguageLabel(selectedLanguage)}
+              </label>
+              <div className="relative">
+                <select
+                  className="h-[56px] w-full appearance-none rounded-xl border border-black/20 bg-[#efefef] px-4 pr-12 font-['Roboto',Arial,Helvetica,sans-serif] text-[18px] font-normal text-[#0a0a0b] outline-none focus:border-black/35 sm:px-6 sm:pr-14 sm:text-[20px]"
+                  id="language-select"
+                  onChange={(event) => {
+                    const next = event.target.value.toLowerCase();
+                    if (isSupportedLanguage(next)) {
+                      setLanguage(normalizeLanguageForCountry(selectedCountry, next));
+                    }
+                  }}
+                  value={selectedLanguage}
+                >
+                  {languageOptions.map((option) => (
+                    <option key={option.code} value={option.code}>
+                      {getLanguageLabel(option, selectedLanguage)}
                     </option>
                   ))}
                 </select>

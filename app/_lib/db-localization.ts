@@ -22,6 +22,9 @@ const HINDI_TERM_MAP: Record<string, string> = {
   "operating length": "ऑपरेटिंग लंबाई",
   hydraulic: "हाइड्रॉलिक",
   pto: "पीटीओ",
+  tractor: "ट्रैक्टर",
+  machine: "मशीन",
+  "support vehicle": "सपोर्ट वाहन",
   feature: "विशेषता",
   value: "मान",
   "watch video": "वीडियो देखें",
@@ -45,6 +48,9 @@ const HINDI_PHRASE_MAP: Record<string, string> = {
   "single chain tencher": "सिंगल चेन ट्रेंचर",
   "single chain": "सिंगल चेन",
   "pipeline trencher": "पाइपलाइन ट्रेंचर",
+  "cable trenching machine": "केबल ट्रेंचिंग मशीन",
+  "irrigation trenching machine": "सिंचाई ट्रेंचिंग मशीन",
+  "cable laying machine": "केबल लेइंग मशीन",
   "ideal for": "के लिए उपयुक्त",
   "water management": "जल प्रबंधन",
   "water infrastructure": "जल अवसंरचना",
@@ -88,6 +94,9 @@ const HINDI_PHRASE_MAP: Record<string, string> = {
   line: "लाइन",
   hydraulic: "हाइड्रॉलिक",
   pto: "पीटीओ",
+  tractor: "ट्रैक्टर",
+  machine: "मशीन",
+  "support vehicle": "सपोर्ट वाहन",
   "up to": "तक",
   ideal: "उपयुक्त",
   for: "के लिए",
@@ -218,7 +227,9 @@ export function localizeDbText(
   const textFromMap = map ? pickFromMap(map, language) : "";
   const plainText = normalizeString(raw);
   const source = textFromMap || plainText;
+  const hasExplicitFallback = Object.prototype.hasOwnProperty.call(options ?? {}, "fallback");
   const fallback = options?.fallback ?? HINDI_PLACEHOLDER_SHORT;
+  const emptyFallback = hasExplicitFallback && fallback === "";
 
   if (language !== "hi") {
     return source || fallback;
@@ -246,9 +257,14 @@ export function localizeDbText(
   }
 
   const byDomainTerms = translateHindiByDomainTerms(source);
-  if (byDomainTerms !== source) return byDomainTerms;
+  if (byDomainTerms !== source) {
+    if (!options?.strictHindi) return byDomainTerms;
+    if (!hasLatinAlphabet(byDomainTerms) || !looksLikeSentence(source)) return byDomainTerms;
+    return emptyFallback ? "" : strictHindiFallback("", fallback);
+  }
 
   if (!options?.strictHindi) return source;
+  if (emptyFallback) return "";
   return strictHindiFallback(source, fallback);
 }
 

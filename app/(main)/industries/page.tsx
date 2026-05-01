@@ -30,7 +30,13 @@ export const metadata: Metadata = {
 export default async function IndustriesListingPage() {
   const language = await getRequestContentLanguage();
   const locale = await getRequestLocale();
-  const industries = await getActiveIndustries(language);
+  const [industries, sourceIndustries] = await Promise.all([
+    getActiveIndustries(language),
+    language === "en" ? getActiveIndustries(language) : getActiveIndustries("en"),
+  ]);
+  const sourceIndustryById = new Map(sourceIndustries.map((industry) => [industry.id, industry]));
+  const industryRouteSlug = (industry: (typeof industries)[number]) =>
+    titleToSlug(sourceIndustryById.get(industry.id)?.title ?? industry.title ?? "");
 
   return (
     <main className="site-container py-12">
@@ -42,7 +48,7 @@ export default async function IndustriesListingPage() {
           {industries.map((industry) => (
             <Link
               className="rounded-md border border-black/15 bg-white p-4 transition hover:border-black/35"
-              href={localizeHref(`/industries/${titleToSlug(industry.title ?? "")}`, locale)}
+              href={localizeHref(`/industries/${industryRouteSlug(industry)}`, locale)}
               key={industry.id}
             >
               <div className="relative h-[180px] w-full overflow-hidden rounded bg-[#f5f5f5]">
