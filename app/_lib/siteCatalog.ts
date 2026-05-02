@@ -33,23 +33,23 @@ export const INDUSTRY_TO_PRODUCTS: Record<(typeof INDUSTRIES)[number], string[]>
     "Post Hole Digger",
     "Attachments",
   ],
-  "Water Management": [
+  "Water Management": ["Trenchers", "Walk Behind Trencher"],
+  "Solar Energy": [
     "Trenchers",
     "Walk Behind Trencher",
-    "Post Hole Digger",
     "Attachments",
+    "Sand Filler",
+    "Pole Stacker",
   ],
-  "Solar Energy": ["Trenchers", "Wheel Trencher", "Post Hole Digger", "Attachments"],
   "Environmental Sustainability": [
     "Aquatic Weed Harvester",
     "Amphibious Excavator",
     "Floating Pontoon",
-    "Trenchers",
   ],
-  Landscaping: ["Walk Behind Trencher", "Post Hole Digger", "Landscaping Equipment", "Attachments"],
-  Defence: ["Trenchers", "Walk Behind Trencher", "Post Hole Digger", "Pole Stacker"],
-  Construction: ["Trenchers", "Wheel Trencher", "Sand Filler", "Pole Stacker"],
-  Agriculture: ["Trenchers", "Agricultural Attachments", "Post Hole Digger", "Attachments"],
+  Landscaping: ["Trenchers", "Walk Behind Trencher", "Landscaping Equipment", "Attachments"],
+  Defence: ["Trenchers"],
+  Construction: ["Trenchers", "Walk Behind Trencher", "Post Hole Digger", "Attachments"],
+  Agriculture: ["Trenchers", "Walk Behind Trencher", "Post Hole Digger"],
 };
 
 export const industryToHref = (industry: string) => `/industries/${titleToSlug(industry)}`;
@@ -64,4 +64,3 @@ export function findIndustryLabel(slug: string): string | null {
 export function findProductLabel(slug: string): string | null {
   return PRODUCTS.find((item) => productSlug(item) === slug) ?? null;
 }
-

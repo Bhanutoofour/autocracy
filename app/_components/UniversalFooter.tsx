@@ -133,14 +133,14 @@ export default async function UniversalFooter() {
                 alt="Autocracy brand mark"
                 className="h-[40px] w-[44px]"
                 height={40}
-                src="/footer-logo-mark.png"
+                src="/footer-logo-mark.webp"
                 width={44}
               />
               <Image
                 alt="Autocracy Machinery"
                 className="h-auto w-[170px]"
                 height={39}
-                src="/footer-logo-combined.png"
+                src="/footer-logo-combined.webp"
                 width={170}
               />
             </Link>

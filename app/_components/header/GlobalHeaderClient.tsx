@@ -56,7 +56,7 @@ function Logo({ homeHref }: { homeHref: string }) {
         className="h-auto w-full"
         height={150}
         priority
-        src="/logo.png"
+        src="/logo.webp"
         width={668}
       />
     </Link>
@@ -242,24 +242,24 @@ function ProductMenuCard({
 }
 
 const PRODUCT_IMAGE_MAP: Record<string, string> = {
-  Trenchers: "/home-assets/imports/Final-1/282576ad5e8a2a7d8bdf398187b6cfa2059de92a.png",
-  "Wheel Trencher": "/home-assets/imports/Final-1/d0c7c5f1f56a52183f8f154be5750cb44bc29825.png",
-  "Walk Behind Trencher": "/home-assets/imports/Final-1/6c90a6d63f96a270777ab13c4d1c1d927e332433.png",
-  "Post Hole Digger": "/home-assets/imports/Final-1/043c80512a640c617815f93fba4eac4d60617dfd.png",
-  Attachments: "/home-assets/imports/Final-1/7f60e1c3df8e63febda1944bedd2854950affd6e.png",
-  "Sand Filler": "/home-assets/imports/Final-1/d0c7c5f1f56a52183f8f154be5750cb44bc29825.png",
-  "Pole Stacker": "/home-assets/imports/Final-1/043c80512a640c617815f93fba4eac4d60617dfd.png",
-  "Landscaping Equipment": "/home-assets/imports/Final-1/82aa72403df4827948c292a0322a06091d498468.png",
-  "Agricultural Attachments": "/home-assets/imports/Final-1/7f60e1c3df8e63febda1944bedd2854950affd6e.png",
-  "Aquatic Weed Harvester": "/home-assets/imports/Final-1/9b6af6ec8958651a036927ec24ff6cab560236ef.png",
-  "Amphibious Excavator": "/home-assets/imports/Final-1/c2505b2efaf24ad9893f1179569e418a553b84cd.png",
-  "Floating Pontoon": "/home-assets/imports/Final-1/9b6af6ec8958651a036927ec24ff6cab560236ef.png",
+  Trenchers: "/home-assets/imports/Final-1/282576ad5e8a2a7d8bdf398187b6cfa2059de92a.webp",
+  "Wheel Trencher": "/home-assets/imports/Final-1/d0c7c5f1f56a52183f8f154be5750cb44bc29825.webp",
+  "Walk Behind Trencher": "/home-assets/imports/Final-1/6c90a6d63f96a270777ab13c4d1c1d927e332433.webp",
+  "Post Hole Digger": "/home-assets/imports/Final-1/043c80512a640c617815f93fba4eac4d60617dfd.webp",
+  Attachments: "/home-assets/imports/Final-1/7f60e1c3df8e63febda1944bedd2854950affd6e.webp",
+  "Sand Filler": "/home-assets/imports/Final-1/d0c7c5f1f56a52183f8f154be5750cb44bc29825.webp",
+  "Pole Stacker": "/home-assets/imports/Final-1/043c80512a640c617815f93fba4eac4d60617dfd.webp",
+  "Landscaping Equipment": "/home-assets/imports/Final-1/82aa72403df4827948c292a0322a06091d498468.webp",
+  "Agricultural Attachments": "/home-assets/imports/Final-1/7f60e1c3df8e63febda1944bedd2854950affd6e.webp",
+  "Aquatic Weed Harvester": "/home-assets/imports/Final-1/9b6af6ec8958651a036927ec24ff6cab560236ef.webp",
+  "Amphibious Excavator": "/home-assets/imports/Final-1/c2505b2efaf24ad9893f1179569e418a553b84cd.webp",
+  "Floating Pontoon": "/home-assets/imports/Final-1/9b6af6ec8958651a036927ec24ff6cab560236ef.webp",
 };
 
 const MENU_PRODUCTS: ProductCard[] = PRODUCTS.map((label) => ({
   label,
   displayLabel: label,
-  image: PRODUCT_IMAGE_MAP[label] ?? "/home-assets/imports/Final-1/282576ad5e8a2a7d8bdf398187b6cfa2059de92a.png",
+  image: PRODUCT_IMAGE_MAP[label] ?? "/home-assets/imports/Final-1/282576ad5e8a2a7d8bdf398187b6cfa2059de92a.webp",
 }));
 
 type GlobalHeaderClientProps = {

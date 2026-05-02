@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/home-assets/imports/Final-1/032f1530adf57211e22495cccd59ff0a6d6be4d0.png",
+        url: "/home-assets/imports/Final-1/032f1530adf57211e22495cccd59ff0a6d6be4d0.webp",
         width: 1200,
         height: 630,
         alt: "Autocracy Machinery heavy-duty trencher for infrastructure projects",
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     title: "Autocracy Machinery | Heavy Machinery & Trencher Manufacturer India",
     description:
       "Built for India: trenchers, utility excavation machines, and environmental equipment for critical infrastructure projects.",
-    images: ["/home-assets/imports/Final-1/032f1530adf57211e22495cccd59ff0a6d6be4d0.png"],
+    images: ["/home-assets/imports/Final-1/032f1530adf57211e22495cccd59ff0a6d6be4d0.webp"],
   },
   robots: {
     index: true,

@@ -109,7 +109,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
       name: "Autocracy Machinery",
       logo: {
         "@type": "ImageObject",
-        url: "https://www.autocracymachinery.com/logo.png",
+        url: "https://www.autocracymachinery.com/logo.webp",
       },
     },
   };

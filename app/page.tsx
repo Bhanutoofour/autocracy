@@ -43,80 +43,80 @@ const asset = "/home-assets/imports/Final-1/";
 const fallbackIndustries = [
   {
     title: "Agriculture",
-    image: "7f60e1c3df8e63febda1944bedd2854950affd6e.png",
+    image: "7f60e1c3df8e63febda1944bedd2854950affd6e.webp",
   },
   {
     title: "Construction",
-    image: "17685258b73f41282e6007005b6d9a993a08de26.png",
+    image: "17685258b73f41282e6007005b6d9a993a08de26.webp",
   },
   {
     title: "Landscaping",
-    image: "82aa72403df4827948c292a0322a06091d498468.png",
+    image: "82aa72403df4827948c292a0322a06091d498468.webp",
   },
   {
     title: "Water Conservation",
-    image: "9b6af6ec8958651a036927ec24ff6cab560236ef.png",
+    image: "9b6af6ec8958651a036927ec24ff6cab560236ef.webp",
   },
-  { title: "Solar", image: "d0c7c5f1f56a52183f8f154be5750cb44bc29825.png" },
+  { title: "Solar", image: "d0c7c5f1f56a52183f8f154be5750cb44bc29825.webp" },
   {
     title: "Army Or Defence",
-    image: "45e1522bd4ed8312223a50ebad220d15fc4e5524.png",
+    image: "45e1522bd4ed8312223a50ebad220d15fc4e5524.webp",
   },
   {
     title: "OFC Telecommunication",
-    image: "032f1530adf57211e22495cccd59ff0a6d6be4d0.png",
+    image: "032f1530adf57211e22495cccd59ff0a6d6be4d0.webp",
   },
   {
     title: "Water Management",
-    image: "9b6af6ec8958651a036927ec24ff6cab560236ef.png",
+    image: "9b6af6ec8958651a036927ec24ff6cab560236ef.webp",
   },
 ];
 
 const fallbackProducts = [
-  { name: "Trenchers", image: "282576ad5e8a2a7d8bdf398187b6cfa2059de92a.png" },
+  { name: "Trenchers", image: "282576ad5e8a2a7d8bdf398187b6cfa2059de92a.webp" },
   {
     name: "Wheel Trenchers",
-    image: "d0c7c5f1f56a52183f8f154be5750cb44bc29825.png",
+    image: "d0c7c5f1f56a52183f8f154be5750cb44bc29825.webp",
   },
   {
     name: "Walk Behind Trencher",
-    image: "6c90a6d63f96a270777ab13c4d1c1d927e332433.png",
+    image: "6c90a6d63f96a270777ab13c4d1c1d927e332433.webp",
   },
   {
     name: "Post Hole Digger",
-    image: "043c80512a640c617815f93fba4eac4d60617dfd.png",
+    image: "043c80512a640c617815f93fba4eac4d60617dfd.webp",
   },
   {
     name: "Attachments",
-    image: "7f60e1c3df8e63febda1944bedd2854950affd6e.png",
+    image: "7f60e1c3df8e63febda1944bedd2854950affd6e.webp",
   },
   {
     name: "Sand Filler",
-    image: "d0c7c5f1f56a52183f8f154be5750cb44bc29825.png",
+    image: "d0c7c5f1f56a52183f8f154be5750cb44bc29825.webp",
   },
   {
     name: "Pole Stacker",
-    image: "043c80512a640c617815f93fba4eac4d60617dfd.png",
+    image: "043c80512a640c617815f93fba4eac4d60617dfd.webp",
   },
   {
     name: "Landscaping Equipment",
-    image: "82aa72403df4827948c292a0322a06091d498468.png",
+    image: "82aa72403df4827948c292a0322a06091d498468.webp",
   },
   {
     name: "Agricultural Attachments",
-    image: "7f60e1c3df8e63febda1944bedd2854950affd6e.png",
+    image: "7f60e1c3df8e63febda1944bedd2854950affd6e.webp",
   },
   {
     name: "Aquatic Weed Harvester",
-    image: "9b6af6ec8958651a036927ec24ff6cab560236ef.png",
+    image: "9b6af6ec8958651a036927ec24ff6cab560236ef.webp",
   },
   {
     name: "Amphibious Excavator",
-    image: "c2505b2efaf24ad9893f1179569e418a553b84cd.png",
+    image: "c2505b2efaf24ad9893f1179569e418a553b84cd.webp",
   },
   {
     name: "Floating Pontoon",
-    image: "9b6af6ec8958651a036927ec24ff6cab560236ef.png",
+    image: "9b6af6ec8958651a036927ec24ff6cab560236ef.webp",
   },
 ];
 
@@ -236,90 +236,90 @@ const localizedHomeCopy = {
 >;
 
 const clients = [
-  { name: "MEIL", src: "/images/clients/meil.png", width: 220, height: 78 },
-  { name: "LARSEN & TOUBRO", src: "/images/clients/larsen-toubro.png", width: 220, height: 72 },
-  { name: "STL", src: "/images/clients/stl.png", width: 140, height: 64 },
-  { name: "BlueDrop Enviro", src: "/images/clients/bluedrop-enviro.png", width: 148, height: 74 },
-  { name: "HMDA", src: "/images/clients/hmda.png", width: 154, height: 74 },
+  { name: "MEIL", src: "/images/clients/meil.webp", width: 220, height: 78 },
+  { name: "LARSEN & TOUBRO", src: "/images/clients/larsen-toubro.webp", width: 220, height: 72 },
+  { name: "STL", src: "/images/clients/stl.webp", width: 140, height: 64 },
+  { name: "BlueDrop Enviro", src: "/images/clients/bluedrop-enviro.webp", width: 148, height: 74 },
+  { name: "HMDA", src: "/images/clients/hmda.webp", width: 154, height: 74 },
 ];
 
 const certifications = [
   {
     title: "Information Security Management System",
-    image: "20fb7c0a981653f0e648c11357f8d5e84d4bf80f.png",
+    image: "20fb7c0a981653f0e648c11357f8d5e84d4bf80f.webp",
   },
   {
     title: "Energy Management System",
-    image: "2c871ff8415db3797e1f3754fd16cd3e461d9ec4.png",
+    image: "2c871ff8415db3797e1f3754fd16cd3e461d9ec4.webp",
   },
   {
     title: "Environment Management System",
-    image: "b290301bdfbaf8815eaa4ccc4b373d50ad10a72c.png",
+    image: "b290301bdfbaf8815eaa4ccc4b373d50ad10a72c.webp",
   },
   {
     title: "Quality Management System",
-    image: "5a5fe0c5d1b94d43eec8084c6a5fe95c978f76c8.png",
+    image: "5a5fe0c5d1b94d43eec8084c6a5fe95c978f76c8.webp",
   },
   {
     title: "Occupational Health & Safety Management System",
-    image: "754cfb6a040601d6eed2b68c2c33b1bfd0d8f7a5.png",
+    image: "754cfb6a040601d6eed2b68c2c33b1bfd0d8f7a5.webp",
   },
   {
     title: "Zero Defect Zero Effect (ZED Bronze)",
-    image: "f98f85bff9744c11c44e13b942a4fb6cdabf572f.png",
+    image: "f98f85bff9744c11c44e13b942a4fb6cdabf572f.webp",
   },
 ];
 
 const awards = [
   {
     title: "National Start Up Award(NSA) 2023",
-    image: "3056053c919b3aff3851ac44bf1a0d364c1b7324.png",
+    image: "3056053c919b3aff3851ac44bf1a0d364c1b7324.webp",
   },
   {
     title: "COWE - Women Entrepreneur of the Year...",
-    image: "6f79ddcbbf2d6df60bdc72d10ee750b4062fe76d.png",
+    image: "6f79ddcbbf2d6df60bdc72d10ee750b4062fe76d.webp",
   },
   {
     title: "Business World Emerging Entrepreneur",
-    image: "4c8d790d9f0e269594d166de2a1f2bc31756cb7d.png",
+    image: "4c8d790d9f0e269594d166de2a1f2bc31756cb7d.webp",
   },
   {
     title: "Stanford Seed Spark Winner",
-    image: "28fe76fafbd6a96b61c2da01d6e43907611ed888.png",
+    image: "28fe76fafbd6a96b61c2da01d6e43907611ed888.webp",
   },
   {
     title: "IEDRA Excellence Award",
-    image: "e01088c2bc9dc1e016102c3d92b7aa506b5fe0d8.png",
+    image: "e01088c2bc9dc1e016102c3d92b7aa506b5fe0d8.webp",
   },
 ];
 
 const awardsGallery = [
-  "6b849aac67e51dd6efd614142f26a669baad2aef.png",
-  "1712120617244.jpg",
+  "6b849aac67e51dd6efd614142f26a669baad2aef.webp",
+  "1712120617244.webp",
 ];
 
 const fallbackStories = [
   {
-    image: "6f79ddcbbf2d6df60bdc72d10ee750b4062fe76d.png",
+    image: "6f79ddcbbf2d6df60bdc72d10ee750b4062fe76d.webp",
     title: "The Right Machine For The Right Job",
     excerpt:
       "Autocracy Machinery is India's leading manufacturer of speciality construction, agricultural and infrastructure machinery...",
   },
   {
-    image: "4c8d790d9f0e269594d166de2a1f2bc31756cb7d.png",
+    image: "4c8d790d9f0e269594d166de2a1f2bc31756cb7d.webp",
     title: "New age for agriculture, infrastructure sector",
     excerpt:
       "Autocracy Machinery was recognised for delivering purpose-built heavy machinery for agriculture and infrastructure...",
   },
   {
-    image: "e01088c2bc9dc1e016102c3d92b7aa506b5fe0d8.png",
+    image: "e01088c2bc9dc1e016102c3d92b7aa506b5fe0d8.webp",
     title:
       "15 Women-led Startups Pitched to 11 Investors in 3rd Edn. of TiE Women Pitch Competition",
     excerpt:
       "Visakhapatnam: In an industry where there is a rare presence of women, Santhoshi Buddh showcased innovation...",
   },
   {
-    image: "28fe76fafbd6a96b61c2da01d6e43907611ed888.png",
+    image: "28fe76fafbd6a96b61c2da01d6e43907611ed888.webp",
     title:
       "Santoshi, who stepped into an impossible field, overcame criticism, a...",
     excerpt:
@@ -329,25 +329,25 @@ const fallbackStories = [
 
 const fallbackStoriesHi = [
   {
-    image: "6f79ddcbbf2d6df60bdc72d10ee750b4062fe76d.png",
+    image: "6f79ddcbbf2d6df60bdc72d10ee750b4062fe76d.webp",
     title: "सही काम के लिए सही मशीन",
     excerpt:
       "Autocracy Machinery निर्माण, कृषि और इंफ्रास्ट्रक्चर परियोजनाओं के लिए उद्देश्य-आधारित मशीनों के निर्माण के लिए जानी जाती है...",
   },
   {
-    image: "4c8d790d9f0e269594d166de2a1f2bc31756cb7d.png",
+    image: "4c8d790d9f0e269594d166de2a1f2bc31756cb7d.webp",
     title: "कृषि और इंफ्रास्ट्रक्चर क्षेत्र के लिए नई दिशा",
     excerpt:
       "Autocracy Machinery को कृषि और इंफ्रास्ट्रक्चर के लिए उन्नत मशीनरी समाधान उपलब्ध कराने के लिए सराहा गया...",
   },
   {
-    image: "e01088c2bc9dc1e016102c3d92b7aa506b5fe0d8.png",
+    image: "e01088c2bc9dc1e016102c3d92b7aa506b5fe0d8.webp",
     title: "महिला-नेतृत्व वाले स्टार्टअप्स में इंजीनियरिंग नवाचार",
     excerpt:
       "महिला-नेतृत्व वाले स्टार्टअप्स में Autocracy Machinery को भारतीय इंजीनियरिंग उत्कृष्टता के उदाहरण के रूप में प्रस्तुत किया गया...",
   },
   {
-    image: "28fe76fafbd6a96b61c2da01d6e43907611ed888.png",
+    image: "28fe76fafbd6a96b61c2da01d6e43907611ed888.webp",
     title: "चुनौतियों के बीच निर्माण क्षेत्र में नई पहचान",
     excerpt:
       "Autocracy Machinery ने कठिन चुनौतियों के बीच नवाचार और गुणवत्ता के साथ अपनी मजबूत पहचान बनाई...",
@@ -374,7 +374,7 @@ function Logo() {
         className="h-auto w-full"
         height={150}
         priority
-        src="/logo.png"
+        src="/logo.webp"
         width={668}
       />
     </Link>
@@ -830,7 +830,7 @@ const organizationSchema = {
   name: "Autocracy Machinery",
   legalName: "Aceautocracy Machinery Pvt. Limited",
   url: "https://www.autocracymachinery.com/",
-  logo: "https://www.autocracymachinery.com/logo.png",
+  logo: "https://www.autocracymachinery.com/logo.webp",
   email: "sales@autocracymachinery.com",
   telephone: "+91 87904 73345",
   description:
@@ -948,7 +948,7 @@ export default async function Home() {
             title: "सिंगल चेन ट्रेंचर",
             description:
               "नई सीरीज़, जो 600 मिमी चौड़ाई और 1500 मिमी गहराई तक सटीक ट्रेंच प्रोफाइल के लिए डिज़ाइन की गई है।",
-            image: "032f1530adf57211e22495cccd59ff0a6d6be4d0.png",
+            image: "032f1530adf57211e22495cccd59ff0a6d6be4d0.webp",
             altText: "फील्ड साइट पर काम करता हुआ सिंगल चेन ट्रेंचर",
           },
         ]
@@ -958,7 +958,7 @@ export default async function Home() {
             title: "Single chain trencher",
             description:
               "New series designed for trench profiles upto 600mm in width and upto 1500mm in depth",
-            image: "032f1530adf57211e22495cccd59ff0a6d6be4d0.png",
+            image: "032f1530adf57211e22495cccd59ff0a6d6be4d0.webp",
             altText: "Single chain trencher working at a field site",
           },
         ];

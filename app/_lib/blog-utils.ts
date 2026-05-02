@@ -33,7 +33,7 @@ function decodeBasicEntities(value: string): string {
 
 export function resolveBlogImageSrc(value: string | null | undefined): string {
   const trimmed = value?.trim() ?? "";
-  if (!trimmed) return "/home-assets/imports/Final-1/032f1530adf57211e22495cccd59ff0a6d6be4d0.png";
+  if (!trimmed) return "/home-assets/imports/Final-1/032f1530adf57211e22495cccd59ff0a6d6be4d0.webp";
 
   if (/^https?:\/\//i.test(trimmed)) return trimmed;
   if (trimmed.startsWith("//")) return `https:${trimmed}`;

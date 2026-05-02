@@ -460,7 +460,7 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
     industryData.bannerImages?.[0]?.imageUrl
     || industryData.thumbnail
     || products[0]?.thumbnail
-    || "/home-assets/imports/Final-1/032f1530adf57211e22495cccd59ff0a6d6be4d0.png";
+    || "/home-assets/imports/Final-1/032f1530adf57211e22495cccd59ff0a6d6be4d0.webp";
   const heroImageAlt =
     industryData.bannerImages?.[0]?.altText
     || industryData.thumbnailAltText
