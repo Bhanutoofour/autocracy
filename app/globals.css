@@ -46,6 +46,23 @@ body {
   margin: 0;
 }
 
+:is(h1, h2) {
+  font-family: "Roboto Condensed", "Arial Narrow", Arial, Helvetica, sans-serif !important;
+  font-weight: 700 !important;
+  letter-spacing: 0;
+}
+
+:is(h3, h4, h5, h6) {
+  font-family: "Roboto Condensed", "Arial Narrow", Arial, Helvetica, sans-serif !important;
+  font-weight: 600 !important;
+  letter-spacing: 0;
+}
+
+p {
+  font-family: "Roboto", Arial, Helvetica, sans-serif !important;
+  font-weight: 400 !important;
+}
+
 a,
 button {
   cursor: pointer;
@@ -86,7 +103,9 @@ a {
 
 .figma-subheading {
   color: var(--muted-ink);
+  font-family: "Roboto Condensed", "Arial Narrow", Arial, Helvetica, sans-serif;
   font-size: 1rem;
+  font-weight: 600;
   letter-spacing: 0.9em;
   line-height: 1.5;
   text-transform: uppercase;
@@ -113,6 +132,12 @@ a {
   letter-spacing: 0;
   line-height: 105%;
   text-align: left;
+}
+
+.category-template :is(h3, h4, h5, h6) {
+  font-family: "Roboto Condensed", "Arial Narrow", Arial, Helvetica, sans-serif;
+  font-weight: 600;
+  letter-spacing: 0;
 }
 
 .category-template p {

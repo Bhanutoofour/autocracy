@@ -242,18 +242,18 @@ function ProductMenuCard({
 }
 
 const PRODUCT_IMAGE_MAP: Record<string, string> = {
-  Trenchers: "/home-assets/imports/Final-1/282576ad5e8a2a7d8bdf398187b6cfa2059de92a.webp",
-  "Wheel Trencher": "/home-assets/imports/Final-1/d0c7c5f1f56a52183f8f154be5750cb44bc29825.webp",
-  "Walk Behind Trencher": "/home-assets/imports/Final-1/6c90a6d63f96a270777ab13c4d1c1d927e332433.webp",
-  "Post Hole Digger": "/home-assets/imports/Final-1/043c80512a640c617815f93fba4eac4d60617dfd.webp",
-  Attachments: "/home-assets/imports/Final-1/7f60e1c3df8e63febda1944bedd2854950affd6e.webp",
-  "Sand Filler": "/home-assets/imports/Final-1/d0c7c5f1f56a52183f8f154be5750cb44bc29825.webp",
-  "Pole Stacker": "/home-assets/imports/Final-1/043c80512a640c617815f93fba4eac4d60617dfd.webp",
-  "Landscaping Equipment": "/home-assets/imports/Final-1/82aa72403df4827948c292a0322a06091d498468.webp",
-  "Agricultural Attachments": "/home-assets/imports/Final-1/7f60e1c3df8e63febda1944bedd2854950affd6e.webp",
-  "Aquatic Weed Harvester": "/home-assets/imports/Final-1/9b6af6ec8958651a036927ec24ff6cab560236ef.webp",
-  "Amphibious Excavator": "/home-assets/imports/Final-1/c2505b2efaf24ad9893f1179569e418a553b84cd.webp",
-  "Floating Pontoon": "/home-assets/imports/Final-1/9b6af6ec8958651a036927ec24ff6cab560236ef.webp",
+  Trenchers: "https://d3du1kxieyd1np.cloudfront.net/assets/products/chain_trenchers/product_image/rudra-100-xt.png",
+  "Wheel Trencher": "https://d3du1kxieyd1np.cloudfront.net/assets/products/wheel_trenchers/product_image/chakra-rs-100-road-cutter-machine.png",
+  "Walk Behind Trencher": "https://d3du1kxieyd1np.cloudfront.net/assets/products/mini_trenchers/product_image/portable-trencher.png",
+  "Post Hole Digger": "https://d3du1kxieyd1np.cloudfront.net/assets/products/pole_erection/product_image/post-hole-digger.png",
+  Attachments: "https://d3du1kxieyd1np.cloudfront.net/assets/products/forklift/product_image/forklift.png",
+  "Sand Filler": "https://d3du1kxieyd1np.cloudfront.net/assets/products/padding/product_image/padding-machine-sandfiller.png",
+  "Pole Stacker": "https://d3du1kxieyd1np.cloudfront.net/assets/products/pole_stacker/product_image/pole-stacker.png",
+  "Landscaping Equipment": "https://d3du1kxieyd1np.cloudfront.net/assets/products/sod_harvester/product_image/sod-harvester-machine.png",
+  "Agricultural Attachments": "https://d3du1kxieyd1np.cloudfront.net/assets/products/infielder/product_image/agriculture-infielder.png",
+  "Aquatic Weed Harvester": "https://d3du1kxieyd1np.cloudfront.net/assets/products/floating_trash_collector/product_image/aquatic-weed-harvester.png",
+  "Amphibious Excavator": "https://d3du1kxieyd1np.cloudfront.net/assets/products/Amphibious Excavator/amphibious_excavator_thumbnail.png",
+  "Floating Pontoon": "https://d3du1kxieyd1np.cloudfront.net/assets/products/Floating Excavation Platform/floating_excavation_platform_thumbnail.png",
 };
 
 const MENU_PRODUCTS: ProductCard[] = PRODUCTS.map((label) => ({
