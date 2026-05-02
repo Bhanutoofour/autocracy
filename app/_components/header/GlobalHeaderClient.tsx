@@ -355,7 +355,6 @@ export default function GlobalHeaderClient({ language, locale }: GlobalHeaderCli
                 className={`${navItemClass} ${
                   activeMenu === "industries" ? "text-[#b88900]" : "hover:text-[#b88900]"
                 }`}
-                onMouseEnter={() => setActiveMenu("industries")}
                 onClick={() => setActiveMenu((prev) => (prev === "industries" ? null : "industries"))}
                 type="button"
               >
@@ -369,7 +368,6 @@ export default function GlobalHeaderClient({ language, locale }: GlobalHeaderCli
                 className={`${navItemClass} ${
                   activeMenu === "products" ? "text-[#b88900]" : "hover:text-[#b88900]"
                 }`}
-                onMouseEnter={() => setActiveMenu("products")}
                 onClick={() => setActiveMenu((prev) => (prev === "products" ? null : "products"))}
                 type="button"
               >
@@ -422,7 +420,7 @@ export default function GlobalHeaderClient({ language, locale }: GlobalHeaderCli
                           : "border-transparent font-normal text-[#2b2b2e] hover:border-black/20"
                       }`}
                       key={industry}
-                      onMouseEnter={() => setActiveIndustry(industry)}
+                      onClick={() => setActiveIndustry(industry)}
                       type="button"
                     >
                       {translateIndustryLabel(industry, language)}
