@@ -60,6 +60,12 @@ export async function GET(req: NextRequest) {
 
         return {
           ...product,
+          menuOrder:
+            typeof product.seoMetadata === "object" &&
+            product.seoMetadata &&
+            "menuOrder" in product.seoMetadata
+              ? Number((product.seoMetadata as { menuOrder?: number }).menuOrder) || product.id
+              : product.id,
           industryIds: productIndustryIds.map((pi) => pi.industryId),
         };
       })

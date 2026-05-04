@@ -2,6 +2,7 @@ import {
   List,
   Datagrid,
   TextField,
+  NumberField,
   ImageField,
   BooleanField,
   DeleteButton,
@@ -38,6 +39,7 @@ export const ProductsList = () => {
     <List>
       <Datagrid bulkActionButtons={<ProductsBulkActionButtons />}>
         <TextField source="id" />
+        <NumberField source="menuOrder" label="Menu Order" />
         <TextField source="title" />
         <TextField source="description" />
         <ImageField source="thumbnail" />

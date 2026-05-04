@@ -2,6 +2,7 @@ import {
   Edit,
   SimpleForm,
   TextInput,
+  NumberInput,
   BooleanInput,
   ReferenceArrayInput,
   SelectArrayInput,
@@ -128,6 +129,7 @@ export const ProductsEdit = () => {
 
     // Transform SEO fields into seoMetadata object
     data.seoMetadata = {
+      menuOrder: Number(data.menuOrder) || 0,
       pageTitle: data.seoPageTitle,
       pageDescription: data.seoPageDescription,
       pageKeywords: data.seoPageKeywords,
@@ -155,6 +157,7 @@ export const ProductsEdit = () => {
 
     // Remove individual SEO fields
     delete data.seoPageTitle;
+    delete data.menuOrder;
     delete data.seoPageDescription;
     delete data.seoPageKeywords;
     delete data.seoSocialTitle;
@@ -205,6 +208,12 @@ export const ProductsEdit = () => {
         <div>
           <h3 style={{ textDecoration: "underline" }}>Basic Information</h3>
           <TextInput source="title" validate={required()} fullWidth />
+          <NumberInput
+            source="menuOrder"
+            label="Menu Order"
+            fullWidth
+            helperText="Lower numbers appear first in the header Products menu."
+          />
           <TextInput
             source="description"
             multiline

@@ -28,6 +28,7 @@ type ActiveProduct = {
   thumbnail: string;
   thumbnailAltText: string;
   active: boolean;
+  menuOrder?: number;
 };
 
 type ProductWithIndustries = {
@@ -36,6 +37,7 @@ type ProductWithIndustries = {
   thumbnail: string;
   thumbnailAltText: string;
   active: boolean;
+  menuOrder?: number;
   industries: string[];
 };
 
@@ -73,6 +75,7 @@ type IndustryDataType = {
   brochure: string;
   seoDescription?: string;
   seoMetadata?: {
+    menuOrder?: number;
     pageTitle?: string;
     pageDescription?: string;
     pageKeywords?: string;
@@ -101,6 +104,7 @@ type ProductDataType = {
   thumbnail: string;
   thumbnailAltText: string;
   series: string[];
+  menuOrder?: number;
   active: boolean | null;
   generalImage: string;
   generalImageAltText: string;
@@ -108,6 +112,7 @@ type ProductDataType = {
   models: Model[];
   seoDescription?: string;
   seoMetadata?: {
+    menuOrder?: number;
     pageTitle?: string;
     pageDescription?: string;
     pageKeywords?: string;

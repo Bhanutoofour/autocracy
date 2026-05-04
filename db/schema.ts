@@ -59,6 +59,7 @@ export const products = pgTable("products", {
   seoDescription: text("seo_description").notNull().default(""),
   // SEO Metadata for Product Category (Parent)
   seoMetadata: json("seo_metadata").$type<{
+    menuOrder?: number;
     pageTitle?: string;
     pageDescription?: string;
     pageKeywords?: string;

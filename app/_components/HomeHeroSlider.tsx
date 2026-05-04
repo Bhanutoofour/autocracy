@@ -82,7 +82,7 @@ export default function HomeHeroSlider({
 
       <div className="site-container relative flex min-h-[460px] items-end pb-8 pt-16 sm:min-h-[520px] sm:pb-10 lg:min-h-[590px] lg:pb-10 lg:pt-8">
         <div className="flex w-full max-w-[310px] flex-col items-start gap-4 sm:max-w-[480px] lg:max-w-[560px]">
-          <h1 className="max-w-[560px] whitespace-pre-line break-words font-[var(--font-roboto-condensed)] text-[34px] font-black leading-[1.04] tracking-normal text-white sm:text-[44px] lg:text-[52px]">
+          <h1 className="max-w-[560px] whitespace-pre-line break-words font-[var(--font-roboto-condensed)] text-[34px] font-black leading-[1.04] tracking-normal text-white sm:text-[40px] lg:text-[40px]">
             {activeSlide.title}
           </h1>
           <div className="w-full max-w-[520px]">

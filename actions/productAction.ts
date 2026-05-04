@@ -33,6 +33,20 @@ function warnProductDataError(context: string, error: unknown) {
   console.warn(`${context}: ${formatProductDataError(error)}`);
 }
 
+function getProductMenuOrder(product: { id: number; seoMetadata?: { menuOrder?: number } | null }) {
+  const value = Number(product.seoMetadata?.menuOrder);
+  return Number.isFinite(value) ? value : product.id;
+}
+
+function sortProductsForMenu<T extends { id: number; seoMetadata?: { menuOrder?: number } | null }>(
+  productRows: T[],
+): T[] {
+  return [...productRows].sort((a, b) => {
+    const orderDiff = getProductMenuOrder(a) - getProductMenuOrder(b);
+    return orderDiff || a.id - b.id;
+  });
+}
+
 const getActiveProductsCached = unstable_cache(
   async (): Promise<ActiveProduct[]> => {
     const result = await db
@@ -41,14 +55,16 @@ const getActiveProductsCached = unstable_cache(
         title: products.title,
         thumbnail: products.thumbnail,
         thumbnailAltText: products.thumbnailAltText,
+        seoMetadata: products.seoMetadata,
         active: products.active,
       })
       .from(products)
       .where(eq(products.active, true))
       .orderBy(products.id);
 
-    return result.map((product) => ({
+    return sortProductsForMenu(result).map((product) => ({
       ...product,
+      menuOrder: getProductMenuOrder(product),
       active: !!product.active,
     }));
   },
@@ -127,6 +143,7 @@ export const getProductsWithIndustries = async (
         title: products.title,
         thumbnail: products.thumbnail,
         thumbnailAltText: products.thumbnailAltText,
+        seoMetadata: products.seoMetadata,
         active: products.active,
       })
       .from(products)
@@ -134,7 +151,7 @@ export const getProductsWithIndustries = async (
       .orderBy(products.id);
 
     const productsWithIndustries = await Promise.all(
-      result.map(async (product) => {
+      sortProductsForMenu(result).map(async (product) => {
         const productIndustryRows = await db
           .select({ industryId: productIndustries.industryId })
           .from(productIndustries)
@@ -153,6 +170,7 @@ export const getProductsWithIndustries = async (
           ...localizeProductCard(
             {
               ...product,
+              menuOrder: getProductMenuOrder(product),
               active: !!product.active,
             },
             language,
@@ -338,6 +356,7 @@ export const getProductById = async (
         fallback: "Product image",
       }),
       series,
+      menuOrder: getProductMenuOrder(product),
       active: product.active,
       generalImage: product.generalImage,
       generalImageAltText: localizeDbText(product.generalImageAltText, language, {

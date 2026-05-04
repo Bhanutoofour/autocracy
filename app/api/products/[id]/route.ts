@@ -32,6 +32,12 @@ export async function GET(req: NextRequest) {
 
     // Create a new object with flattened seoMetadata for React Admin form
     const flattenedRecord: any = { ...record };
+    flattenedRecord.menuOrder =
+      typeof record.seoMetadata === "object" &&
+      record.seoMetadata &&
+      "menuOrder" in record.seoMetadata
+        ? Number((record.seoMetadata as { menuOrder?: number }).menuOrder) || record.id
+        : record.id;
 
     // Flatten seoMetadata for React Admin form
     if (record.seoMetadata) {
