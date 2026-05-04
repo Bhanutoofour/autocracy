@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
-import { Roboto_Condensed } from "next/font/google";
+import { Roboto, Roboto_Condensed } from "next/font/google";
 import JsonLd from "@/app/_components/JsonLd";
 import "./globals.css";
 
@@ -8,6 +8,13 @@ const robotoCondensed = Roboto_Condensed({
   subsets: ["latin"],
   variable: "--font-roboto-condensed",
   weight: ["400", "500", "600", "700", "800", "900"],
+  display: "swap",
+});
+
+const roboto = Roboto({
+  subsets: ["latin"],
+  variable: "--font-roboto",
+  weight: ["400"],
   display: "swap",
 });
 
@@ -88,7 +95,7 @@ export default async function RootLayout({
   return (
     <html
       lang={htmlLang}
-      className={`h-full antialiased ${robotoCondensed.variable}`}
+      className={`h-full antialiased ${robotoCondensed.variable} ${roboto.variable}`}
       data-scroll-behavior="smooth"
     >
       <body className="min-h-full flex flex-col">

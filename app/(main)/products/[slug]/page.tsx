@@ -479,10 +479,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <p className="font-[var(--font-roboto-condensed)] text-[14px] font-semibold uppercase leading-5 tracking-[0.35em] text-[#6b6f76]">
               {pageText.productCategory}
             </p>
-            <h1 className="mt-4 align-middle !font-['DaggerSquare',var(--font-roboto-condensed),sans-serif] text-[32px] !font-normal uppercase leading-[120%] tracking-[0] text-[#0a0a0b] [font-style:oblique]">
+            <h1 className="mt-4 align-middle font-[var(--font-roboto-condensed)] text-[44px] font-black uppercase leading-[105%] tracking-normal text-[#0a0a0b] sm:text-[56px]">
               {productData.title}
             </h1>
-            <p className="mt-5 max-w-[880px] font-[var(--font-roboto-condensed)] text-[14px] font-normal leading-[1.5] tracking-normal text-[#1f2937] sm:mt-6">
+            <p className="mt-5 max-w-[880px] font-[var(--font-roboto-condensed)] !text-[14px] !font-normal leading-[1.5] tracking-normal text-[#1f2937] sm:mt-6">
               {pageContent.heroDescription}
             </p>
             <div className="mt-7 flex flex-wrap gap-3">

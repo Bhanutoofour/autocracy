@@ -19,7 +19,11 @@ type HomeHeroSliderProps = {
 
 const AUTOPLAY_MS = 5000;
 
-export default function HomeHeroSlider({ slides, ctaLabel, assetBasePath }: HomeHeroSliderProps) {
+export default function HomeHeroSlider({
+  slides,
+  ctaLabel,
+  assetBasePath,
+}: HomeHeroSliderProps) {
   const normalizedSlides = useMemo(
     () =>
       slides.map((slide) => ({
@@ -31,7 +35,7 @@ export default function HomeHeroSlider({ slides, ctaLabel, assetBasePath }: Home
             ? slide.image
             : `${assetBasePath}${slide.image}`,
       })),
-    [slides, assetBasePath]
+    [slides, assetBasePath],
   );
 
   const [activeIndex, setActiveIndex] = useState(0);
@@ -47,7 +51,9 @@ export default function HomeHeroSlider({ slides, ctaLabel, assetBasePath }: Home
   if (normalizedSlides.length === 0) return null;
 
   const safeActiveIndex =
-    normalizedSlides.length > 0 ? activeIndex % normalizedSlides.length : activeIndex;
+    normalizedSlides.length > 0
+      ? activeIndex % normalizedSlides.length
+      : activeIndex;
   const activeSlide = normalizedSlides[safeActiveIndex];
 
   const goTo = (index: number) => {
@@ -79,9 +85,9 @@ export default function HomeHeroSlider({ slides, ctaLabel, assetBasePath }: Home
           <h1 className="font-[var(--font-roboto-condensed)] text-[32px] font-black leading-[1.05] tracking-normal text-white lg:text-[56px]">
             {activeSlide.title}
           </h1>
-          <p className="max-w-[720px] text-base font-normal leading-[1.4] tracking-normal text-white lg:text-[20px]">
+          <h4 className="max-w-[720px] !font-[var(--font-roboto)] text-[20px] !font-normal !leading-[140%] tracking-[0] text-white ![font-stretch:normal]">
             {activeSlide.description}
-          </p>
+          </h4>
           <Link
             className="flex h-11 w-[132px] items-center justify-center bg-[var(--brand-yellow)] px-4 text-center font-[var(--font-roboto-condensed)] text-[16px] font-semibold uppercase leading-5 tracking-normal text-[#0a0a0b] transition hover:brightness-95 lg:h-[60px] lg:w-[204px]"
             href="/in/en/contact-us"
@@ -113,7 +119,11 @@ export default function HomeHeroSlider({ slides, ctaLabel, assetBasePath }: Home
             {normalizedSlides.map((slide, index) => (
               <button
                 aria-label={`Go to slide ${index + 1}: ${slide.title}`}
-                className={index === safeActiveIndex ? "size-4 bg-white" : "size-2.5 bg-white/50"}
+                className={
+                  index === safeActiveIndex
+                    ? "size-4 bg-white"
+                    : "size-2.5 bg-white/50"
+                }
                 key={`${slide.title}-${index}`}
                 onClick={() => goTo(index)}
                 type="button"
