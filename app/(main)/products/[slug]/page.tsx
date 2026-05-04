@@ -452,7 +452,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   };
 
   return (
-    <main className="category-template bg-white">
+    <main className="category-template overflow-x-hidden bg-white">
       <JsonLd data={breadcrumbSchema} />
       <JsonLd data={productGroupSchema} />
       <JsonLd data={faqSchema} />
@@ -468,25 +468,25 @@ export default async function ProductPage({ params }: ProductPageProps) {
               {tUi(language, "products")}
             </Link>
             <span>/</span>
-            <span className="font-semibold text-[#0a0a0b]">{productData.title}</span>
+            <span className="min-w-0 break-words font-semibold text-[#0a0a0b]">{productData.title}</span>
           </nav>
         </div>
       </div>
 
       <section className="border-b border-black/10">
-        <div className="site-container grid gap-8 py-10 sm:py-12 lg:grid-cols-[minmax(0,1fr)_minmax(360px,0.85fr)] lg:items-center lg:py-16">
-          <div>
-            <p className="font-[var(--font-roboto-condensed)] text-[14px] font-semibold uppercase leading-5 tracking-[0.35em] text-[#6b6f76]">
+        <div className="site-container grid min-w-0 gap-7 py-8 sm:gap-8 sm:py-12 lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.85fr)] lg:items-center lg:py-16">
+          <div className="min-w-0">
+            <p className="break-words font-[var(--font-roboto-condensed)] text-[13px] font-semibold uppercase leading-5 tracking-[0.18em] text-[#6b6f76] sm:text-[14px] sm:tracking-[0.35em]">
               {pageText.productCategory}
             </p>
-            <h1 className="mt-4 align-middle font-[var(--font-roboto-condensed)] text-[44px] font-black uppercase leading-[105%] tracking-normal text-[#0a0a0b] sm:text-[56px]">
+            <h1 className="mt-3 break-words align-middle font-[var(--font-roboto-condensed)] text-[34px] font-black uppercase leading-[108%] tracking-normal text-[#0a0a0b] sm:mt-4 sm:text-[48px] lg:text-[56px]">
               {productData.title}
             </h1>
             <p className="mt-5 max-w-[880px] font-[var(--font-roboto-condensed)] !text-[14px] !font-normal leading-[1.5] tracking-normal text-[#1f2937] sm:mt-6">
               {pageContent.heroDescription}
             </p>
-            <div className="mt-7 flex flex-wrap gap-3">
-              <span className="rounded-full bg-[var(--brand-yellow)] px-4 py-2 font-[var(--font-roboto-condensed)] text-[14px] font-bold text-black">
+            <div className="mt-6 flex flex-wrap gap-2 sm:mt-7 sm:gap-3">
+              <span className="max-w-full break-words rounded-full bg-[var(--brand-yellow)] px-3 py-2 font-[var(--font-roboto-condensed)] text-[14px] font-bold text-black sm:px-4">
                 {productData.title}
               </span>
               <span className="rounded-full border border-black/15 bg-white px-4 py-2 font-[var(--font-roboto-condensed)] text-[14px] font-semibold text-[#0a0a0b]">
@@ -494,8 +494,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
               </span>
             </div>
           </div>
-          <div className="overflow-hidden rounded-[8px] border border-black/10 bg-[#f7f7f7]">
-            <div className="relative aspect-[4/3] min-h-[220px] w-full sm:min-h-0">
+          <div className="min-w-0 overflow-hidden rounded-[8px] border border-black/10 bg-[#f7f7f7]">
+            <div className="relative aspect-[4/3] min-h-[180px] w-full sm:min-h-[220px] lg:min-h-0">
               <Image
                 alt={heroImageAlt}
                 className="object-cover"
@@ -512,7 +512,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       <section className="site-container py-10 sm:py-12 lg:py-16">
         <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <h2 className="font-[var(--font-roboto-condensed)] text-[30px] font-bold leading-[1.15] tracking-normal text-[#0a0a0b] sm:text-[36px]">
+            <h2 className="break-words font-[var(--font-roboto-condensed)] text-[28px] font-bold leading-[1.15] tracking-normal text-[#0a0a0b] sm:text-[36px]">
               {pageText.availableModels}
             </h2>
             <p className="mt-2 font-[var(--font-roboto-condensed)] text-[16px] font-normal leading-6 tracking-normal text-[#5b6572]">
@@ -520,15 +520,15 @@ export default async function ProductPage({ params }: ProductPageProps) {
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
-            <div className="rounded border border-black/15 bg-white px-4 py-2 font-[var(--font-roboto-condensed)] text-[14px] font-normal leading-5 text-[#2d3642]">{pageText.allSeries}</div>
-            <div className="rounded border border-black/15 bg-white px-4 py-2 font-[var(--font-roboto-condensed)] text-[14px] font-normal leading-5 text-[#2d3642]">{pageText.allModels}</div>
+            <div className="rounded border border-black/15 bg-white px-3 py-2 font-[var(--font-roboto-condensed)] text-[14px] font-normal leading-5 text-[#2d3642] sm:px-4">{pageText.allSeries}</div>
+            <div className="rounded border border-black/15 bg-white px-3 py-2 font-[var(--font-roboto-condensed)] text-[14px] font-normal leading-5 text-[#2d3642] sm:px-4">{pageText.allModels}</div>
           </div>
         </div>
         {productData.models.length > 0 ? (
           <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             {productData.models.map((model) => (
               <Link
-                className="group flex flex-col overflow-hidden rounded-[8px] border border-black/10 bg-white transition hover:-translate-y-1 hover:border-[#f9c300] hover:shadow-xl"
+                className="group flex min-w-0 flex-col overflow-hidden rounded-[8px] border border-black/10 bg-white transition hover:-translate-y-1 hover:border-[#f9c300] hover:shadow-xl"
                 key={model.id}
                 href={localizeHref(`/products/${slug}/${modelNumberSlug(model.modelNumber)}`, locale)}
               >
@@ -538,21 +538,21 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   </span>
                   <Image
                     alt={model.thumbnailAltText || model.modelTitle}
-                    className="object-contain p-6 transition duration-500 group-hover:scale-105"
+                    className="object-contain p-4 transition duration-500 group-hover:scale-105 sm:p-6"
                     fill
                     sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                     src={model.thumbnail}
                   />
                 </div>
-                <div className="flex flex-1 flex-col p-5">
+                <div className="flex min-w-0 flex-1 flex-col p-4 sm:p-5">
                   <p className="font-[var(--font-roboto-condensed)] text-[14px] font-normal uppercase leading-5 tracking-normal text-[#6b6f76]">{model.machineType}</p>
-                  <h3 className="mt-1 align-middle !font-['DaggerSquare',var(--font-roboto-condensed),sans-serif] text-[28px] !font-normal uppercase leading-[120%] tracking-[0] text-[#0a0a0b] [font-style:oblique]">
+                  <h3 className="mt-1 break-words align-middle !font-['DaggerSquare',var(--font-roboto-condensed),sans-serif] text-[24px] !font-normal uppercase leading-[120%] tracking-[0] text-[#0a0a0b] [font-style:oblique] sm:text-[28px]">
                     {model.modelNumber}
                   </h3>
                   <p className="mt-1 font-[var(--font-roboto-condensed)] text-[15px] font-normal leading-6 tracking-normal text-[#2d3642]">{model.modelTitle}</p>
 
                   {model.keyFeatures.length > 0 ? (
-                    <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                    <div className="mt-5 grid gap-3 min-[440px]:grid-cols-2">
                       {model.keyFeatures.slice(0, 2).map((feature, index) => (
                         <div className="rounded bg-[#f5f5f5] p-3" key={`${model.id}-${feature.name}-${index}`}>
                           <p className="font-[var(--font-roboto-condensed)] text-[12px] font-normal leading-4 tracking-normal text-[#68717d]">{feature.name}</p>
@@ -563,7 +563,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   ) : null}
 
                   <div className="mt-auto pt-6">
-                    <span className="inline-flex h-12 items-center justify-center bg-[#020406] px-6 font-[var(--font-roboto-condensed)] text-[14px] font-semibold uppercase leading-5 tracking-[1px] text-[var(--brand-yellow)] transition group-hover:bg-[#1a1a1a]">
+                    <span className="inline-flex min-h-11 w-full items-center justify-center bg-[#020406] px-5 py-3 font-[var(--font-roboto-condensed)] text-[14px] font-semibold uppercase leading-5 tracking-[1px] text-[var(--brand-yellow)] transition group-hover:bg-[#1a1a1a] min-[440px]:w-auto">
                       {tUi(language, "view_model")}
                     </span>
                   </div>
@@ -578,7 +578,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
       <section className="border-y border-black/10 bg-[var(--section-gray)]">
         <div className="site-container py-10 sm:py-12 lg:py-16">
-          <h2 className="font-[var(--font-roboto-condensed)] text-[36px] font-bold leading-[1.12] tracking-normal text-[#0a0a0b] sm:text-[44px]">
+          <h2 className="break-words font-[var(--font-roboto-condensed)] text-[30px] font-bold leading-[1.12] tracking-normal text-[#0a0a0b] sm:text-[44px]">
             {pageContent.aboutTitle}
           </h2>
           <p className="mt-4 max-w-[940px] font-[var(--font-roboto-condensed)] text-[16px] font-normal leading-7 tracking-normal text-[#1f2937]">
@@ -590,11 +590,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
               { heading: pageText.contentSections[1], points: pageContent.features.slice(0, 3) },
               { heading: pageText.contentSections[2], points: pageContent.aboutExpandedBody.slice(0, 3) },
             ].map((section, sectionIndex) => (
-              <article className="rounded-[8px] border border-black/10 bg-white p-6" key={section.heading}>
+              <article className="min-w-0 rounded-[8px] border border-black/10 bg-white p-5 sm:p-6" key={section.heading}>
                 <div className="flex h-10 w-10 items-center justify-center rounded bg-[var(--brand-yellow)] text-black">
                   <CheckIcon className="h-5 w-5" />
                 </div>
-                <h3 className="mt-5 font-[var(--font-roboto-condensed)] text-[24px] font-bold leading-[1.2] tracking-normal text-[#0a0a0b]">
+                <h3 className="mt-5 break-words font-[var(--font-roboto-condensed)] text-[22px] font-bold leading-[1.2] tracking-normal text-[#0a0a0b] sm:text-[24px]">
                   {section.heading}
                 </h3>
                 <ul className="mt-5 space-y-4 font-[var(--font-roboto-condensed)] text-[15px] font-normal leading-7 tracking-normal text-[#1f2937]">
@@ -613,7 +613,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
       <section className="bg-black py-10 text-white sm:py-12 lg:py-16">
         <div className="site-container text-center">
-          <h2 className="font-[var(--font-roboto-condensed)] text-[32px] font-bold uppercase leading-tight tracking-normal sm:text-[42px]">
+          <h2 className="break-words font-[var(--font-roboto-condensed)] text-[28px] font-bold uppercase leading-tight tracking-normal sm:text-[42px]">
             {pageText.ctaHeading}
           </h2>
           <p className="mx-auto mt-4 max-w-2xl font-[var(--font-roboto-condensed)] text-[16px] font-normal leading-7 text-white/75">
@@ -621,14 +621,14 @@ export default async function ProductPage({ params }: ProductPageProps) {
           </p>
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row sm:flex-wrap">
             <Link
-              className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded bg-[var(--brand-yellow)] px-5 py-3 font-[var(--font-roboto-condensed)] text-[14px] font-bold uppercase tracking-[0.04em] text-black"
+              className="inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded bg-[var(--brand-yellow)] px-5 py-3 font-[var(--font-roboto-condensed)] text-[14px] font-bold uppercase tracking-[0.04em] text-black sm:w-auto"
               href={localizeHref("/contact-us", locale)}
             >
               {tUi(language, "contact_us")}
               <ArrowRightIcon className="h-4 w-4" />
             </Link>
             <Link
-              className="inline-flex min-h-[48px] items-center justify-center rounded border border-white/35 px-5 py-3 font-[var(--font-roboto-condensed)] text-[14px] font-bold uppercase tracking-[0.04em] text-white"
+              className="inline-flex min-h-[48px] w-full items-center justify-center rounded border border-white/35 px-5 py-3 font-[var(--font-roboto-condensed)] text-[14px] font-bold uppercase tracking-[0.04em] text-white sm:w-auto"
               href={localizeHref("/brochure", locale)}
             >
               {pageText.brochure}
@@ -644,8 +644,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
           </h2>
           <div className="mx-auto mt-10 grid max-w-[1120px] gap-6">
             {faqs.map((faq, index) => (
-              <article className="rounded-[8px] border border-black/10 bg-white p-7" key={`faq-${index}`}>
-                <h3 className="font-[var(--font-roboto-condensed)] text-[22px] font-bold leading-[1.2] tracking-normal text-[#050506]">{faq.question}</h3>
+              <article className="min-w-0 rounded-[8px] border border-black/10 bg-white p-5 sm:p-7" key={`faq-${index}`}>
+                <h3 className="break-words font-[var(--font-roboto-condensed)] text-[20px] font-bold leading-[1.2] tracking-normal text-[#050506] sm:text-[22px]">{faq.question}</h3>
                 <p className="mt-4 font-[var(--font-roboto-condensed)] text-[16px] font-normal leading-7 tracking-normal text-[#384351]">{faq.answer}</p>
               </article>
             ))}

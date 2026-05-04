@@ -203,7 +203,7 @@ export default async function UniversalFooter() {
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 lg:gap-10">
             {footerMenus.map((links, columnIndex) => (
               <div
-                className="font-[var(--font-roboto-condensed)] text-[12px] font-normal leading-[1.5] tracking-normal text-white/90"
+                className="font-[var(--font-roboto-condensed)] text-[16px] font-normal leading-[1.5] tracking-normal text-white/90"
                 key={`footer-col-${columnIndex + 1}`}
               >
                 <h3 className="mb-3 text-[13px] font-semibold uppercase tracking-[0.04em] text-white">

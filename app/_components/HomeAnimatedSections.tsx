@@ -230,8 +230,11 @@ export function AnimatedTestimonialsSection({
                 className="testimonial-card flex min-h-[366px] flex-col bg-white px-7 py-7 lg:px-8"
                 key={`${testimonial.name}-${testimonial.location}`}
               >
-                <div className="mb-7 text-[88px] font-black leading-[0.45] text-[var(--brand-yellow)]">
-                  &quot;
+                <div
+                  aria-hidden="true"
+                  className="mb-7 font-[Arial,sans-serif] text-[92px] font-black leading-[0.48] text-[var(--brand-yellow)]"
+                >
+                  ”
                 </div>
                 <p className="font-[var(--font-roboto-condensed)] text-[16px] font-normal leading-6 tracking-normal text-[#1f2024]">
                   {testimonial.quote}

@@ -206,14 +206,23 @@ a {
 }
 
 .award-card {
+  justify-content: center !important;
   flex: 0 0 calc((100% - 12px) / 2);
-  min-height: clamp(170px, 20vw, 196px);
+  min-height: clamp(210px, 23vw, 240px);
+  padding-block: 1.25rem;
+  padding-bottom: 1.25rem !important;
   scroll-snap-align: start;
 }
 
 .award-logo-slot {
-  height: clamp(56px, 9vw, 72px);
-  width: clamp(120px, 20vw, 150px);
+  height: clamp(92px, 12vw, 124px);
+  margin-bottom: 1.25rem !important;
+  width: clamp(190px, 25vw, 250px);
+}
+
+.award-logo-slot img {
+  object-position: center;
+  transform: scale(1.12);
 }
 
 .award-title {
@@ -264,8 +273,8 @@ a {
 
 .testimonial-card {
   flex: 0 0 82vw;
-  border: 1px solid #ece8dc;
-  border-radius: 24px;
+  border: 0;
+  border-radius: 0;
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
   scroll-snap-align: start;
   transition: transform 220ms ease, box-shadow 220ms ease;
@@ -289,7 +298,7 @@ a {
 
   .award-card {
     flex-basis: calc((100% - 24px) / 2);
-    min-height: 184px;
+    min-height: 240px;
   }
 
   .awards-photo-frame {

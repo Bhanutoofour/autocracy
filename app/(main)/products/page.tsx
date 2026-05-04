@@ -39,19 +39,19 @@ export default async function ProductsListingPage() {
     productSlug(sourceProductById.get(product.id)?.title ?? product.title ?? "");
 
   return (
-    <main className="site-container py-12">
-      <h1 className="font-[var(--font-roboto-condensed)] text-4xl font-bold uppercase text-[#0a0a0b]">
+    <main className="site-container overflow-x-hidden py-8 sm:py-10 lg:py-12">
+      <h1 className="break-words font-[var(--font-roboto-condensed)] text-[32px] font-bold uppercase leading-[1.05] text-[#0a0a0b] sm:text-4xl">
         {tUi(language, "products")}
       </h1>
       {products.length > 0 ? (
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-6 grid gap-4 sm:mt-8 sm:grid-cols-2 lg:grid-cols-3">
           {products.map((product) => (
             <Link
-              className="rounded-md border border-black/15 bg-white p-4 transition hover:border-black/35"
+              className="min-w-0 rounded-md border border-black/15 bg-white p-3 transition hover:border-black/35 sm:p-4"
               href={localizeHref(`/products/${productRouteSlug(product)}`, locale)}
               key={product.id}
             >
-              <div className="relative h-[180px] w-full overflow-hidden rounded bg-[#f5f5f5]">
+              <div className="relative h-[150px] w-full overflow-hidden rounded bg-[#f5f5f5] sm:h-[180px]">
                 <Image
                   alt={product.thumbnailAltText || product.title || "Product"}
                   className="object-contain"
@@ -60,7 +60,7 @@ export default async function ProductsListingPage() {
                   src={product.thumbnail}
                 />
               </div>
-              <h2 className="mt-4 align-middle !font-['DaggerSquare',var(--font-roboto-condensed),sans-serif] text-[32px] !font-normal uppercase leading-[120%] tracking-[0] text-[#111113] [font-style:oblique]">
+              <h2 className="mt-4 break-words align-middle !font-['DaggerSquare',var(--font-roboto-condensed),sans-serif] text-[24px] !font-normal uppercase leading-[120%] tracking-[0] text-[#111113] [font-style:oblique] sm:text-[32px]">
                 {product.title}
               </h2>
             </Link>

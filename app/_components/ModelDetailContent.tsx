@@ -314,7 +314,7 @@ export default function ModelDetailContent({
   ];
 
   return (
-    <main className="bg-white">
+    <main className="overflow-x-hidden bg-white">
       <div className="border-b border-black/10 bg-[#f5f5f5]">
         <div className="site-container py-4">
           <nav className="flex flex-wrap items-center gap-2 text-sm text-[#5b6572]">
@@ -326,38 +326,38 @@ export default function ModelDetailContent({
               {backLabel}
             </Link>
             <span>/</span>
-            <span className="font-semibold text-[#0a0a0b]">{modelData.modelNumber}</span>
+            <span className="min-w-0 break-words font-semibold text-[#0a0a0b]">{modelData.modelNumber}</span>
           </nav>
         </div>
       </div>
 
-      <section className="site-container py-8 lg:py-16">
-        <div className="grid gap-10 lg:grid-cols-[minmax(468px,1.2fr)_minmax(0,0.8fr)]">
-          <div className="lg:sticky lg:top-24 lg:self-start">
+      <section className="site-container py-7 sm:py-8 lg:py-16">
+        <div className="grid min-w-0 gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:gap-10">
+          <div className="min-w-0 lg:sticky lg:top-24 lg:self-start">
             <ModelMediaGallery badge={modelData.series} slides={mediaSlides} />
 
             {primaryFeatures.length > 0 ? (
-              <div className="mt-5 grid grid-cols-3 gap-3">
+              <div className="mt-4 grid gap-2 min-[420px]:grid-cols-3 sm:mt-5 sm:gap-3">
                 {primaryFeatures.slice(0, 3).map((feature, index) => (
-                  <div className="rounded-[8px] bg-[#f5f5f5] p-3 text-center" key={`${feature.name}-quick-${index}`}>
-                    <p className="text-[14px] text-[#68717d]">{feature.name}</p>
-                    <p className="mt-1 text-sm font-semibold text-[#0e1116]">{feature.value}</p>
+                  <div className="min-w-0 rounded-[8px] bg-[#f5f5f5] p-3 text-center" key={`${feature.name}-quick-${index}`}>
+                    <p className="break-words text-[13px] text-[#68717d] sm:text-[14px]">{feature.name}</p>
+                    <p className="mt-1 break-words text-sm font-semibold text-[#0e1116]">{feature.value}</p>
                   </div>
                 ))}
               </div>
             ) : null}
           </div>
 
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#6b6f76]">
+          <div className="min-w-0">
+            <p className="break-words text-sm font-semibold uppercase tracking-[0.12em] text-[#6b6f76] sm:tracking-[0.18em]">
               {modelData.productName}
             </p>
-            <h1 className="mt-3 align-middle !font-['DaggerSquare',var(--font-roboto-condensed),sans-serif] text-[32px] !font-normal uppercase leading-[120%] tracking-[0] text-[#0a0a0b] [font-style:oblique]">
+            <h1 className="mt-3 break-words align-middle !font-['DaggerSquare',var(--font-roboto-condensed),sans-serif] text-[28px] !font-normal uppercase leading-[120%] tracking-[0] text-[#0a0a0b] [font-style:oblique] sm:text-[32px]">
               {modelData.modelNumber || modelData.modelTitle}
             </h1>
-            <p className="mt-3 text-[24px] leading-[1.2] text-[#4b5662]">
-              {modelData.modelTitle}
-              <span className="px-2 text-[#f9c300]">|</span>
+            <p className="mt-3 flex flex-col gap-1 break-words text-[19px] leading-[1.25] text-[#4b5662] min-[480px]:block sm:text-[24px]">
+              <span>{modelData.modelTitle}</span>
+              <span className="hidden px-2 text-[#f9c300] min-[480px]:inline">|</span>
               <span className="font-semibold text-[#0a0a0b]">{modelData.machineType}</span>
             </p>
 
@@ -377,7 +377,7 @@ export default function ModelDetailContent({
                 <div className="mt-3 flex flex-wrap gap-2">
                   {industryContext.highlights.slice(0, 4).map((item, index) => (
                     <span
-                      className="rounded-full border border-black/15 bg-[#f5f5f5] px-4 py-2 text-sm text-[#0a0a0b]"
+                      className="max-w-full break-words rounded-full border border-black/15 bg-[#f5f5f5] px-3 py-2 text-sm text-[#0a0a0b] sm:px-4"
                       key={`${industryContext.industryLabel}-pill-${index}`}
                     >
                       {item}
@@ -387,16 +387,16 @@ export default function ModelDetailContent({
               </div>
             ) : null}
 
-            <div className="mt-9 flex flex-wrap gap-3">
+            <div className="mt-7 flex flex-col gap-3 min-[480px]:flex-row min-[480px]:flex-wrap sm:mt-9">
               <Link
-                className="inline-flex min-h-[56px] min-w-[190px] items-center justify-center gap-2 rounded-[4px] bg-[#f9c300] px-6 py-3 text-[14px] font-bold uppercase tracking-[0.04em] !text-[#0a0a0b] transition hover:brightness-95 [&_*]:!text-[#0a0a0b]"
+                className="inline-flex min-h-[50px] w-full items-center justify-center gap-2 rounded-[4px] bg-[#f9c300] px-5 py-3 text-[14px] font-bold uppercase tracking-[0.04em] !text-[#0a0a0b] transition hover:brightness-95 min-[480px]:w-auto min-[480px]:min-w-[170px] sm:min-h-[56px] sm:min-w-[190px] sm:px-6 [&_*]:!text-[#0a0a0b]"
                 href={contactHref}
               >
                 {messages.common.getQuote}
                 <ArrowRightIcon className="size-4" />
               </Link>
               <Link
-                className="inline-flex min-h-[56px] min-w-[190px] items-center justify-center gap-2 rounded-[4px] border border-black/25 bg-white px-6 py-3 text-[14px] font-bold uppercase tracking-[0.04em] !text-[#0a0a0b] transition hover:bg-[#f5f5f5] [&_*]:!text-[#0a0a0b]"
+                className="inline-flex min-h-[50px] w-full items-center justify-center gap-2 rounded-[4px] border border-black/25 bg-white px-5 py-3 text-[14px] font-bold uppercase tracking-[0.04em] !text-[#0a0a0b] transition hover:bg-[#f5f5f5] min-[480px]:w-auto min-[480px]:min-w-[170px] sm:min-h-[56px] sm:min-w-[190px] sm:px-6 [&_*]:!text-[#0a0a0b]"
                 href={brochureHref}
                 target={brochureHref.startsWith("http") ? "_blank" : undefined}
               >
@@ -410,11 +410,11 @@ export default function ModelDetailContent({
 
       {industryContext ? (
         <section className="site-container mt-8">
-          <div className="rounded-[8px] border border-black/10 bg-[#fbfbfb] px-5 py-6 sm:px-6">
+          <div className="min-w-0 rounded-[8px] border border-black/10 bg-[#fbfbfb] px-4 py-6 sm:px-6">
             <p className="text-[14px] font-semibold uppercase tracking-[0.14em] text-[#66707d]">
               {industryContext.industryLabel}
             </p>
-            <h2 className="mt-2 font-[var(--font-roboto-condensed)] text-[24px] font-bold leading-[1.15] text-[#0a0a0b]">
+            <h2 className="mt-2 break-words font-[var(--font-roboto-condensed)] text-[22px] font-bold leading-[1.15] text-[#0a0a0b] sm:text-[24px]">
               {industryContext.heading}
             </h2>
             <p className="mt-3 text-[14px] leading-6 text-[#2d3642]">{industryContext.summary}</p>
@@ -424,7 +424,7 @@ export default function ModelDetailContent({
                   <span className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded bg-[#f9c300] text-black">
                     <CheckIcon className="size-4" />
                   </span>
-                  <span>{item}</span>
+                  <span className="min-w-0 break-words">{item}</span>
                 </li>
               ))}
             </ul>
@@ -435,16 +435,16 @@ export default function ModelDetailContent({
       {detailRows.length > 0 ? (
         <section className="mt-10 border-y border-black/10 bg-[#f5f5f5]">
           <div className="site-container py-10 lg:py-14">
-            <h2 className="font-[var(--font-roboto-condensed)] text-[24px] font-bold leading-[1.15] text-[#0a0a0b]">
+            <h2 className="break-words font-[var(--font-roboto-condensed)] text-[22px] font-bold leading-[1.15] text-[#0a0a0b] sm:text-[24px]">
               {specsHeading}
             </h2>
             <p className="mt-3 max-w-[860px] text-[14px] leading-6 text-[#2d3642]">{specsParagraph}</p>
 
-            <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-6 grid gap-3 sm:mt-8 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
                 {detailRows.map((feature, index) => (
-                  <div className="rounded-[8px] border border-black/10 bg-white p-5" key={`${feature.name}-table-${index}`}>
-                    <p className="text-sm text-[#68717d]">{feature.name}</p>
-                    <p className="mt-1 text-[14px] font-semibold text-[#0e1116]">{feature.value}</p>
+                  <div className="min-w-0 rounded-[8px] border border-black/10 bg-white p-4 sm:p-5" key={`${feature.name}-table-${index}`}>
+                    <p className="break-words text-sm text-[#68717d]">{feature.name}</p>
+                    <p className="mt-1 break-words text-[14px] font-semibold text-[#0e1116]">{feature.value}</p>
                   </div>
                 ))}
             </div>
@@ -455,21 +455,21 @@ export default function ModelDetailContent({
       {featureCards.length > 0 ? (
         <section className="site-container py-12 lg:py-16">
           <div>
-            <h2 className="font-[var(--font-roboto-condensed)] text-[24px] font-bold leading-[1.15] tracking-normal text-[#0a0a0b]">
+            <h2 className="break-words font-[var(--font-roboto-condensed)] text-[22px] font-bold leading-[1.15] tracking-normal text-[#0a0a0b] sm:text-[24px]">
               Key Features
             </h2>
             <p className="mt-2 font-[var(--font-roboto-condensed)] text-[14px] font-normal leading-6 tracking-normal text-[#384351]">
               Discover what makes the {modelData.modelNumber} stand out from the competition
             </p>
           </div>
-          <div className="mt-10 grid gap-x-12 gap-y-11 md:grid-cols-2 xl:grid-cols-3">
+          <div className="mt-8 grid gap-7 md:grid-cols-2 lg:gap-x-12 lg:gap-y-11 xl:grid-cols-3">
             {featureCards.map((feature, index) => (
-              <article className="flex gap-5" key={`key-feature-${index}`}>
-                <span className="grid size-[50px] shrink-0 place-items-center rounded-[8px] bg-[#fff8df] text-[var(--brand-yellow)]">
+              <article className="flex min-w-0 gap-4 sm:gap-5" key={`key-feature-${index}`}>
+                <span className="grid size-11 shrink-0 place-items-center rounded-[8px] bg-[#fff8df] text-[var(--brand-yellow)] sm:size-[50px]">
                   <CheckIcon className="size-5" />
                 </span>
-                <div>
-                  <h3 className="font-[var(--font-roboto-condensed)] text-[24px] font-bold leading-[1.15] tracking-normal text-[#0a0a0b]">
+                <div className="min-w-0">
+                  <h3 className="break-words font-[var(--font-roboto-condensed)] text-[20px] font-bold leading-[1.15] tracking-normal text-[#0a0a0b] sm:text-[24px]">
                     {feature.name}
                   </h3>
                   <p className="mt-3 font-[var(--font-roboto-condensed)] text-[14px] font-normal leading-6 tracking-normal text-[#384351]">
@@ -497,7 +497,7 @@ export default function ModelDetailContent({
                   <span className="mt-1 flex size-6 shrink-0 items-center justify-center rounded-full border-2 border-[var(--brand-yellow)] text-[var(--brand-yellow)]">
                     <CheckIcon className="size-3.5" />
                   </span>
-                  <span>{point}</span>
+                  <span className="min-w-0 break-words">{point}</span>
                 </li>
               ))}
             </ul>
@@ -515,7 +515,7 @@ export default function ModelDetailContent({
                   <span className="mt-1 flex size-6 shrink-0 items-center justify-center rounded-full border-2 border-[var(--brand-yellow)] text-[var(--brand-yellow)]">
                     <CheckIcon className="size-3.5" />
                   </span>
-                  <span>{point}</span>
+                  <span className="min-w-0 break-words">{point}</span>
                 </li>
               ))}
             </ul>
@@ -535,8 +535,8 @@ export default function ModelDetailContent({
           </div>
           <div className="mt-8 grid gap-5">
             {faqItems.map((faq, index) => (
-              <article className="rounded-[8px] border border-black/10 bg-[var(--section-gray)] p-6" key={`model-faq-${index}`}>
-                <h3 className="font-[var(--font-roboto-condensed)] text-[24px] font-bold leading-[1.15] text-[#0a0a0b]">
+              <article className="min-w-0 rounded-[8px] border border-black/10 bg-[var(--section-gray)] p-5 sm:p-6" key={`model-faq-${index}`}>
+                <h3 className="break-words font-[var(--font-roboto-condensed)] text-[20px] font-bold leading-[1.15] text-[#0a0a0b] sm:text-[24px]">
                   {faq.question}
                 </h3>
                 <p className="mt-2 text-[14px] leading-6 text-[#384351]">{faq.answer}</p>
@@ -547,15 +547,15 @@ export default function ModelDetailContent({
       </section>
 
       <section className="site-container mt-10">
-        <div className="rounded-[8px] bg-[var(--brand-yellow)] px-6 py-10 text-center">
-        <h2 className="font-[var(--font-roboto-condensed)] text-[24px] font-bold leading-[1.15] text-[#0a0a0b]">
+        <div className="min-w-0 rounded-[8px] bg-[var(--brand-yellow)] px-4 py-8 text-center sm:px-6 sm:py-10">
+        <h2 className="break-words font-[var(--font-roboto-condensed)] text-[22px] font-bold leading-[1.15] text-[#0a0a0b] sm:text-[24px]">
           {isHindi
             ? `${modelData.modelTitle} ?? ??? ???? ??????????? ?? ??? ???? ?? ??? ????? ????`
             : `Ready to power up your projects with ${modelData.modelTitle}?`}
         </h2>
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+        <div className="mt-6 flex flex-col items-stretch justify-center gap-3 min-[440px]:flex-row min-[440px]:flex-wrap min-[440px]:items-center">
           <Link
-            className="button-gold-text inline-flex min-h-[44px] items-center rounded bg-black px-4 py-2 text-sm font-semibold uppercase tracking-[0.03em] !text-[#f9c300]"
+            className="button-gold-text inline-flex min-h-[44px] items-center justify-center rounded bg-black px-4 py-2 text-sm font-semibold uppercase tracking-[0.03em] !text-[#f9c300]"
             href={brochureHref}
             target={brochureHref.startsWith("http") ? "_blank" : undefined}
           >
@@ -565,7 +565,7 @@ export default function ModelDetailContent({
             </span>
           </Link>
           <Link
-            className="inline-flex min-h-[44px] items-center rounded border border-black/35 bg-white px-4 py-2 text-sm font-semibold uppercase tracking-[0.03em] text-[#0a0a0b]"
+            className="inline-flex min-h-[44px] items-center justify-center rounded border border-black/35 bg-white px-4 py-2 text-sm font-semibold uppercase tracking-[0.03em] text-[#0a0a0b]"
             href={contactHref}
           >
             {messages.common.getQuote}
@@ -576,14 +576,14 @@ export default function ModelDetailContent({
 
       {relatedModels.length > 0 ? (
         <section className="site-container mt-10">
-          <h2 className="font-[var(--font-roboto-condensed)] text-[24px] font-bold leading-[1.15] text-[#0a0a0b]">
+          <h2 className="break-words font-[var(--font-roboto-condensed)] text-[22px] font-bold leading-[1.15] text-[#0a0a0b] sm:text-[24px]">
             {isHindi
               ? `${modelData.series} ?????? ??? ?? ????`
               : `More Models in ${modelData.series} Series`}
           </h2>
           <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {relatedModels.map((model) => (
-              <article className="rounded border border-black/10 bg-white p-4" key={model.id}>
+              <article className="min-w-0 rounded border border-black/10 bg-white p-4" key={model.id}>
                 <div className="relative overflow-hidden rounded bg-[#f5f5f5]">
                   <div className="relative aspect-[16/9] w-full">
                     <Image
@@ -596,7 +596,7 @@ export default function ModelDetailContent({
                   </div>
                 </div>
                 <p className="mt-4 text-sm uppercase tracking-[0.08em] text-[#5b6572]">{model.machineType}</p>
-                <h3 className="mt-1 align-middle !font-['DaggerSquare',var(--font-roboto-condensed),sans-serif] text-[28px] !font-normal uppercase leading-[120%] tracking-[0] text-[#0e1116] [font-style:oblique]">{model.modelNumber}</h3>
+                <h3 className="mt-1 break-words align-middle !font-['DaggerSquare',var(--font-roboto-condensed),sans-serif] text-[24px] !font-normal uppercase leading-[120%] tracking-[0] text-[#0e1116] [font-style:oblique] sm:text-[28px]">{model.modelNumber}</h3>
                 <p className="mt-1 text-[14px] leading-6 text-[#2f3a47]">{model.modelTitle}</p>
 
                 {model.keyFeatures.length > 0 ? (
@@ -622,10 +622,10 @@ export default function ModelDetailContent({
       ) : null}
 
       <div className="site-container mt-10 flex flex-wrap gap-3 pb-12">
-        <Link className="button-gold-text rounded bg-black px-4 py-2 font-semibold !text-[#f9c300]" href={backHref}>
+        <Link className="button-gold-text w-full rounded bg-black px-4 py-2 text-center font-semibold !text-[#f9c300] min-[440px]:w-auto" href={backHref}>
           {backLabel}
         </Link>
-        <Link className="rounded border border-black/25 px-4 py-2 font-semibold" href={contactHref}>
+        <Link className="w-full rounded border border-black/25 px-4 py-2 text-center font-semibold min-[440px]:w-auto" href={contactHref}>
           {tUi(language, "contact_us")}
         </Link>
       </div>
@@ -633,7 +633,7 @@ export default function ModelDetailContent({
       <section className="border-t border-black/10 bg-[var(--section-gray)] py-12 lg:py-16">
         <div className="site-container">
           <div className="mx-auto max-w-4xl">
-            <h2 className="font-[var(--font-roboto-condensed)] text-[24px] font-bold leading-[1.15] text-[#0a0a0b]">
+            <h2 className="break-words font-[var(--font-roboto-condensed)] text-[22px] font-bold leading-[1.15] text-[#0a0a0b] sm:text-[24px]">
               About the {modelData.modelNumber} from Autocracy Machinery
             </h2>
             <div className="mt-4 space-y-4 text-[14px] leading-6 text-[#384351]">

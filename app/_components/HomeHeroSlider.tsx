@@ -64,7 +64,7 @@ export default function HomeHeroSlider({
   };
 
   return (
-    <section className="relative min-h-[560px] overflow-hidden bg-[var(--ink)] text-white lg:min-h-[671px]">
+    <section className="relative min-h-[460px] overflow-hidden bg-[var(--ink)] text-white sm:min-h-[520px] lg:min-h-[590px]">
       {normalizedSlides.map((slide, index) => (
         <Image
           alt={slide.altText || slide.title || `Hero image ${index + 1}`}
@@ -78,22 +78,24 @@ export default function HomeHeroSlider({
           src={slide.image}
         />
       ))}
-      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(1,6,10,0.84),rgba(1,6,10,0.38)_52%,rgba(1,6,10,0.1))]" />
+      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(1,6,10,0.76),rgba(1,6,10,0.34)_48%,rgba(1,6,10,0.08))]" />
 
-      <div className="site-container relative flex min-h-[560px] items-end pb-16 pt-20 lg:min-h-[671px] lg:items-center lg:pb-0">
-        <div className="flex w-full max-w-[320px] flex-col items-start gap-6 lg:max-w-[760px]">
-          <h1 className="font-[var(--font-roboto-condensed)] text-[32px] font-black leading-[1.05] tracking-normal text-white lg:text-[56px]">
+      <div className="site-container relative flex min-h-[460px] items-end pb-8 pt-16 sm:min-h-[520px] sm:pb-10 lg:min-h-[590px] lg:pb-10 lg:pt-8">
+        <div className="flex w-full max-w-[310px] flex-col items-start gap-4 sm:max-w-[480px] lg:max-w-[560px]">
+          <h1 className="max-w-[560px] whitespace-pre-line break-words font-[var(--font-roboto-condensed)] text-[34px] font-black leading-[1.04] tracking-normal text-white sm:text-[44px] lg:text-[52px]">
             {activeSlide.title}
           </h1>
-          <h4 className="max-w-[720px] !font-[var(--font-roboto)] text-[20px] !font-normal !leading-[140%] tracking-[0] text-white ![font-stretch:normal]">
-            {activeSlide.description}
-          </h4>
-          <Link
-            className="flex h-11 w-[132px] items-center justify-center bg-[var(--brand-yellow)] px-4 text-center font-[var(--font-roboto-condensed)] text-[16px] font-semibold uppercase leading-5 tracking-normal text-[#0a0a0b] transition hover:brightness-95 lg:h-[60px] lg:w-[204px]"
-            href="/in/en/contact-us"
-          >
-            {ctaLabel}
-          </Link>
+          <div className="w-full max-w-[520px]">
+            <p className="max-w-[430px] whitespace-pre-line !font-[var(--font-roboto-condensed)] !text-[18px] !font-normal !leading-[1.45] tracking-[0] text-white/95 sm:!text-[20px] lg:max-w-[470px] lg:!text-[22px]">
+              {activeSlide.description}
+            </p>
+            <Link
+              className="mt-6 flex h-[44px] w-[136px] items-center justify-center bg-[var(--brand-yellow)] px-4 text-center font-[var(--font-roboto-condensed)] text-[15px] font-bold uppercase leading-5 tracking-normal text-[#0a0a0b] transition hover:brightness-95 sm:h-[46px] sm:w-[144px] lg:h-[46px] lg:w-[150px]"
+              href="/in/en/contact-us"
+            >
+              {ctaLabel}
+            </Link>
+          </div>
         </div>
       </div>
 
@@ -101,7 +103,7 @@ export default function HomeHeroSlider({
         <>
           <button
             aria-label="Previous slide"
-            className="absolute left-4 top-1/2 z-20 -translate-y-1/2 bg-black/30 px-3 py-2 text-xl text-white transition hover:bg-black/45 lg:left-8"
+            className="absolute left-4 top-1/2 z-20 -translate-y-1/2 bg-black/30 px-3 py-2 text-xl text-white transition hover:bg-black/45 lg:left-10"
             onClick={() => goTo(safeActiveIndex - 1)}
             type="button"
           >
@@ -109,13 +111,13 @@ export default function HomeHeroSlider({
           </button>
           <button
             aria-label="Next slide"
-            className="absolute right-4 top-1/2 z-20 -translate-y-1/2 bg-black/30 px-3 py-2 text-xl text-white transition hover:bg-black/45 lg:right-8"
+            className="absolute right-4 top-1/2 z-20 -translate-y-1/2 bg-black/30 px-3 py-2 text-xl text-white transition hover:bg-black/45 lg:right-10"
             onClick={() => goTo(safeActiveIndex + 1)}
             type="button"
           >
             {"\u2192"}
           </button>
-          <div className="absolute bottom-[19px] left-1/2 z-20 flex h-4 -translate-x-1/2 items-center gap-2 lg:bottom-9">
+          <div className="absolute bottom-[18px] left-1/2 z-20 flex h-4 -translate-x-1/2 items-center gap-2 lg:bottom-8">
             {normalizedSlides.map((slide, index) => (
               <button
                 aria-label={`Go to slide ${index + 1}: ${slide.title}`}

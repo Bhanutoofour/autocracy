@@ -102,7 +102,7 @@ const messages: Record<ContentLanguage, MessageTree> = {
       viewAllProducts: "View all products",
       strengthsHeading: "Built for India. Engineered for Efficiency.",
       certificationsHeading: "Our Certifications",
-      storiesHeading: "Our Story, Through Their Words",
+      storiesHeading: "Media Coverage",
       happyClients: "Happy Clients",
     },
     footer: {
@@ -161,7 +161,7 @@ const messages: Record<ContentLanguage, MessageTree> = {
       viewAllProducts: "सभी उत्पाद देखें",
       strengthsHeading: "भारत के लिए निर्मित। दक्षता के लिए अभिकल्पित।",
       certificationsHeading: "हमारे प्रमाणपत्र",
-      storiesHeading: "हमारी कहानी, उनकी जुबानी",
+      storiesHeading: "मीडिया कवरेज",
       happyClients: "खुश ग्राहक",
     },
     footer: {
@@ -220,7 +220,7 @@ const messages: Record<ContentLanguage, MessageTree> = {
       viewAllProducts: "Voir tous les produits",
       strengthsHeading: "Conçu pour l'Inde. Pensé pour l'efficacité.",
       certificationsHeading: "Nos certifications",
-      storiesHeading: "Notre histoire, racontée par eux",
+      storiesHeading: "Couverture médiatique",
       happyClients: "Clients satisfaits",
     },
     footer: {
@@ -279,7 +279,7 @@ const messages: Record<ContentLanguage, MessageTree> = {
       viewAllProducts: "Ver todos los productos",
       strengthsHeading: "Construido para India. Diseñado para la eficiencia.",
       certificationsHeading: "Nuestras certificaciones",
-      storiesHeading: "Nuestra historia, en sus palabras",
+      storiesHeading: "Cobertura mediática",
       happyClients: "Clientes satisfechos",
     },
     footer: {
@@ -338,7 +338,7 @@ const messages: Record<ContentLanguage, MessageTree> = {
       viewAllProducts: "Alle Produkte ansehen",
       strengthsHeading: "Für Indien gebaut. Für Effizienz entwickelt.",
       certificationsHeading: "Unsere Zertifizierungen",
-      storiesHeading: "Unsere Geschichte in ihren Worten",
+      storiesHeading: "Medienberichte",
       happyClients: "Zufriedene Kunden",
     },
     footer: {
@@ -397,7 +397,7 @@ const messages: Record<ContentLanguage, MessageTree> = {
       viewAllProducts: "عرض كل المنتجات",
       strengthsHeading: "مصمم للهند. ومهندس للكفاءة.",
       certificationsHeading: "شهاداتنا",
-      storiesHeading: "قصتنا بكلماتهم",
+      storiesHeading: "التغطية الإعلامية",
       happyClients: "عملاء سعداء",
     },
     footer: {
@@ -456,7 +456,7 @@ const messages: Record<ContentLanguage, MessageTree> = {
       viewAllProducts: "查看所有产品",
       strengthsHeading: "为印度打造。为效率而设计。",
       certificationsHeading: "我们的认证",
-      storiesHeading: "我们的故事，他们的话语",
+      storiesHeading: "媒体报道",
       happyClients: "满意客户",
     },
     footer: {
@@ -513,7 +513,7 @@ const messages: Record<ContentLanguage, MessageTree> = {
       viewAllProducts: "すべての製品を見る",
       strengthsHeading: "インドのために設計。効率のために開発。",
       certificationsHeading: "認証情報",
-      storiesHeading: "私たちの物語、彼らの言葉",
+      storiesHeading: "メディア掲載",
       happyClients: "満足したお客様",
     },
     footer: {
@@ -570,7 +570,7 @@ const messages: Record<ContentLanguage, MessageTree> = {
       viewAllProducts: "সব পণ্য দেখুন",
       strengthsHeading: "ভারতের জন্য নির্মিত। দক্ষতার জন্য পরিকল্পিত।",
       certificationsHeading: "আমাদের সার্টিফিকেশন",
-      storiesHeading: "আমাদের গল্প, তাদের কথায়",
+      storiesHeading: "মিডিয়া কভারেজ",
       happyClients: "সন্তুষ্ট গ্রাহক",
     },
     footer: {
