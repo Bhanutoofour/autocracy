@@ -9,6 +9,7 @@ interface FormSelectProps {
   options: string[];
   selectedValue: string;
   onChange: (value: string) => void;
+  placeholder?: string;
   required?: boolean;
   disabled?: boolean;
   labelBold?: boolean;
@@ -47,6 +48,7 @@ export const FormSelect: React.FC<FormSelectProps> = ({
   options,
   selectedValue,
   onChange,
+  placeholder,
   disabled = false,
   labelBold = false,
 }) => {
@@ -64,7 +66,7 @@ export const FormSelect: React.FC<FormSelectProps> = ({
         required={required}
       >
         <option value="" disabled hidden>
-          -- Select {label.toLowerCase()} --
+          {placeholder ?? `-- Select ${label.toLowerCase()} --`}
         </option>
         {options.map((opt) => (
           <option key={opt} value={opt}>

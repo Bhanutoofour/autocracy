@@ -20,12 +20,19 @@ export interface RecognitionsProps {
   title: string;
   data: RecognitionData[];
   conatinerClassName?: string;
+  copy?: {
+    eyebrow: string;
+    heading: string;
+    description: string;
+    imageAlt: string;
+  };
 }
 
 const Recognitions: React.FC<RecognitionsProps> = ({
   title,
   data,
   conatinerClassName,
+  copy,
 }) => {
   const { width } = useWindowSize();
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -75,10 +82,18 @@ const Recognitions: React.FC<RecognitionsProps> = ({
 
   if (title !== "Awards") return null;
 
+  const content = copy ?? {
+    eyebrow: "A W A R D S",
+    heading: "We've Been Recognized for Disrupting the Industrial Game",
+    description:
+      "From national startup honors to innovation awards, our journey is backed by the best celebrating bold ideas, breakthrough impact, and entrepreneurial excellence.",
+    imageAlt: "Awards",
+  };
+
   return (
     <section className={`${styles.recognitionContainer} ${conatinerClassName}`}>
       <div className={styles.awardsTitle}>
-        <p className={styles.awards}>A W A R D S</p>
+        <p className={styles.awards}>{content.eyebrow}</p>
         <div className={styles.recognized}>
           <Image
             src={ICONS.RIGHT_LEAF}
@@ -86,9 +101,7 @@ const Recognitions: React.FC<RecognitionsProps> = ({
             width={46}
             height={95}
           />
-          <h2 className={styles.titleTwo}>
-            We’ve Been Recognized for Disrupting the Industrial Game
-          </h2>
+          <h2 className={styles.titleTwo}>{content.heading}</h2>
           <Image
             src={ICONS.LEFT_LEAF}
             alt="awards icon"
@@ -96,11 +109,7 @@ const Recognitions: React.FC<RecognitionsProps> = ({
             height={95}
           />
         </div>
-        <p className={styles.titleThree}>
-          From national startup honors to innovation awards, our journey is
-          backed by the best celebrating bold ideas, breakthrough impact, and
-          entrepreneurial excellence.
-        </p>
+        <p className={styles.titleThree}>{content.description}</p>
       </div>
       <div className={styles.carouselSect}>
         <div>
@@ -112,7 +121,7 @@ const Recognitions: React.FC<RecognitionsProps> = ({
               >
                 <Image
                   src={src}
-                  alt="Awards"
+                  alt={content.imageAlt}
                   width={width && width > SCREENS.MOBILE_LANDSCAPE ? 440 : 353}
                   height={width && width > SCREENS.MOBILE_LANDSCAPE ? 220 : 178}
                 />

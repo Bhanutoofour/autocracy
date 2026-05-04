@@ -32,6 +32,11 @@ const remotePatterns: NonNullable<NextConfig["images"]>["remotePatterns"] = [
   },
   {
     protocol: "https",
+    hostname: "autocracymachinery.s3.ap-south-1.amazonaws.com",
+    pathname: "/assets/**",
+  },
+  {
+    protocol: "https",
     hostname: "img.youtube.com",
     pathname: "/vi/**",
   },
