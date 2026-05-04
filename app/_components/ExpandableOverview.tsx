@@ -26,7 +26,7 @@ export default function ExpandableOverview({
       <h2 className="font-[var(--font-roboto-condensed)] text-[24px] font-bold leading-[1.15] tracking-normal text-[#0a0a0b]">
         {title}
       </h2>
-      <div className="mt-3 space-y-4 font-[var(--font-roboto)] text-[14px] font-normal leading-6 tracking-normal text-[#384351]">
+      <div className="mt-3 space-y-4 font-[var(--font-roboto-condensed)] text-[14px] font-normal leading-6 tracking-normal text-[#384351]">
         {initialParagraphs.map((paragraph, index) => (
           <p key={`overview-initial-${index}`}>{paragraph}</p>
         ))}
@@ -41,7 +41,7 @@ export default function ExpandableOverview({
             id={contentId}
           >
             <div className="overflow-hidden">
-              <div className="mt-4 space-y-4 font-[var(--font-roboto)] text-[14px] font-normal leading-6 tracking-normal text-[#384351]">
+              <div className="mt-4 space-y-4 font-[var(--font-roboto-condensed)] text-[14px] font-normal leading-6 tracking-normal text-[#384351]">
                 {expandedParagraphs.map((paragraph, index) => (
                   <p key={`overview-expanded-${index}`}>{paragraph}</p>
                 ))}

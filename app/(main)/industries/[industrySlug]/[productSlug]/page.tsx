@@ -305,7 +305,7 @@ export default async function IndustryProductPage({
 
       <div className="border-b border-black/10 bg-[#f5f5f5]">
         <div className="site-container py-4">
-          <nav className="flex flex-wrap items-center gap-2 font-[var(--font-roboto)] text-[14px] font-normal leading-5 tracking-normal text-[#5b6572]">
+          <nav className="flex flex-wrap items-center gap-2 font-[var(--font-roboto-condensed)] text-[14px] font-normal leading-5 tracking-normal text-[#5b6572]">
             <Link href={localizeHref("/", locale)} className="transition hover:text-[#0a0a0b]">{pageText.home}</Link>
             <span>/</span>
             <Link href={localizeHref("/industries", locale)} className="transition hover:text-[#0a0a0b]">{tUi(language, "industries")}</Link>
@@ -323,17 +323,17 @@ export default async function IndustryProductPage({
         <div className="site-container grid gap-8 py-10 sm:py-12 lg:grid-cols-[minmax(0,1fr)_minmax(360px,0.85fr)] lg:items-center lg:py-16">
           <div>
             <p className="font-[var(--font-roboto-condensed)] text-[14px] font-semibold uppercase leading-5 tracking-[0.35em] text-[#6b6f76]">{tUi(language, "industry_product")}</p>
-            <h1 className="mt-4 font-[var(--font-roboto-condensed)] text-[42px] font-bold uppercase leading-none tracking-normal text-[#0a0a0b] sm:text-[58px] lg:text-[72px]">
+            <h1 className="mt-4 align-middle !font-['DaggerSquare',var(--font-roboto-condensed),sans-serif] text-[40px] !font-normal uppercase leading-[120%] tracking-[0] text-[#0a0a0b] [font-style:oblique]">
               {pageText.heading}
             </h1>
             {heroDescription ? (
-              <p className="mt-5 max-w-[880px] font-[var(--font-roboto)] text-[14px] font-normal leading-[1.5] tracking-normal text-[#1f2937] sm:mt-6">
+              <p className="mt-5 max-w-[880px] font-[var(--font-roboto-condensed)] text-[14px] font-normal leading-[1.5] tracking-normal text-[#1f2937] sm:mt-6">
                 {heroDescription}
               </p>
             ) : null}
             <div className="mt-7 flex flex-wrap gap-3">
-              <span className="rounded-full bg-[var(--brand-yellow)] px-4 py-2 font-[var(--font-roboto)] text-[14px] font-bold text-black">{industryData.title}</span>
-              <span className="rounded-full border border-black/15 bg-white px-4 py-2 font-[var(--font-roboto)] text-[14px] font-semibold text-[#0a0a0b]">
+              <span className="rounded-full bg-[var(--brand-yellow)] px-4 py-2 font-[var(--font-roboto-condensed)] text-[14px] font-bold text-black">{industryData.title}</span>
+              <span className="rounded-full border border-black/15 bg-white px-4 py-2 font-[var(--font-roboto-condensed)] text-[14px] font-semibold text-[#0a0a0b]">
                 {productData.models.length} {tUi(language, "models")}
               </span>
             </div>
@@ -359,13 +359,13 @@ export default async function IndustryProductPage({
             <h2 className="font-[var(--font-roboto-condensed)] text-[30px] font-bold leading-[1.15] tracking-normal text-[#0a0a0b] sm:text-[36px]">
               {pageText.availableModelsHeading}
             </h2>
-            <p className="mt-2 font-[var(--font-roboto)] text-[16px] font-normal leading-6 tracking-normal text-[#5b6572]">
+            <p className="mt-2 font-[var(--font-roboto-condensed)] text-[16px] font-normal leading-6 tracking-normal text-[#5b6572]">
               {pageText.availableModelsBody}
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
-            <div className="rounded border border-black/15 bg-white px-4 py-2 font-[var(--font-roboto)] text-[14px] font-normal leading-5 text-[#2d3642]">{pageText.allSeries}</div>
-            <div className="rounded border border-black/15 bg-white px-4 py-2 font-[var(--font-roboto)] text-[14px] font-normal leading-5 text-[#2d3642]">{pageText.allModels}</div>
+            <div className="rounded border border-black/15 bg-white px-4 py-2 font-[var(--font-roboto-condensed)] text-[14px] font-normal leading-5 text-[#2d3642]">{pageText.allSeries}</div>
+            <div className="rounded border border-black/15 bg-white px-4 py-2 font-[var(--font-roboto-condensed)] text-[14px] font-normal leading-5 text-[#2d3642]">{pageText.allModels}</div>
           </div>
         </div>
         {productData.models.length > 0 ? (
@@ -392,18 +392,18 @@ export default async function IndustryProductPage({
                   />
                 </div>
                 <div className="flex flex-1 flex-col p-5">
-                  <p className="font-[var(--font-roboto)] text-[14px] font-normal uppercase leading-5 tracking-normal text-[#6b6f76]">{model.machineType}</p>
-                  <h3 className="mt-1 align-middle !font-['DaggerSquare','Roboto',sans-serif] text-[28px] !font-normal uppercase leading-[120%] tracking-[0] text-[#0a0a0b] [font-style:oblique]">
+                  <p className="font-[var(--font-roboto-condensed)] text-[14px] font-normal uppercase leading-5 tracking-normal text-[#6b6f76]">{model.machineType}</p>
+                  <h3 className="mt-1 align-middle !font-['DaggerSquare',var(--font-roboto-condensed),sans-serif] text-[28px] !font-normal uppercase leading-[120%] tracking-[0] text-[#0a0a0b] [font-style:oblique]">
                     {model.modelNumber}
                   </h3>
-                  <p className="mt-1 font-[var(--font-roboto)] text-[15px] font-normal leading-6 tracking-normal text-[#2d3642]">{model.modelTitle}</p>
+                  <p className="mt-1 font-[var(--font-roboto-condensed)] text-[15px] font-normal leading-6 tracking-normal text-[#2d3642]">{model.modelTitle}</p>
 
                   {model.keyFeatures.length > 0 ? (
                     <div className="mt-5 grid gap-3 sm:grid-cols-2">
                       {model.keyFeatures.slice(0, 2).map((feature, index) => (
                         <div className="rounded bg-[#f5f5f5] p-3" key={`${model.id}-${feature.name}-${index}`}>
-                          <p className="font-[var(--font-roboto)] text-[12px] font-normal leading-4 tracking-normal text-[#68717d]">{feature.name}</p>
-                          <p className="mt-1 font-[var(--font-roboto)] text-[14px] font-semibold leading-5 tracking-normal text-[#0e1116]">{feature.value}</p>
+                          <p className="font-[var(--font-roboto-condensed)] text-[12px] font-normal leading-4 tracking-normal text-[#68717d]">{feature.name}</p>
+                          <p className="mt-1 font-[var(--font-roboto-condensed)] text-[14px] font-semibold leading-5 tracking-normal text-[#0e1116]">{feature.value}</p>
                         </div>
                       ))}
                     </div>
@@ -433,7 +433,7 @@ export default async function IndustryProductPage({
           <h2 className="mt-2 max-w-4xl font-[var(--font-roboto-condensed)] text-[36px] font-bold leading-[1.12] tracking-normal text-[#0a0a0b] sm:text-[44px]">
             {industryProductContent.headline}
           </h2>
-          <p className="mt-4 max-w-[940px] font-[var(--font-roboto)] text-[16px] font-normal leading-7 tracking-normal text-[#1f2937]">
+          <p className="mt-4 max-w-[940px] font-[var(--font-roboto-condensed)] text-[16px] font-normal leading-7 tracking-normal text-[#1f2937]">
             {industryProductContent.summary}
           </p>
 
@@ -459,7 +459,7 @@ export default async function IndustryProductPage({
                 <h3 className="mt-5 font-[var(--font-roboto-condensed)] text-[24px] font-bold leading-[1.2] tracking-normal text-[#0a0a0b]">
                   {section.heading}
                 </h3>
-                <ul className="mt-5 space-y-4 font-[var(--font-roboto)] text-[15px] font-normal leading-7 tracking-normal text-[#1f2937]">
+                <ul className="mt-5 space-y-4 font-[var(--font-roboto-condensed)] text-[15px] font-normal leading-7 tracking-normal text-[#1f2937]">
                   {section.points.map((point, index) => (
                     <li className="flex gap-3" key={`industry-product-${sectionIndex}-${index}`}>
                       <span className="mt-[10px] h-1.5 w-1.5 shrink-0 rounded-full bg-[#f9c300]" />
@@ -478,7 +478,7 @@ export default async function IndustryProductPage({
           <h2 className="font-[var(--font-roboto-condensed)] text-[32px] font-bold uppercase leading-tight sm:text-[42px]">
             {pageText.ctaHeading}
           </h2>
-          <p className="mx-auto mt-4 max-w-2xl font-[var(--font-roboto)] text-[16px] font-normal leading-7 text-white/75">
+          <p className="mx-auto mt-4 max-w-2xl font-[var(--font-roboto-condensed)] text-[16px] font-normal leading-7 text-white/75">
             {pageText.ctaBody}
           </p>
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row sm:flex-wrap">
@@ -516,7 +516,7 @@ export default async function IndustryProductPage({
                 <h3 className="font-[var(--font-roboto-condensed)] text-[22px] font-bold leading-[1.2] tracking-normal text-[#050506]">
                   {faq.question}
                 </h3>
-                <p className="mt-4 font-[var(--font-roboto)] text-[16px] font-normal leading-7 tracking-normal text-[#384351]">
+                <p className="mt-4 font-[var(--font-roboto-condensed)] text-[16px] font-normal leading-7 tracking-normal text-[#384351]">
                   {faq.answer}
                 </p>
               </article>

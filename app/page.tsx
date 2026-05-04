@@ -626,7 +626,7 @@ function IndustriesSection({
           <p className="mb-6 text-[18px] font-normal uppercase leading-none tracking-[0.75em] text-[#243245]">
             {messages.home.industriesTitle}
           </p>
-          <h2 className="text-center font-[var(--font-roboto)] text-[40px] font-bold leading-[105%] tracking-[0] text-[#0a0a0b] [font-stretch:75%]">
+          <h2 className="text-center font-[var(--font-roboto-condensed)] text-[40px] font-bold leading-[105%] tracking-[0] text-[#0a0a0b] [font-stretch:75%]">
             {messages.home.chooseIndustry}
           </h2>
         </div>
@@ -800,7 +800,7 @@ function HappyClients({ language }: { language: ContentLanguage }) {
     <section className="bg-white pt-12 pb-20 lg:pt-14 lg:pb-24">
       <div className="site-container">
         <aside className="mx-auto w-full max-w-[1260px]">
-          <h2 className="w-full text-center font-[var(--font-roboto)] text-[40px] font-black leading-[1.2] tracking-normal text-[#0A0A0B]">
+          <h2 className="w-full text-center font-[var(--font-roboto-condensed)] text-[40px] font-black leading-[1.2] tracking-normal text-[#0A0A0B]">
             {messages.home.happyClients}
           </h2>
 

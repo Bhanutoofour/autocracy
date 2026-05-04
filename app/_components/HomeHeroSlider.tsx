@@ -83,7 +83,7 @@ export default function HomeHeroSlider({ slides, ctaLabel, assetBasePath }: Home
             {activeSlide.description}
           </p>
           <Link
-            className="flex h-11 w-[132px] items-center justify-center bg-[var(--brand-yellow)] px-4 text-center font-[var(--font-roboto)] text-[16px] font-semibold uppercase leading-5 tracking-normal text-[#0a0a0b] transition hover:brightness-95 lg:h-[60px] lg:w-[204px]"
+            className="flex h-11 w-[132px] items-center justify-center bg-[var(--brand-yellow)] px-4 text-center font-[var(--font-roboto-condensed)] text-[16px] font-semibold uppercase leading-5 tracking-normal text-[#0a0a0b] transition hover:brightness-95 lg:h-[60px] lg:w-[204px]"
             href="/in/en/contact-us"
           >
             {ctaLabel}

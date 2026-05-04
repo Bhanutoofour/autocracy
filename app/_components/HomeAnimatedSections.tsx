@@ -233,7 +233,7 @@ export function AnimatedTestimonialsSection({
                 <div className="mb-7 text-[88px] font-black leading-[0.45] text-[var(--brand-yellow)]">
                   &quot;
                 </div>
-                <p className="font-[var(--font-roboto)] text-[16px] font-normal leading-6 tracking-normal text-[#1f2024]">
+                <p className="font-[var(--font-roboto-condensed)] text-[16px] font-normal leading-6 tracking-normal text-[#1f2024]">
                   {testimonial.quote}
                 </p>
                 <div className="mt-auto flex items-center gap-4 pt-10">
@@ -241,10 +241,10 @@ export function AnimatedTestimonialsSection({
                     {testimonial.name[0]}
                   </span>
                   <div>
-                    <p className="font-[var(--font-roboto)] text-[20px] font-semibold leading-6 tracking-normal text-[#111113]">
+                    <p className="font-[var(--font-roboto-condensed)] text-[20px] font-semibold leading-6 tracking-normal text-[#111113]">
                       {testimonial.name}
                     </p>
-                    <p className="mt-1 font-[var(--font-roboto)] text-[14px] font-semibold leading-6 tracking-normal text-[#9a9a9a]">
+                    <p className="mt-1 font-[var(--font-roboto-condensed)] text-[14px] font-semibold leading-6 tracking-normal text-[#9a9a9a]">
                       {testimonial.location}
                     </p>
                   </div>

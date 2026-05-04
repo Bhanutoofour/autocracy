@@ -205,25 +205,25 @@ function ProductMenuCard({
 }) {
   return (
     <a
-      className={`relative flex h-[78px] w-full items-center justify-between gap-3 border bg-white px-4 transition ${
+      className={`relative flex min-h-[86px] w-full min-w-0 items-center justify-between gap-3 border bg-white px-3 py-3 transition xl:px-4 ${
         active
           ? "border-[2px] border-[var(--brand-yellow)]"
           : "border-[#e4e4e4] hover:border-black/25"
       }`}
       href={href}
     >
-      <div className="flex items-center gap-3">
-        <div className="relative h-[41px] w-[78px] shrink-0">
+      <div className="flex min-w-0 flex-1 items-center gap-3">
+        <div className="relative h-[42px] w-[72px] shrink-0 xl:w-[82px]">
           <Image
             alt={card.displayLabel}
             className="object-contain"
             fill
-            sizes="86px"
+            sizes="(min-width: 1280px) 82px, 72px"
             src={card.image}
           />
         </div>
         <span
-          className="line-clamp-2 max-w-[160px] align-middle font-[var(--font-roboto-condensed)] text-[16px] font-bold leading-[120%] tracking-[0] text-[#0A0A0B]"
+          className="min-w-0 flex-1 overflow-hidden text-ellipsis align-middle font-[var(--font-roboto-condensed)] text-[16px] font-medium leading-[120%] tracking-[0] text-[#0A0A0B] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]"
         >
           {card.displayLabel}
         </span>
@@ -297,7 +297,7 @@ export default function GlobalHeaderClient({ language, locale }: GlobalHeaderCli
     { label: messages.common.contactUs, href: toLocalizedHref("/contact-us"), showArrow: false },
   ];
   const navItemClass =
-    "flex items-center justify-center gap-1 text-center font-[var(--font-roboto)] text-[17px] font-semibold leading-[105%] tracking-[0] text-[#000000] [font-stretch:75%] transition";
+    "flex items-center justify-center gap-1 text-center font-[var(--font-roboto-condensed)] text-[17px] font-semibold leading-[105%] tracking-[0] text-[#000000] [font-stretch:75%] transition";
   const topBarItemClass =
     "hidden items-center gap-2 font-[var(--font-roboto-condensed)] text-[14px] font-semibold uppercase leading-[105%] tracking-[0]";
   const topBarSwitcherClass =
@@ -410,14 +410,14 @@ export default function GlobalHeaderClient({ language, locale }: GlobalHeaderCli
         {activeMenu === "industries" ? (
           <div className="border-t border-black/10 bg-white">
             <div className="site-container py-6">
-              <div className="grid grid-cols-[470px_1fr] gap-4">
+              <div className="grid grid-cols-[minmax(260px,0.75fr)_minmax(0,1.25fr)] gap-4 xl:grid-cols-[minmax(360px,470px)_minmax(0,1fr)]">
                 <div className="space-y-1">
                   {INDUSTRIES.map((industry) => (
                     <button
-                      className={`flex w-full items-center justify-between border-l-[3px] px-5 py-2.5 text-left font-[var(--font-roboto-condensed)] text-[18px] leading-[20px] tracking-[0] transition ${
+                      className={`flex w-full items-center justify-between border-l-[3px] px-5 py-2.5 text-left font-[var(--font-roboto-condensed)] text-[18px] leading-[20px] tracking-[0] ${
                         activeIndustry === industry
-                          ? "border-[var(--brand-yellow)] font-bold text-[#111113]"
-                          : "border-transparent font-normal text-[#2b2b2e] hover:border-black/20"
+                          ? "border-[var(--brand-yellow)] font-semibold text-[#111113]"
+                          : "border-transparent font-normal text-[#2b2b2e]"
                       }`}
                       key={industry}
                       onClick={() => setActiveIndustry(industry)}
@@ -429,7 +429,7 @@ export default function GlobalHeaderClient({ language, locale }: GlobalHeaderCli
                   ))}
                 </div>
 
-                <div className="grid auto-rows-[78px] content-start grid-cols-3 gap-3">
+                <div className="grid content-start grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-3">
                   {industryProducts.map((card) => (
                     <ProductMenuCard
                       card={{
@@ -449,7 +449,7 @@ export default function GlobalHeaderClient({ language, locale }: GlobalHeaderCli
         {activeMenu === "products" ? (
           <div className="border-t border-black/10 bg-white">
             <div className="site-container py-6">
-              <div className="grid auto-rows-[78px] grid-cols-4 gap-2">
+              <div className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-3">
                 {MENU_PRODUCTS.map((card) => (
                   <ProductMenuCard
                     card={{
@@ -545,7 +545,7 @@ export default function GlobalHeaderClient({ language, locale }: GlobalHeaderCli
                       <LanguageSwitcherButton />
                     </div>
                     <a
-                      className="mb-6 inline-flex items-center gap-2 font-[var(--font-roboto)] text-[16px] font-semibold text-[#0a0a0b]"
+                      className="mb-6 inline-flex items-center gap-2 font-[var(--font-roboto-condensed)] text-[16px] font-semibold text-[#0a0a0b]"
                       href="tel:+918790473345"
                     >
                       <Icon className="size-7" name="phone" />

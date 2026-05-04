@@ -26,12 +26,13 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: "Roboto", sans-serif;
+  --font-sans: var(--font-roboto-condensed), sans-serif;
   --font-mono: "Courier New", Courier, monospace;
 }
 
 * {
   box-sizing: border-box;
+  font-stretch: 75%;
 }
 
 html {
@@ -41,7 +42,8 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-roboto), sans-serif;
+  font-family: var(--font-roboto-condensed), sans-serif;
+  font-stretch: 75%;
   margin: 0;
 }
 
@@ -58,10 +60,10 @@ body {
 }
 
 p {
-  font-family: var(--font-roboto), sans-serif !important;
+  font-family: var(--font-roboto-condensed), sans-serif !important;
   font-weight: 400 !important;
   font-stretch: 75%;
-  font-size: 14px;
+  font-size: 14px !important;
   line-height: 140%;
   letter-spacing: 0;
 }
@@ -144,7 +146,7 @@ a {
 }
 
 .category-template p {
-  font-family: var(--font-roboto), sans-serif;
+  font-family: var(--font-roboto-condensed), sans-serif;
   font-size: 14px;
   font-weight: 400;
   letter-spacing: 0;

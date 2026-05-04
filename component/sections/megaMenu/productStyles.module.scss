@@ -29,7 +29,7 @@
   text-align: left;
 
   p {
-    font-family: "Roboto", sans-serif;
+    font-family: var(--font-roboto-condensed), sans-serif;
     font-size: 18px;
     line-height: 20px;
     color: $text-primary;

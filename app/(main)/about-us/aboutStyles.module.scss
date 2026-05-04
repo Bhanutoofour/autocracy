@@ -2,7 +2,7 @@
 
 .aboutUsContainer {
   display: flex;
-  font-family: Roboto, sans-serif;
+  font-family: var(--font-roboto-condensed), sans-serif;
   flex-direction: column;
   gap: 3.75rem;
   align-items: center;
@@ -166,7 +166,7 @@
       }
 
       .cardTitle {
-        font-family: Roboto, sans-serif;
+        font-family: var(--font-roboto-condensed), sans-serif;
         font-weight: 400;
         font-size: 1rem;
         line-height: 120%;
@@ -177,7 +177,7 @@
       }
 
       .cardDescription {
-        font-family: Roboto, sans-serif;
+        font-family: var(--font-roboto-condensed), sans-serif;
         font-weight: 600;
         font-size: 1rem;
         line-height: 140%;
@@ -204,7 +204,7 @@
 
       .introText {
         white-space: pre-line;
-        font-family: Roboto, sans-serif;
+        font-family: var(--font-roboto-condensed), sans-serif;
         font-weight: 400;
         font-size: 0.75rem;
         line-height: 150%;
@@ -253,7 +253,7 @@
     }
 
     .headerTitle {
-      font-family: Roboto, sans-serif;
+      font-family: var(--font-roboto-condensed), sans-serif;
       font-weight: 700;
       font-size: 2.5rem;
       line-height: 105%;
@@ -275,7 +275,7 @@
       }
 
       p {
-        font-family: Roboto, sans-serif;
+        font-family: var(--font-roboto-condensed), sans-serif;
         font-weight: 400;
         font-size: 16px;
         line-height: 150%;
@@ -318,7 +318,7 @@
       }
 
       .sectionTitle {
-        font-family: Roboto, sans-serif;
+        font-family: var(--font-roboto-condensed), sans-serif;
         font-weight: 700;
         font-size: 2rem;
         line-height: 105%;
@@ -338,7 +338,7 @@
         }
 
         p {
-          font-family: Roboto, sans-serif;
+          font-family: var(--font-roboto-condensed), sans-serif;
           font-weight: 400;
           font-size: 0.875rem;
           line-height: 150%;
@@ -380,7 +380,7 @@
     }
 
     .founderTitle {
-      font-family: Roboto, sans-serif;
+      font-family: var(--font-roboto-condensed), sans-serif;
       font-weight: 700;
       font-style: Condensed Bold;
       font-size: 2.5rem;
@@ -464,7 +464,7 @@
               flex: 1;
 
               .founderName {
-                font-family: Roboto, sans-serif;
+                font-family: var(--font-roboto-condensed), sans-serif;
                 font-weight: 800;
                 font-size: 0.875rem;
                 line-height: 120%;
@@ -473,7 +473,7 @@
               }
 
               .founderRole {
-                font-family: Roboto, sans-serif;
+                font-family: var(--font-roboto-condensed), sans-serif;
                 color: #fff;
                 font-weight: 400;
                 font-size: 0.625rem;
@@ -518,7 +518,7 @@
             }
 
             .mobileFounderName {
-              font-family: Roboto, sans-serif;
+              font-family: var(--font-roboto-condensed), sans-serif;
               font-weight: 700;
               font-size: 1rem;
               line-height: 120%;
@@ -529,7 +529,7 @@
             }
 
             .mobileFounderRole {
-              font-family: Roboto, sans-serif;
+              font-family: var(--font-roboto-condensed), sans-serif;
               font-weight: 400;
               font-size: .875rem;
               line-height: 120%;
@@ -552,7 +552,7 @@
           }
 
           .founderDescription {
-            font-family: Roboto, sans-serif;
+            font-family: var(--font-roboto-condensed), sans-serif;
             font-weight: 400;
             font-size: 0.875rem;
             line-height: 150%;
@@ -598,7 +598,7 @@
       }
 
       .initiativesTitle {
-        font-family: Roboto, sans-serif;
+        font-family: var(--font-roboto-condensed), sans-serif;
         font-weight: 700;
         font-size: 2.5rem;
         line-height: 105%;
@@ -610,7 +610,7 @@
       }
 
       .initiativesDescription {
-        font-family: Roboto, sans-serif;
+        font-family: var(--font-roboto-condensed), sans-serif;
         font-weight: 400;
         font-size: 1rem;
         line-height: 150%;
@@ -695,7 +695,7 @@
       }
 
       .excellenceTitle {
-        font-family: Roboto, sans-serif;
+        font-family: var(--font-roboto-condensed), sans-serif;
         font-weight: 700;
         font-size: 2.5rem;
         line-height: 120%;
@@ -722,7 +722,7 @@
           }
 
           .pillarTitle {
-            font-family: Roboto, sans-serif;
+            font-family: var(--font-roboto-condensed), sans-serif;
             font-weight: 700;
             font-size: 1.25rem;
             line-height: 120%;
@@ -733,7 +733,7 @@
           }
 
           .pillarDescription {
-            font-family: Roboto, sans-serif;
+            font-family: var(--font-roboto-condensed), sans-serif;
             font-weight: 400;
             font-size: 1rem;
             line-height: 150%;

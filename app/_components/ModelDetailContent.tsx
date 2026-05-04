@@ -352,7 +352,7 @@ export default function ModelDetailContent({
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#6b6f76]">
               {modelData.productName}
             </p>
-            <h1 className="mt-3 align-middle !font-['DaggerSquare','Roboto',sans-serif] text-[32px] !font-normal uppercase leading-[120%] tracking-[0] text-[#0a0a0b] [font-style:oblique]">
+            <h1 className="mt-3 align-middle !font-['DaggerSquare',var(--font-roboto-condensed),sans-serif] text-[32px] !font-normal uppercase leading-[120%] tracking-[0] text-[#0a0a0b] [font-style:oblique]">
               {modelData.modelNumber || modelData.modelTitle}
             </h1>
             <p className="mt-3 text-[24px] leading-[1.2] text-[#4b5662]">
@@ -458,7 +458,7 @@ export default function ModelDetailContent({
             <h2 className="font-[var(--font-roboto-condensed)] text-[24px] font-bold leading-[1.15] tracking-normal text-[#0a0a0b]">
               Key Features
             </h2>
-            <p className="mt-2 font-[var(--font-roboto)] text-[14px] font-normal leading-6 tracking-normal text-[#384351]">
+            <p className="mt-2 font-[var(--font-roboto-condensed)] text-[14px] font-normal leading-6 tracking-normal text-[#384351]">
               Discover what makes the {modelData.modelNumber} stand out from the competition
             </p>
           </div>
@@ -472,7 +472,7 @@ export default function ModelDetailContent({
                   <h3 className="font-[var(--font-roboto-condensed)] text-[24px] font-bold leading-[1.15] tracking-normal text-[#0a0a0b]">
                     {feature.name}
                   </h3>
-                  <p className="mt-3 font-[var(--font-roboto)] text-[14px] font-normal leading-6 tracking-normal text-[#384351]">
+                  <p className="mt-3 font-[var(--font-roboto-condensed)] text-[14px] font-normal leading-6 tracking-normal text-[#384351]">
                     {feature.description}
                   </p>
                 </div>
@@ -596,7 +596,7 @@ export default function ModelDetailContent({
                   </div>
                 </div>
                 <p className="mt-4 text-sm uppercase tracking-[0.08em] text-[#5b6572]">{model.machineType}</p>
-                <h3 className="mt-1 align-middle !font-['DaggerSquare','Roboto',sans-serif] text-[28px] !font-normal uppercase leading-[120%] tracking-[0] text-[#0e1116] [font-style:oblique]">{model.modelNumber}</h3>
+                <h3 className="mt-1 align-middle !font-['DaggerSquare',var(--font-roboto-condensed),sans-serif] text-[28px] !font-normal uppercase leading-[120%] tracking-[0] text-[#0e1116] [font-style:oblique]">{model.modelNumber}</h3>
                 <p className="mt-1 text-[14px] leading-6 text-[#2f3a47]">{model.modelTitle}</p>
 
                 {model.keyFeatures.length > 0 ? (

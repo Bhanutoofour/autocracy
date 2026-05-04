@@ -304,7 +304,7 @@ export default function IndustryModelDetailTemplate({
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[var(--brand-yellow)]">
               {modelData.productName} application
             </p>
-            <h1 className="mt-4 align-middle !font-['DaggerSquare','Roboto',sans-serif] text-[32px] !font-normal uppercase leading-[120%] tracking-[0] [font-style:oblique]">
+            <h1 className="mt-4 align-middle !font-['DaggerSquare',var(--font-roboto-condensed),sans-serif] text-[32px] !font-normal uppercase leading-[120%] tracking-[0] [font-style:oblique]">
               {modelData.modelNumber} for {industryContext.industryLabel}
             </h1>
             <p className="mt-4 max-w-2xl text-[24px] leading-[1.2] text-white/80">
@@ -569,7 +569,7 @@ export default function IndustryModelDetailTemplate({
                   </div>
                 </div>
                 <p className="mt-4 text-sm uppercase tracking-[0.08em] text-[#5b6572]">{model.machineType}</p>
-                <h3 className="mt-1 align-middle !font-['DaggerSquare','Roboto',sans-serif] text-[28px] !font-normal uppercase leading-[120%] tracking-[0] text-[#0e1116] [font-style:oblique]">{model.modelNumber}</h3>
+                <h3 className="mt-1 align-middle !font-['DaggerSquare',var(--font-roboto-condensed),sans-serif] text-[28px] !font-normal uppercase leading-[120%] tracking-[0] text-[#0e1116] [font-style:oblique]">{model.modelNumber}</h3>
                 <p className="mt-1 text-[14px] leading-6 text-[#2f3a47]">{model.modelTitle}</p>
 
                 {model.keyFeatures.length > 0 ? (

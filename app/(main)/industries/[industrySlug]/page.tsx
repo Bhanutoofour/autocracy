@@ -497,7 +497,7 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
 
       <div className="border-b border-black/10 bg-[#f5f5f5]">
         <div className="site-container py-4">
-          <nav className="flex flex-wrap items-center gap-2 font-[var(--font-roboto)] text-[14px] leading-5 text-[#5b6572]">
+          <nav className="flex flex-wrap items-center gap-2 font-[var(--font-roboto-condensed)] text-[14px] leading-5 text-[#5b6572]">
             <Link className="transition hover:text-[#0a0a0b]" href={localizeHref("/", locale)}>
               {pageText.home}
             </Link>
@@ -521,7 +521,7 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
             <h1 className="mt-4 max-w-[780px] break-words font-[var(--font-roboto-condensed)] !text-[44px] font-black uppercase leading-[0.98] tracking-normal text-white sm:!text-[64px] lg:!text-[72px] xl:!text-[78px]">
               {industryData.title}
             </h1>
-            <p className="mt-6 max-w-[760px] font-[var(--font-roboto)] text-[16px] font-normal leading-7 tracking-normal text-white/80">
+            <p className="mt-6 max-w-[760px] font-[var(--font-roboto-condensed)] text-[16px] font-normal leading-7 tracking-normal text-white/80">
               {contentSummary}
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
@@ -545,7 +545,7 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
                   <p className="font-[var(--font-roboto-condensed)] text-[26px] font-bold leading-none text-white">
                     {item.value}
                   </p>
-                  <p className="mt-1 font-[var(--font-roboto)] text-[13px] font-normal uppercase leading-5 tracking-[0.08em] text-white/60">
+                  <p className="mt-1 font-[var(--font-roboto-condensed)] text-[13px] font-normal uppercase leading-5 tracking-[0.08em] text-white/60">
                     {item.label}
                   </p>
                 </div>
@@ -568,7 +568,7 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
                 <p className="font-[var(--font-roboto-condensed)] text-[18px] font-bold uppercase leading-6 text-white">
                   {pageText.imageCaptionTitle}
                 </p>
-                <p className="mt-1 font-[var(--font-roboto)] text-[13px] leading-5 text-white/70">
+                <p className="mt-1 font-[var(--font-roboto-condensed)] text-[13px] leading-5 text-white/70">
                   {pageText.imageCaptionBody}
                 </p>
               </div>
@@ -583,7 +583,7 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
             <h2 className="font-[var(--font-roboto-condensed)] !text-[34px] font-bold leading-tight text-[#0a0a0b] sm:!text-[40px]">
               {pageText.equipmentCategories}
             </h2>
-            <p className="mt-2 max-w-[720px] font-[var(--font-roboto)] text-[16px] font-normal leading-6 tracking-normal text-[#5b6572]">
+            <p className="mt-2 max-w-[720px] font-[var(--font-roboto-condensed)] text-[16px] font-normal leading-6 tracking-normal text-[#5b6572]">
               {pageText.equipmentCategoriesBody}
             </p>
           </div>
@@ -618,7 +618,7 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
                   <h3 className="font-[var(--font-roboto-condensed)] text-[26px] font-bold uppercase text-[#0a0a0b]">
                     {product.title}
                   </h3>
-                  <p className="mt-2 font-[var(--font-roboto)] text-[15px] font-normal leading-6 tracking-normal text-[#384351]">
+                  <p className="mt-2 font-[var(--font-roboto-condensed)] text-[15px] font-normal leading-6 tracking-normal text-[#384351]">
                     {pageText.productIntro(product.title ?? tUi(language, "product"))}
                   </p>
                   <div className="mt-auto pt-6">
@@ -658,7 +658,7 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
             <h2 className="mt-3 font-[var(--font-roboto-condensed)] !text-[34px] font-bold leading-[1.08] tracking-normal text-[#0a0a0b] sm:!text-[44px]">
               {industryExperience.applicationHeading}
             </h2>
-            <p className="mt-4 max-w-[720px] font-[var(--font-roboto)] text-[16px] font-normal leading-7 tracking-normal text-[#384351]">
+            <p className="mt-4 max-w-[720px] font-[var(--font-roboto-condensed)] text-[16px] font-normal leading-7 tracking-normal text-[#384351]">
               {industryExperience.applicationSummary}
             </p>
           </div>
@@ -669,7 +669,7 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
                 <h3 className="mt-5 font-[var(--font-roboto-condensed)] text-[22px] font-bold leading-[1.15] tracking-normal text-[#0a0a0b]">
                   {pillar.title}
                 </h3>
-                <p className="mt-3 font-[var(--font-roboto)] text-[14px] font-normal leading-6 tracking-normal text-[#384351]">
+                <p className="mt-3 font-[var(--font-roboto-condensed)] text-[14px] font-normal leading-6 tracking-normal text-[#384351]">
                   {pillar.body}
                 </p>
               </article>
@@ -687,7 +687,7 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
             <h2 className="mt-3 font-[var(--font-roboto-condensed)] !text-[36px] font-bold leading-[1.12] tracking-normal text-[#0a0a0b] sm:!text-[44px]">
               {pageText.selectionHeading}
             </h2>
-            <p className="mt-4 max-w-[620px] font-[var(--font-roboto)] text-[16px] font-normal leading-7 tracking-normal text-[#1f2937]">
+            <p className="mt-4 max-w-[620px] font-[var(--font-roboto-condensed)] text-[16px] font-normal leading-7 tracking-normal text-[#1f2937]">
               {pageText.selectionBody}
             </p>
           </div>
@@ -701,7 +701,7 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
                   <h3 className="font-[var(--font-roboto-condensed)] text-[24px] font-bold leading-[1.15] tracking-normal text-[#0a0a0b]">
                     {step.title}
                   </h3>
-                  <p className="mt-2 font-[var(--font-roboto)] text-[15px] font-normal leading-7 tracking-normal text-[#384351]">
+                  <p className="mt-2 font-[var(--font-roboto-condensed)] text-[15px] font-normal leading-7 tracking-normal text-[#384351]">
                     {step.body}
                   </p>
                 </div>
@@ -727,7 +727,7 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
                 <span className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center bg-black text-[var(--brand-yellow)]">
                   <CheckIcon className="h-4 w-4" />
                 </span>
-                <p className="font-[var(--font-roboto)] text-[15px] font-normal leading-7 tracking-normal text-[#2d3642]">
+                <p className="font-[var(--font-roboto-condensed)] text-[15px] font-normal leading-7 tracking-normal text-[#2d3642]">
                   {point}
                 </p>
               </div>
@@ -742,7 +742,7 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
             <h2 className="font-[var(--font-roboto-condensed)] !text-[32px] font-bold uppercase leading-tight tracking-normal sm:!text-[42px]">
               {pageText.ctaHeading}
             </h2>
-            <p className="mt-4 max-w-2xl font-[var(--font-roboto)] text-[16px] font-normal leading-7 text-white/75">
+            <p className="mt-4 max-w-2xl font-[var(--font-roboto-condensed)] text-[16px] font-normal leading-7 text-white/75">
               {pageText.ctaBody}
             </p>
           </div>
@@ -775,7 +775,7 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
                 <h3 className="font-[var(--font-roboto-condensed)] text-[22px] font-bold leading-[1.2] tracking-normal text-[#050506]">
                   {faq.question}
                 </h3>
-                <p className="mt-4 font-[var(--font-roboto)] text-[16px] font-normal leading-7 tracking-normal text-[#384351]">
+                <p className="mt-4 font-[var(--font-roboto-condensed)] text-[16px] font-normal leading-7 tracking-normal text-[#384351]">
                   {faq.answer}
                 </p>
               </article>
