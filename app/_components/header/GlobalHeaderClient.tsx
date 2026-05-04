@@ -297,7 +297,7 @@ export default function GlobalHeaderClient({ language, locale }: GlobalHeaderCli
     { label: messages.common.contactUs, href: toLocalizedHref("/contact-us"), showArrow: false },
   ];
   const navItemClass =
-    "flex items-center justify-center gap-1 text-right font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[16px] font-semibold leading-[105%] tracking-[0] transition";
+    "flex items-center justify-center gap-1 text-center font-['Roboto',Arial,Helvetica,sans-serif] text-[17px] font-semibold leading-[105%] tracking-[0] text-[#000000] [font-stretch:75%] transition";
   const topBarItemClass =
     "hidden items-center gap-2 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-semibold uppercase leading-[105%] tracking-[0]";
   const topBarSwitcherClass =

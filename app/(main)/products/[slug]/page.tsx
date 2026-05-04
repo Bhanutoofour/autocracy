@@ -546,7 +546,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 </div>
                 <div className="flex flex-1 flex-col p-5">
                   <p className="font-['Roboto',Arial,Helvetica,sans-serif] text-[14px] font-normal uppercase leading-5 tracking-normal text-[#6b6f76]">{model.machineType}</p>
-                  <h3 className="mt-1 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[26px] font-bold uppercase text-[#0a0a0b]">
+                  <h3 className="mt-1 align-middle !font-['DaggerSquare','Roboto',Arial,sans-serif] text-[28px] !font-normal uppercase leading-[120%] tracking-[0] text-[#0a0a0b] [font-style:oblique]">
                     {model.modelNumber}
                   </h3>
                   <p className="mt-1 font-['Roboto',Arial,Helvetica,sans-serif] text-[15px] font-normal leading-6 tracking-normal text-[#2d3642]">{model.modelTitle}</p>

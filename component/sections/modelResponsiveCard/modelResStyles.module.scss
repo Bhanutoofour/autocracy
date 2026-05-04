@@ -13,10 +13,13 @@
 }
 
 .modelName {
-  font-weight: 400;
-  font-style: OBLIQUE;
-  font-size: 24px;
+  font-family: "DaggerSquare", "Roboto", sans-serif !important;
+  font-weight: 400 !important;
+  font-style: oblique;
+  font-size: 28px;
   line-height: 120%;
+  letter-spacing: 0;
+  vertical-align: middle;
   text-transform: uppercase;
   text-align: left;
 }

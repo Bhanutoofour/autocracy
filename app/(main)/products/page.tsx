@@ -60,7 +60,7 @@ export default async function ProductsListingPage() {
                   src={product.thumbnail}
                 />
               </div>
-              <h2 className="mt-4 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-2xl font-semibold text-[#111113]">
+              <h2 className="mt-4 align-middle !font-['DaggerSquare','Roboto',Arial,sans-serif] text-[32px] !font-normal uppercase leading-[120%] tracking-[0] text-[#111113] [font-style:oblique]">
                 {product.title}
               </h2>
             </Link>

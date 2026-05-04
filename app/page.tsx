@@ -626,7 +626,7 @@ function IndustriesSection({
           <p className="mb-6 text-[18px] font-normal uppercase leading-none tracking-[0.75em] text-[#243245]">
             {messages.home.industriesTitle}
           </p>
-          <h2 className="text-center font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[40px] font-bold leading-[1.05] tracking-normal text-[#0a0a0b]">
+          <h2 className="text-center font-['Roboto',Arial,Helvetica,sans-serif] text-[40px] font-bold leading-[105%] tracking-[0] text-[#0a0a0b] [font-stretch:75%]">
             {messages.home.chooseIndustry}
           </h2>
         </div>
