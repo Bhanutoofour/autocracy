@@ -248,23 +248,23 @@ export default function LocationGate() {
     <>
       {open ? (
         <div className="fixed inset-0 z-[100] grid place-items-center bg-black/35 p-4">
-          <div className="w-full max-w-[760px] overflow-hidden rounded-md bg-[#ececec] shadow-[0_20px_50px_rgba(0,0,0,0.3)]">
-            <div className="bg-[var(--brand-yellow)] px-6 py-5 sm:px-10 sm:py-6">
-              <h2 className="font-[var(--font-roboto-condensed)] text-[22px] font-extrabold leading-[1.15] text-[#0a0a0b] sm:text-[28px]">
+          <div className="w-full max-w-[560px] overflow-hidden rounded-md bg-[#f1f1f1] shadow-[0_16px_40px_rgba(0,0,0,0.28)]">
+            <div className="bg-[var(--brand-yellow)] px-5 py-4 sm:px-7">
+              <h2 className="font-[var(--font-roboto-condensed)] text-[20px] font-extrabold leading-[1.15] text-[#0a0a0b] sm:text-[24px]">
                 {messages.locationGate.title}
               </h2>
             </div>
 
-            <div className="px-6 py-7 sm:px-10 sm:py-8">
+            <div className="px-5 py-5 sm:px-7 sm:py-6">
               <label
-                className="mb-3 block font-[var(--font-roboto-condensed)] text-[14px] font-normal text-[#20242a] sm:text-[16px]"
+                className="mb-2 block font-[var(--font-roboto-condensed)] text-[14px] font-normal text-[#20242a] sm:text-[15px]"
                 htmlFor="country-select"
               >
                 {messages.locationGate.selectCountry}
               </label>
               <div className="relative">
                 <select
-                  className="h-[56px] w-full appearance-none rounded-xl border border-black/20 bg-[#efefef] px-4 pr-12 font-[var(--font-roboto-condensed)] text-[18px] font-normal text-[#0a0a0b] outline-none focus:border-black/35 sm:px-6 sm:pr-14 sm:text-[20px]"
+                  className="h-[48px] w-full appearance-none rounded-lg border border-black/20 bg-white px-4 pr-11 font-[var(--font-roboto-condensed)] text-[17px] font-normal text-[#0a0a0b] outline-none focus:border-black/35 sm:text-[18px]"
                   id="country-select"
                   onChange={(event) => {
                     const value = normalizeCountryCode(event.target.value);
@@ -283,10 +283,10 @@ export default function LocationGate() {
                     </option>
                   ))}
                 </select>
-                <span className="pointer-events-none absolute inset-y-0 right-4 grid place-items-center text-[#2f3237] sm:right-5">
+                <span className="pointer-events-none absolute inset-y-0 right-4 grid place-items-center text-[#2f3237]">
                   <svg
                     aria-hidden="true"
-                    className="h-5 w-5"
+                    className="h-4 w-4"
                     fill="none"
                     stroke="currentColor"
                     strokeLinecap="round"
@@ -300,14 +300,14 @@ export default function LocationGate() {
               </div>
 
               <label
-                className="mb-3 mt-5 block font-[var(--font-roboto-condensed)] text-[14px] font-normal text-[#20242a] sm:text-[16px]"
+                className="mb-2 mt-4 block font-[var(--font-roboto-condensed)] text-[14px] font-normal text-[#20242a] sm:text-[15px]"
                 htmlFor="language-select"
               >
                 {getSelectLanguageLabel(selectedLanguage)}
               </label>
               <div className="relative">
                 <select
-                  className="h-[56px] w-full appearance-none rounded-xl border border-black/20 bg-[#efefef] px-4 pr-12 font-[var(--font-roboto-condensed)] text-[18px] font-normal text-[#0a0a0b] outline-none focus:border-black/35 sm:px-6 sm:pr-14 sm:text-[20px]"
+                  className="h-[48px] w-full appearance-none rounded-lg border border-black/20 bg-white px-4 pr-11 font-[var(--font-roboto-condensed)] text-[17px] font-normal text-[#0a0a0b] outline-none focus:border-black/35 sm:text-[18px]"
                   id="language-select"
                   onChange={(event) => {
                     const next = event.target.value.toLowerCase();
@@ -323,10 +323,10 @@ export default function LocationGate() {
                     </option>
                   ))}
                 </select>
-                <span className="pointer-events-none absolute inset-y-0 right-4 grid place-items-center text-[#2f3237] sm:right-5">
+                <span className="pointer-events-none absolute inset-y-0 right-4 grid place-items-center text-[#2f3237]">
                   <svg
                     aria-hidden="true"
-                    className="h-5 w-5"
+                    className="h-4 w-4"
                     fill="none"
                     stroke="currentColor"
                     strokeLinecap="round"
@@ -339,9 +339,9 @@ export default function LocationGate() {
                 </span>
               </div>
 
-              <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <button
-                  className={`h-[54px] rounded-md font-[var(--font-roboto-condensed)] text-[18px] font-extrabold text-[#0a0a0b] transition sm:text-[20px] ${
+                  className={`h-[46px] rounded-md font-[var(--font-roboto-condensed)] text-[17px] font-extrabold text-[#0a0a0b] transition sm:text-[18px] ${
                     isSelectedCountryLive
                       ? "bg-[#f7b322] hover:brightness-95"
                       : "cursor-not-allowed bg-[#d6d6d6]"
@@ -353,7 +353,7 @@ export default function LocationGate() {
                   {isSelectedCountryLive ? messages.locationGate.confirm : "Coming Soon"}
                 </button>
                 <button
-                  className="h-[54px] rounded-md border border-black/45 bg-transparent font-[var(--font-roboto-condensed)] text-[18px] font-bold text-[#0a0a0b] transition hover:bg-black/5 sm:text-[20px]"
+                  className="h-[46px] rounded-md border border-black/35 bg-transparent font-[var(--font-roboto-condensed)] text-[17px] font-bold text-[#0a0a0b] transition hover:bg-black/5 sm:text-[18px]"
                   onClick={handleCancel}
                   type="button"
                 >
@@ -361,7 +361,7 @@ export default function LocationGate() {
                 </button>
               </div>
 
-              <p className="mt-4 text-sm text-[#444]">
+              <p className="mt-3 text-sm text-[#444]">
                 {messages.locationGate.autoDetected}{" "}
                 <span className="font-semibold">{selectedLabel}</span>
               </p>
