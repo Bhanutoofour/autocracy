@@ -304,7 +304,7 @@ export default function IndustryModelDetailTemplate({
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[var(--brand-yellow)]">
               {modelData.productName} application
             </p>
-            <h1 className="mt-4 align-middle !font-['DaggerSquare','Roboto',Arial,sans-serif] text-[28px] !font-normal uppercase leading-[120%] tracking-[0] [font-style:oblique]">
+            <h1 className="mt-4 align-middle !font-['DaggerSquare','Roboto',Arial,sans-serif] text-[32px] !font-normal uppercase leading-[120%] tracking-[0] [font-style:oblique]">
               {modelData.modelNumber} for {industryContext.industryLabel}
             </h1>
             <p className="mt-4 max-w-2xl text-[24px] leading-[1.2] text-white/80">
