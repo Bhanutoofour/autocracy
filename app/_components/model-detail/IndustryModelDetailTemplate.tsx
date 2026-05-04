@@ -304,7 +304,7 @@ export default function IndustryModelDetailTemplate({
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[var(--brand-yellow)]">
               {modelData.productName} application
             </p>
-            <h1 className="mt-4 align-middle !font-['DaggerSquare','Roboto',Arial,sans-serif] text-[32px] !font-normal uppercase leading-[120%] tracking-[0] [font-style:oblique]">
+            <h1 className="mt-4 align-middle !font-['DaggerSquare','Roboto',sans-serif] text-[32px] !font-normal uppercase leading-[120%] tracking-[0] [font-style:oblique]">
               {modelData.modelNumber} for {industryContext.industryLabel}
             </h1>
             <p className="mt-4 max-w-2xl text-[24px] leading-[1.2] text-white/80">
@@ -382,7 +382,7 @@ export default function IndustryModelDetailTemplate({
               <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#6b6f76]">
                 Application Fit
               </p>
-              <h2 className="mt-3 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-bold leading-[1.15] text-[#0a0a0b]">
+              <h2 className="mt-3 font-[var(--font-roboto-condensed)] text-[24px] font-bold leading-[1.15] text-[#0a0a0b]">
                 Built around {industryContext.industryLabel} execution needs
               </h2>
             </div>
@@ -407,7 +407,7 @@ export default function IndustryModelDetailTemplate({
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#6b6f76]">
               Project Execution
             </p>
-            <h2 className="mt-3 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-bold leading-[1.15] text-[#0a0a0b]">
+            <h2 className="mt-3 font-[var(--font-roboto-condensed)] text-[24px] font-bold leading-[1.15] text-[#0a0a0b]">
               How the {modelData.modelNumber} fits the worksite
             </h2>
           </div>
@@ -422,7 +422,7 @@ export default function IndustryModelDetailTemplate({
                   <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#68717d]">
                     {industryContext.industryLabel}
                   </p>
-                  <h3 className="mt-2 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-bold leading-[1.15] text-[#0a0a0b]">
+                  <h3 className="mt-2 font-[var(--font-roboto-condensed)] text-[24px] font-bold leading-[1.15] text-[#0a0a0b]">
                     {block.title}
                   </h3>
                   <div className="mt-4 space-y-3 text-[14px] leading-6 text-[#2d3642]">
@@ -448,7 +448,7 @@ export default function IndustryModelDetailTemplate({
                 <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[var(--brand-yellow)]">
                   Machine Fit
                 </p>
-                <h2 className="mt-3 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-bold leading-[1.15]">
+                <h2 className="mt-3 font-[var(--font-roboto-condensed)] text-[24px] font-bold leading-[1.15]">
                   {specsHeading}
                 </h2>
                 <p className="mt-4 text-[14px] leading-6 text-white/75">{specsParagraph}</p>
@@ -472,7 +472,7 @@ export default function IndustryModelDetailTemplate({
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#6b6f76]">
               Workflow
             </p>
-            <h2 className="mt-3 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-bold leading-[1.15] text-[#0a0a0b]">
+            <h2 className="mt-3 font-[var(--font-roboto-condensed)] text-[24px] font-bold leading-[1.15] text-[#0a0a0b]">
               From route planning to handoff
             </h2>
           </div>
@@ -482,7 +482,7 @@ export default function IndustryModelDetailTemplate({
                 <span className="grid size-9 place-items-center rounded bg-[var(--brand-yellow)] text-sm font-bold text-black">
                   {index + 1}
                 </span>
-                <h3 className="mt-4 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-bold leading-[1.15] text-[#0a0a0b]">
+                <h3 className="mt-4 font-[var(--font-roboto-condensed)] text-[24px] font-bold leading-[1.15] text-[#0a0a0b]">
                   {item.title}
                 </h3>
                 <p className="mt-3 text-[14px] leading-6 text-[#384351]">{item.text}</p>
@@ -498,7 +498,7 @@ export default function IndustryModelDetailTemplate({
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#6b6f76]">
               Application Support
             </p>
-            <h2 className="mt-3 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-bold leading-[1.15] text-[#0a0a0b]">
+            <h2 className="mt-3 font-[var(--font-roboto-condensed)] text-[24px] font-bold leading-[1.15] text-[#0a0a0b]">
               Need {modelData.modelNumber} for {industryContext.industryLabel}?
             </h2>
             <p className="mt-4 max-w-3xl text-[14px] leading-6 text-[#384351]">
@@ -529,7 +529,7 @@ export default function IndustryModelDetailTemplate({
       <section className="site-container py-12 lg:py-16">
         <div className="mx-auto max-w-4xl">
           <div className="text-center">
-            <h2 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-bold leading-[1.15] text-[#0a0a0b]">
+            <h2 className="font-[var(--font-roboto-condensed)] text-[24px] font-bold leading-[1.15] text-[#0a0a0b]">
               {industryContext.industryLabel} FAQs
             </h2>
             <p className="mt-2 text-[14px] leading-6 text-[#5b6572]">
@@ -539,7 +539,7 @@ export default function IndustryModelDetailTemplate({
           <div className="mt-8 grid gap-5">
             {faqItems.map((faq, index) => (
               <article className="rounded-[8px] border border-black/10 bg-[#f5f5f5] p-6" key={`industry-model-faq-${index}`}>
-                <h3 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-bold leading-[1.15] text-[#0a0a0b]">
+                <h3 className="font-[var(--font-roboto-condensed)] text-[24px] font-bold leading-[1.15] text-[#0a0a0b]">
                   {faq.question}
                 </h3>
                 <p className="mt-2 text-[14px] leading-6 text-[#384351]">{faq.answer}</p>
@@ -551,7 +551,7 @@ export default function IndustryModelDetailTemplate({
 
       {relatedModels.length > 0 ? (
         <section className="site-container pb-12">
-          <h2 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-bold leading-[1.15] text-[#0a0a0b]">
+          <h2 className="font-[var(--font-roboto-condensed)] text-[24px] font-bold leading-[1.15] text-[#0a0a0b]">
             More {industryContext.industryLabel} Models in {modelData.series}
           </h2>
           <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -569,7 +569,7 @@ export default function IndustryModelDetailTemplate({
                   </div>
                 </div>
                 <p className="mt-4 text-sm uppercase tracking-[0.08em] text-[#5b6572]">{model.machineType}</p>
-                <h3 className="mt-1 align-middle !font-['DaggerSquare','Roboto',Arial,sans-serif] text-[28px] !font-normal uppercase leading-[120%] tracking-[0] text-[#0e1116] [font-style:oblique]">{model.modelNumber}</h3>
+                <h3 className="mt-1 align-middle !font-['DaggerSquare','Roboto',sans-serif] text-[28px] !font-normal uppercase leading-[120%] tracking-[0] text-[#0e1116] [font-style:oblique]">{model.modelNumber}</h3>
                 <p className="mt-1 text-[14px] leading-6 text-[#2f3a47]">{model.modelTitle}</p>
 
                 {model.keyFeatures.length > 0 ? (

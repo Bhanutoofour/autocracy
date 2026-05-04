@@ -250,21 +250,21 @@ export default function LocationGate() {
         <div className="fixed inset-0 z-[100] grid place-items-center bg-black/35 p-4">
           <div className="w-full max-w-[760px] overflow-hidden rounded-md bg-[#ececec] shadow-[0_20px_50px_rgba(0,0,0,0.3)]">
             <div className="bg-[var(--brand-yellow)] px-6 py-5 sm:px-10 sm:py-6">
-              <h2 className="font-['Roboto',Arial,Helvetica,sans-serif] text-[22px] font-extrabold leading-[1.15] text-[#0a0a0b] sm:text-[28px]">
+              <h2 className="font-[var(--font-roboto)] text-[22px] font-extrabold leading-[1.15] text-[#0a0a0b] sm:text-[28px]">
                 {messages.locationGate.title}
               </h2>
             </div>
 
             <div className="px-6 py-7 sm:px-10 sm:py-8">
               <label
-                className="mb-3 block font-['Roboto',Arial,Helvetica,sans-serif] text-[14px] font-normal text-[#20242a] sm:text-[16px]"
+                className="mb-3 block font-[var(--font-roboto)] text-[14px] font-normal text-[#20242a] sm:text-[16px]"
                 htmlFor="country-select"
               >
                 {messages.locationGate.selectCountry}
               </label>
               <div className="relative">
                 <select
-                  className="h-[56px] w-full appearance-none rounded-xl border border-black/20 bg-[#efefef] px-4 pr-12 font-['Roboto',Arial,Helvetica,sans-serif] text-[18px] font-normal text-[#0a0a0b] outline-none focus:border-black/35 sm:px-6 sm:pr-14 sm:text-[20px]"
+                  className="h-[56px] w-full appearance-none rounded-xl border border-black/20 bg-[#efefef] px-4 pr-12 font-[var(--font-roboto)] text-[18px] font-normal text-[#0a0a0b] outline-none focus:border-black/35 sm:px-6 sm:pr-14 sm:text-[20px]"
                   id="country-select"
                   onChange={(event) => {
                     const value = normalizeCountryCode(event.target.value);
@@ -300,14 +300,14 @@ export default function LocationGate() {
               </div>
 
               <label
-                className="mb-3 mt-5 block font-['Roboto',Arial,Helvetica,sans-serif] text-[14px] font-normal text-[#20242a] sm:text-[16px]"
+                className="mb-3 mt-5 block font-[var(--font-roboto)] text-[14px] font-normal text-[#20242a] sm:text-[16px]"
                 htmlFor="language-select"
               >
                 {getSelectLanguageLabel(selectedLanguage)}
               </label>
               <div className="relative">
                 <select
-                  className="h-[56px] w-full appearance-none rounded-xl border border-black/20 bg-[#efefef] px-4 pr-12 font-['Roboto',Arial,Helvetica,sans-serif] text-[18px] font-normal text-[#0a0a0b] outline-none focus:border-black/35 sm:px-6 sm:pr-14 sm:text-[20px]"
+                  className="h-[56px] w-full appearance-none rounded-xl border border-black/20 bg-[#efefef] px-4 pr-12 font-[var(--font-roboto)] text-[18px] font-normal text-[#0a0a0b] outline-none focus:border-black/35 sm:px-6 sm:pr-14 sm:text-[20px]"
                   id="language-select"
                   onChange={(event) => {
                     const next = event.target.value.toLowerCase();
@@ -341,7 +341,7 @@ export default function LocationGate() {
 
               <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <button
-                  className={`h-[54px] rounded-md font-['Roboto',Arial,Helvetica,sans-serif] text-[18px] font-extrabold text-[#0a0a0b] transition sm:text-[20px] ${
+                  className={`h-[54px] rounded-md font-[var(--font-roboto)] text-[18px] font-extrabold text-[#0a0a0b] transition sm:text-[20px] ${
                     isSelectedCountryLive
                       ? "bg-[#f7b322] hover:brightness-95"
                       : "cursor-not-allowed bg-[#d6d6d6]"
@@ -353,7 +353,7 @@ export default function LocationGate() {
                   {isSelectedCountryLive ? messages.locationGate.confirm : "Coming Soon"}
                 </button>
                 <button
-                  className="h-[54px] rounded-md border border-black/45 bg-transparent font-['Roboto',Arial,Helvetica,sans-serif] text-[18px] font-bold text-[#0a0a0b] transition hover:bg-black/5 sm:text-[20px]"
+                  className="h-[54px] rounded-md border border-black/45 bg-transparent font-[var(--font-roboto)] text-[18px] font-bold text-[#0a0a0b] transition hover:bg-black/5 sm:text-[20px]"
                   onClick={handleCancel}
                   type="button"
                 >

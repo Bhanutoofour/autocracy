@@ -223,7 +223,7 @@ function ProductMenuCard({
           />
         </div>
         <span
-          className="line-clamp-2 max-w-[160px] align-middle font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[16px] font-bold leading-[120%] tracking-[0] text-[#0A0A0B]"
+          className="line-clamp-2 max-w-[160px] align-middle font-[var(--font-roboto-condensed)] text-[16px] font-bold leading-[120%] tracking-[0] text-[#0A0A0B]"
         >
           {card.displayLabel}
         </span>
@@ -297,13 +297,13 @@ export default function GlobalHeaderClient({ language, locale }: GlobalHeaderCli
     { label: messages.common.contactUs, href: toLocalizedHref("/contact-us"), showArrow: false },
   ];
   const navItemClass =
-    "flex items-center justify-center gap-1 text-center font-['Roboto',Arial,Helvetica,sans-serif] text-[17px] font-semibold leading-[105%] tracking-[0] text-[#000000] [font-stretch:75%] transition";
+    "flex items-center justify-center gap-1 text-center font-[var(--font-roboto)] text-[17px] font-semibold leading-[105%] tracking-[0] text-[#000000] [font-stretch:75%] transition";
   const topBarItemClass =
-    "hidden items-center gap-2 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-semibold uppercase leading-[105%] tracking-[0]";
+    "hidden items-center gap-2 font-[var(--font-roboto-condensed)] text-[14px] font-semibold uppercase leading-[105%] tracking-[0]";
   const topBarSwitcherClass =
-    "inline-flex h-8 min-w-[52px] items-center justify-center gap-1 rounded bg-transparent px-1 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-semibold uppercase leading-[105%] tracking-[0] text-[#0a0a0b]";
+    "inline-flex h-8 min-w-[52px] items-center justify-center gap-1 rounded bg-transparent px-1 font-[var(--font-roboto-condensed)] text-[14px] font-semibold uppercase leading-[105%] tracking-[0] text-[#0a0a0b]";
   const topBarLanguageClass =
-    "relative inline-flex h-8 min-w-[38px] items-center rounded bg-transparent px-1 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-semibold uppercase leading-[105%] tracking-[0] text-[#0a0a0b]";
+    "relative inline-flex h-8 min-w-[38px] items-center rounded bg-transparent px-1 font-[var(--font-roboto-condensed)] text-[14px] font-semibold uppercase leading-[105%] tracking-[0] text-[#0a0a0b]";
 
   useEffect(() => {
     document.body.style.overflow = mobileMenuOpen ? "hidden" : "";
@@ -329,7 +329,7 @@ export default function GlobalHeaderClient({ language, locale }: GlobalHeaderCli
 
   return (
     <header className="sticky top-0 z-50 border-b border-black/10 bg-white">
-      <div className="hidden bg-[var(--brand-yellow)] font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-semibold uppercase leading-[105%] tracking-[0] text-[var(--ink)] lg:block">
+      <div className="hidden bg-[var(--brand-yellow)] font-[var(--font-roboto-condensed)] text-[14px] font-semibold uppercase leading-[105%] tracking-[0] text-[var(--ink)] lg:block">
         <div className="site-container flex h-8 items-center justify-end">
           <div className="flex items-center gap-4">
             <a className={`${topBarItemClass} sm:flex`} href="tel:+918790473345">
@@ -391,14 +391,14 @@ export default function GlobalHeaderClient({ language, locale }: GlobalHeaderCli
 
           <div className="flex items-center gap-3">
             <a
-              className="flex h-10 items-center justify-center gap-2 border border-[var(--ink)] px-4 text-center font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-semibold uppercase leading-5 tracking-normal text-[#0a0a0b] transition hover:bg-black/5"
+              className="flex h-10 items-center justify-center gap-2 border border-[var(--ink)] px-4 text-center font-[var(--font-roboto-condensed)] text-[14px] font-semibold uppercase leading-5 tracking-normal text-[#0a0a0b] transition hover:bg-black/5"
               href={toLocalizedHref("/brochure")}
             >
               <Icon className="size-5" name="download" />
               {messages.common.brochure}
             </a>
             <a
-              className="button-gold-text flex h-10 items-center justify-center bg-[var(--ink)] px-6 text-center font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-semibold uppercase leading-5 tracking-normal transition hover:bg-[#2d2d2d]"
+              className="button-gold-text flex h-10 items-center justify-center bg-[var(--ink)] px-6 text-center font-[var(--font-roboto-condensed)] text-[14px] font-semibold uppercase leading-5 tracking-normal transition hover:bg-[#2d2d2d]"
               href={toLocalizedHref("/contact-us")}
               style={{ color: "#f9c300" }}
             >
@@ -414,7 +414,7 @@ export default function GlobalHeaderClient({ language, locale }: GlobalHeaderCli
                 <div className="space-y-1">
                   {INDUSTRIES.map((industry) => (
                     <button
-                      className={`flex w-full items-center justify-between border-l-[3px] px-5 py-2.5 text-left font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[18px] leading-[20px] tracking-[0] transition ${
+                      className={`flex w-full items-center justify-between border-l-[3px] px-5 py-2.5 text-left font-[var(--font-roboto-condensed)] text-[18px] leading-[20px] tracking-[0] transition ${
                         activeIndustry === industry
                           ? "border-[var(--brand-yellow)] font-bold text-[#111113]"
                           : "border-transparent font-normal text-[#2b2b2e] hover:border-black/20"
@@ -492,7 +492,7 @@ export default function GlobalHeaderClient({ language, locale }: GlobalHeaderCli
         <div className="site-container flex h-[88px] items-center justify-between bg-[#f2f2f2]">
           <Logo homeHref={toLocalizedHref("/")} />
           <a
-            className="flex h-[46px] items-center justify-center gap-2 border border-[var(--ink)] bg-[#f2f2f2] px-5 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-semibold uppercase leading-none text-[#0a0a0b]"
+            className="flex h-[46px] items-center justify-center gap-2 border border-[var(--ink)] bg-[#f2f2f2] px-5 font-[var(--font-roboto-condensed)] text-[14px] font-semibold uppercase leading-none text-[#0a0a0b]"
             href={toLocalizedHref("/brochure")}
           >
             <Icon className="size-4" name="download" />
@@ -514,7 +514,7 @@ export default function GlobalHeaderClient({ language, locale }: GlobalHeaderCli
                       {mobileMainMenu.map((item) =>
                         item.panel ? (
                           <button
-                            className="flex h-12 items-center justify-between gap-3 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[15px] font-bold uppercase leading-none text-[#0a0a0b] min-[360px]:h-[50px] min-[360px]:text-[16px]"
+                            className="flex h-12 items-center justify-between gap-3 font-[var(--font-roboto-condensed)] text-[15px] font-bold uppercase leading-none text-[#0a0a0b] min-[360px]:h-[50px] min-[360px]:text-[16px]"
                             key={item.label}
                             onClick={() => setMobilePanel(item.panel)}
                             type="button"
@@ -524,7 +524,7 @@ export default function GlobalHeaderClient({ language, locale }: GlobalHeaderCli
                           </button>
                         ) : (
                           <Link
-                            className="flex h-12 items-center justify-between gap-3 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[15px] font-bold uppercase leading-none text-[#0a0a0b] min-[360px]:h-[50px] min-[360px]:text-[16px]"
+                            className="flex h-12 items-center justify-between gap-3 font-[var(--font-roboto-condensed)] text-[15px] font-bold uppercase leading-none text-[#0a0a0b] min-[360px]:h-[50px] min-[360px]:text-[16px]"
                             href={item.href}
                             key={item.label}
                             onClick={closeMobileMenu}
@@ -545,7 +545,7 @@ export default function GlobalHeaderClient({ language, locale }: GlobalHeaderCli
                       <LanguageSwitcherButton />
                     </div>
                     <a
-                      className="mb-6 inline-flex items-center gap-2 font-['Roboto',Arial,Helvetica,sans-serif] text-[16px] font-semibold text-[#0a0a0b]"
+                      className="mb-6 inline-flex items-center gap-2 font-[var(--font-roboto)] text-[16px] font-semibold text-[#0a0a0b]"
                       href="tel:+918790473345"
                     >
                       <Icon className="size-7" name="phone" />
@@ -553,14 +553,14 @@ export default function GlobalHeaderClient({ language, locale }: GlobalHeaderCli
                     </a>
                     <div className="grid grid-cols-2 gap-2 min-[360px]:gap-4">
                       <a
-                        className="flex h-14 min-w-0 items-center justify-center bg-[var(--brand-yellow)] px-2 text-center font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[12px] font-bold uppercase leading-none text-[#0a0a0b] min-[360px]:h-[62px] min-[360px]:text-[14px]"
+                        className="flex h-14 min-w-0 items-center justify-center bg-[var(--brand-yellow)] px-2 text-center font-[var(--font-roboto-condensed)] text-[12px] font-bold uppercase leading-none text-[#0a0a0b] min-[360px]:h-[62px] min-[360px]:text-[14px]"
                         href={toLocalizedHref("/contact-us")}
                         onClick={closeMobileMenu}
                       >
                         {messages.common.getQuote}
                       </a>
                       <a
-                        className="flex h-14 min-w-0 items-center justify-center gap-1 border border-black/30 px-2 text-center font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[12px] font-semibold uppercase leading-none text-[#0a0a0b] min-[360px]:h-[62px] min-[360px]:gap-2 min-[360px]:text-[14px]"
+                        className="flex h-14 min-w-0 items-center justify-center gap-1 border border-black/30 px-2 text-center font-[var(--font-roboto-condensed)] text-[12px] font-semibold uppercase leading-none text-[#0a0a0b] min-[360px]:h-[62px] min-[360px]:gap-2 min-[360px]:text-[14px]"
                         href={toLocalizedHref("/brochure")}
                         onClick={closeMobileMenu}
                       >
@@ -573,7 +573,7 @@ export default function GlobalHeaderClient({ language, locale }: GlobalHeaderCli
               ) : (
                 <div className="h-full overflow-y-auto bg-white px-5 pb-[calc(2rem+env(safe-area-inset-bottom))] pt-6 min-[390px]:px-8 min-[390px]:pb-[calc(2.5rem+env(safe-area-inset-bottom))] min-[390px]:pt-7">
                   <button
-                    className="flex min-h-11 w-full min-w-0 items-center gap-3 text-left font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[22px] font-bold uppercase leading-[1.05] text-[#0a0a0b] min-[390px]:gap-4 min-[390px]:text-[24px]"
+                    className="flex min-h-11 w-full min-w-0 items-center gap-3 text-left font-[var(--font-roboto-condensed)] text-[22px] font-bold uppercase leading-[1.05] text-[#0a0a0b] min-[390px]:gap-4 min-[390px]:text-[24px]"
                     onClick={() => setMobilePanel("main")}
                     type="button"
                   >
@@ -589,7 +589,7 @@ export default function GlobalHeaderClient({ language, locale }: GlobalHeaderCli
                     {mobilePanel === "industries"
                       ? INDUSTRIES.map((industry) => (
                           <Link
-                            className="flex min-h-[44px] w-full min-w-0 items-center justify-between gap-2 py-2 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[16px] font-bold leading-[1.15] text-[#0a0a0b] min-[390px]:gap-4 min-[390px]:text-[18px]"
+                            className="flex min-h-[44px] w-full min-w-0 items-center justify-between gap-2 py-2 font-[var(--font-roboto-condensed)] text-[16px] font-bold leading-[1.15] text-[#0a0a0b] min-[390px]:gap-4 min-[390px]:text-[18px]"
                             href={toLocalizedHref(industryToHref(industry))}
                             key={industry}
                             onClick={closeMobileMenu}
@@ -602,7 +602,7 @@ export default function GlobalHeaderClient({ language, locale }: GlobalHeaderCli
                         ))
                       : MENU_PRODUCTS.map((card) => (
                           <Link
-                            className="flex min-h-[44px] w-full min-w-0 items-center justify-between gap-2 py-2 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[16px] font-bold leading-[1.15] text-[#0a0a0b] min-[390px]:gap-4 min-[390px]:text-[18px]"
+                            className="flex min-h-[44px] w-full min-w-0 items-center justify-between gap-2 py-2 font-[var(--font-roboto-condensed)] text-[16px] font-bold leading-[1.15] text-[#0a0a0b] min-[390px]:gap-4 min-[390px]:text-[18px]"
                             href={toLocalizedHref(productToHref(card.label))}
                             key={card.label}
                             onClick={closeMobileMenu}

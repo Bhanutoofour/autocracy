@@ -40,7 +40,7 @@ export default async function IndustriesListingPage() {
 
   return (
     <main className="site-container py-12">
-      <h1 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-4xl font-bold uppercase text-[#0a0a0b]">
+      <h1 className="font-[var(--font-roboto-condensed)] text-4xl font-bold uppercase text-[#0a0a0b]">
         {tUi(language, "industries")}
       </h1>
       {industries.length > 0 ? (
@@ -60,7 +60,7 @@ export default async function IndustriesListingPage() {
                   src={industry.thumbnail}
                 />
               </div>
-              <h2 className="mt-4 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-2xl font-semibold text-[#111113]">
+              <h2 className="mt-4 font-[var(--font-roboto-condensed)] text-2xl font-semibold text-[#111113]">
                 {industry.title}
               </h2>
             </Link>

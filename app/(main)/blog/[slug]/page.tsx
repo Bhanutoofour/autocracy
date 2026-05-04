@@ -151,7 +151,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
       </Link>
 
       <article className="mt-5">
-        <h1 className="max-w-[980px] font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[40px] font-bold leading-[1.1] text-[#0a0a0b] sm:text-[52px]">
+        <h1 className="max-w-[980px] font-[var(--font-roboto-condensed)] text-[40px] font-bold leading-[1.1] text-[#0a0a0b] sm:text-[52px]">
           {blog.title}
         </h1>
         {publishedOn ? (
@@ -179,7 +179,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
 
         {looksLikeHtml(blog.content) ? (
           <section
-            className="prose prose-lg mt-8 max-w-none text-[#1f2937] prose-headings:font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] prose-headings:text-[#0a0a0b] prose-a:text-[#2f64b7] prose-img:rounded-md"
+            className="prose prose-lg mt-8 max-w-none text-[#1f2937] prose-headings:font-[var(--font-roboto-condensed)] prose-headings:text-[#0a0a0b] prose-a:text-[#2f64b7] prose-img:rounded-md"
             dangerouslySetInnerHTML={{ __html: blog.content }}
           />
         ) : (
@@ -191,7 +191,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
 
       {relatedBlogs.length > 0 ? (
         <section className="mt-14">
-          <h2 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[34px] font-bold leading-[1.15] text-[#0a0a0b]">
+          <h2 className="font-[var(--font-roboto-condensed)] text-[34px] font-bold leading-[1.15] text-[#0a0a0b]">
             Related Blogs
           </h2>
           <div className="mt-6 grid gap-6 md:grid-cols-3">
@@ -212,7 +212,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                     />
                   </Link>
                   <div className="flex flex-1 flex-col p-4">
-                    <h3 className="line-clamp-2 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-bold leading-[1.2] text-[#111113]">
+                    <h3 className="line-clamp-2 font-[var(--font-roboto-condensed)] text-[24px] font-bold leading-[1.2] text-[#111113]">
                       <Link href={href}>{related.title}</Link>
                     </h3>
                     <p className="mt-3 line-clamp-3 text-[15px] leading-7 text-[#4a5565]">

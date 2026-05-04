@@ -83,7 +83,7 @@ export function AnimatedAwardsSection({
             >
               {"{"}
             </span>
-            <h2 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[28px] font-bold leading-[1.2] tracking-normal text-[#0a0a0b] sm:text-[34px] lg:text-[40px]">
+            <h2 className="font-[var(--font-roboto-condensed)] text-[28px] font-bold leading-[1.2] tracking-normal text-[#0a0a0b] sm:text-[34px] lg:text-[40px]">
               {heading}
             </h2>
             <span
@@ -137,7 +137,7 @@ export function AnimatedAwardsSection({
                       src={`${asset}${award.image}`}
                     />
                   </div>
-                  <h3 className="award-title max-w-[190px] font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-bold leading-[1.25] text-[#111113]">
+                  <h3 className="award-title max-w-[190px] font-[var(--font-roboto-condensed)] text-[14px] font-bold leading-[1.25] text-[#111113]">
                     {award.title}
                   </h3>
                 </article>
@@ -197,7 +197,7 @@ export function AnimatedTestimonialsSection({
       <div className="site-container">
         <div className="mb-10 flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
           <div>
-            <h2 className="text-left font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[32px] font-bold leading-[1.05] tracking-normal text-[#0a0a0b] sm:text-[40px]">
+            <h2 className="text-left font-[var(--font-roboto-condensed)] text-[32px] font-bold leading-[1.05] tracking-normal text-[#0a0a0b] sm:text-[40px]">
               {heading}
             </h2>
             <p className="mt-5 max-w-[620px] text-[16px] font-normal leading-[1.5] text-[#20242a]">
@@ -207,7 +207,7 @@ export function AnimatedTestimonialsSection({
           <div className="hidden gap-4 lg:flex">
             <button
               aria-label={previousLabel}
-              className="grid size-11 place-items-center border border-[#d0d0d0] bg-[#f7f7f7] font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-semibold leading-none text-[#b5b5b5]"
+              className="grid size-11 place-items-center border border-[#d0d0d0] bg-[#f7f7f7] font-[var(--font-roboto-condensed)] text-[24px] font-semibold leading-none text-[#b5b5b5]"
               onClick={() => scrollTestimonials("prev")}
               type="button"
             >
@@ -215,7 +215,7 @@ export function AnimatedTestimonialsSection({
             </button>
             <button
               aria-label={nextLabel}
-              className="grid size-11 place-items-center border border-[var(--ink)] bg-white font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-semibold leading-none text-[#0a0a0b]"
+              className="grid size-11 place-items-center border border-[var(--ink)] bg-white font-[var(--font-roboto-condensed)] text-[24px] font-semibold leading-none text-[#0a0a0b]"
               onClick={() => scrollTestimonials("next")}
               type="button"
             >
@@ -233,7 +233,7 @@ export function AnimatedTestimonialsSection({
                 <div className="mb-7 text-[88px] font-black leading-[0.45] text-[var(--brand-yellow)]">
                   &quot;
                 </div>
-                <p className="font-['Roboto',Arial,Helvetica,sans-serif] text-[16px] font-normal leading-6 tracking-normal text-[#1f2024]">
+                <p className="font-[var(--font-roboto)] text-[16px] font-normal leading-6 tracking-normal text-[#1f2024]">
                   {testimonial.quote}
                 </p>
                 <div className="mt-auto flex items-center gap-4 pt-10">
@@ -241,10 +241,10 @@ export function AnimatedTestimonialsSection({
                     {testimonial.name[0]}
                   </span>
                   <div>
-                    <p className="font-['Roboto',Arial,Helvetica,sans-serif] text-[20px] font-semibold leading-6 tracking-normal text-[#111113]">
+                    <p className="font-[var(--font-roboto)] text-[20px] font-semibold leading-6 tracking-normal text-[#111113]">
                       {testimonial.name}
                     </p>
-                    <p className="mt-1 font-['Roboto',Arial,Helvetica,sans-serif] text-[14px] font-semibold leading-6 tracking-normal text-[#9a9a9a]">
+                    <p className="mt-1 font-[var(--font-roboto)] text-[14px] font-semibold leading-6 tracking-normal text-[#9a9a9a]">
                       {testimonial.location}
                     </p>
                   </div>

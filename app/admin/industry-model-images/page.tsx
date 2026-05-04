@@ -26,7 +26,7 @@ export default async function IndustryModelImagesAdminPage() {
   return (
     <main className="site-container py-8 sm:py-10">
       <section className="mx-auto w-full max-w-[1200px] space-y-4">
-        <h1 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-3xl font-bold text-[#0a0a0b] sm:text-4xl">
+        <h1 className="font-[var(--font-roboto-condensed)] text-3xl font-bold text-[#0a0a0b] sm:text-4xl">
           Admin Dashboard
         </h1>
         <p className="max-w-[900px] text-[15px] leading-7 text-[#475569]">

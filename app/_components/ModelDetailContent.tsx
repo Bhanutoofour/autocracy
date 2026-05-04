@@ -1,4 +1,4 @@
-﻿import Image from "next/image";
+import Image from "next/image";
 import Link from "next/link";
 import { getMessages, type ContentLanguage, tUi } from "@/app/_lib/i18n";
 import ExpandableOverview from "@/app/_components/ExpandableOverview";
@@ -212,11 +212,11 @@ export default function ModelDetailContent({
   const descriptionBlocks = descriptionBlocksOverride ?? modelData.modelDescription;
   const specsHeading =
     modelData.specsTableIntro?.heading?.trim()
-    || (isHindi ? "सटीक मशीनें। परियोजना के लिए तैयार।" : "Precision Machines. Project-Ready.");
+    || (isHindi ? "???? ??????? ???????? ?? ??? ??????" : "Precision Machines. Project-Ready.");
   const specsParagraph =
     modelData.specsTableIntro?.paragraph?.trim()
     || (isHindi
-      ? "उच्च प्रदर्शन के लिए निर्मित और चुनौतीपूर्ण परियोजनाओं में भरोसेमंद फील्ड-तैयार निष्पादन के लिए उपयुक्त।"
+      ? "???? ???????? ?? ??? ??????? ?? ??????????? ?????????? ??? ???????? ?????-????? ???????? ?? ??? ????????"
       : "Built for performance and trusted for field-ready execution across demanding projects.");
   const shouldSkipCoverImage = modelData.modelNumber.trim().toLowerCase() === "rudra 100";
   const mediaSlides: ModelMediaSlide[] = [];
@@ -249,7 +249,7 @@ export default function ModelDetailContent({
       alt: `${block.title || modelData.modelTitle} video`,
       poster: getYouTubeThumbnail(block.youtubeLink) || modelData.coverImage,
       src: embedUrl,
-      title: block.title || (isHindi ? "मॉडल वीडियो" : "Model video"),
+      title: block.title || (isHindi ? "???? ??????" : "Model video"),
       type: "video",
     });
   });
@@ -352,7 +352,7 @@ export default function ModelDetailContent({
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#6b6f76]">
               {modelData.productName}
             </p>
-            <h1 className="mt-3 align-middle !font-['DaggerSquare','Roboto',Arial,sans-serif] text-[32px] !font-normal uppercase leading-[120%] tracking-[0] text-[#0a0a0b] [font-style:oblique]">
+            <h1 className="mt-3 align-middle !font-['DaggerSquare','Roboto',sans-serif] text-[32px] !font-normal uppercase leading-[120%] tracking-[0] text-[#0a0a0b] [font-style:oblique]">
               {modelData.modelNumber || modelData.modelTitle}
             </h1>
             <p className="mt-3 text-[24px] leading-[1.2] text-[#4b5662]">
@@ -364,8 +364,8 @@ export default function ModelDetailContent({
             <ExpandableOverview
               expandedParagraphs={expandedOverviewParagraphs}
               initialParagraphs={visibleOverviewParagraphs}
-              readLessLabel={isHindi ? "कम पढ़ें" : "Read less"}
-              readMoreLabel={isHindi ? "और पढ़ें" : "Read more"}
+              readLessLabel={isHindi ? "?? ?????" : "Read less"}
+              readMoreLabel={isHindi ? "?? ?????" : "Read more"}
               title="Overview"
             />
 
@@ -414,7 +414,7 @@ export default function ModelDetailContent({
             <p className="text-[14px] font-semibold uppercase tracking-[0.14em] text-[#66707d]">
               {industryContext.industryLabel}
             </p>
-            <h2 className="mt-2 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-bold leading-[1.15] text-[#0a0a0b]">
+            <h2 className="mt-2 font-[var(--font-roboto-condensed)] text-[24px] font-bold leading-[1.15] text-[#0a0a0b]">
               {industryContext.heading}
             </h2>
             <p className="mt-3 text-[14px] leading-6 text-[#2d3642]">{industryContext.summary}</p>
@@ -435,7 +435,7 @@ export default function ModelDetailContent({
       {detailRows.length > 0 ? (
         <section className="mt-10 border-y border-black/10 bg-[#f5f5f5]">
           <div className="site-container py-10 lg:py-14">
-            <h2 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-bold leading-[1.15] text-[#0a0a0b]">
+            <h2 className="font-[var(--font-roboto-condensed)] text-[24px] font-bold leading-[1.15] text-[#0a0a0b]">
               {specsHeading}
             </h2>
             <p className="mt-3 max-w-[860px] text-[14px] leading-6 text-[#2d3642]">{specsParagraph}</p>
@@ -455,10 +455,10 @@ export default function ModelDetailContent({
       {featureCards.length > 0 ? (
         <section className="site-container py-12 lg:py-16">
           <div>
-            <h2 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-bold leading-[1.15] tracking-normal text-[#0a0a0b]">
+            <h2 className="font-[var(--font-roboto-condensed)] text-[24px] font-bold leading-[1.15] tracking-normal text-[#0a0a0b]">
               Key Features
             </h2>
-            <p className="mt-2 font-['Roboto',Arial,Helvetica,sans-serif] text-[14px] font-normal leading-6 tracking-normal text-[#384351]">
+            <p className="mt-2 font-[var(--font-roboto)] text-[14px] font-normal leading-6 tracking-normal text-[#384351]">
               Discover what makes the {modelData.modelNumber} stand out from the competition
             </p>
           </div>
@@ -469,10 +469,10 @@ export default function ModelDetailContent({
                   <CheckIcon className="size-5" />
                 </span>
                 <div>
-                  <h3 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-bold leading-[1.15] tracking-normal text-[#0a0a0b]">
+                  <h3 className="font-[var(--font-roboto-condensed)] text-[24px] font-bold leading-[1.15] tracking-normal text-[#0a0a0b]">
                     {feature.name}
                   </h3>
-                  <p className="mt-3 font-['Roboto',Arial,Helvetica,sans-serif] text-[14px] font-normal leading-6 tracking-normal text-[#384351]">
+                  <p className="mt-3 font-[var(--font-roboto)] text-[14px] font-normal leading-6 tracking-normal text-[#384351]">
                     {feature.description}
                   </p>
                 </div>
@@ -485,7 +485,7 @@ export default function ModelDetailContent({
       <section className="border-y border-black/10 bg-[var(--section-gray)] py-12 lg:py-16">
         <div className="site-container grid gap-12 lg:grid-cols-2">
           <div>
-            <h2 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-bold leading-[1.15] text-[#0a0a0b]">
+            <h2 className="font-[var(--font-roboto-condensed)] text-[24px] font-bold leading-[1.15] text-[#0a0a0b]">
               Applications
             </h2>
             <p className="mt-2 text-[14px] leading-6 text-[#5b6572]">
@@ -503,7 +503,7 @@ export default function ModelDetailContent({
             </ul>
           </div>
           <div>
-            <h2 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-bold leading-[1.15] text-[#0a0a0b]">
+            <h2 className="font-[var(--font-roboto-condensed)] text-[24px] font-bold leading-[1.15] text-[#0a0a0b]">
               Benefits
             </h2>
             <p className="mt-2 text-[14px] leading-6 text-[#5b6572]">
@@ -526,7 +526,7 @@ export default function ModelDetailContent({
       <section className="site-container py-12 lg:py-16">
         <div className="mx-auto max-w-4xl">
           <div className="text-center">
-            <h2 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-bold leading-[1.15] text-[#0a0a0b]">
+            <h2 className="font-[var(--font-roboto-condensed)] text-[24px] font-bold leading-[1.15] text-[#0a0a0b]">
               Frequently Asked Questions
             </h2>
             <p className="mt-2 text-[14px] leading-6 text-[#5b6572]">
@@ -536,7 +536,7 @@ export default function ModelDetailContent({
           <div className="mt-8 grid gap-5">
             {faqItems.map((faq, index) => (
               <article className="rounded-[8px] border border-black/10 bg-[var(--section-gray)] p-6" key={`model-faq-${index}`}>
-                <h3 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-bold leading-[1.15] text-[#0a0a0b]">
+                <h3 className="font-[var(--font-roboto-condensed)] text-[24px] font-bold leading-[1.15] text-[#0a0a0b]">
                   {faq.question}
                 </h3>
                 <p className="mt-2 text-[14px] leading-6 text-[#384351]">{faq.answer}</p>
@@ -548,9 +548,9 @@ export default function ModelDetailContent({
 
       <section className="site-container mt-10">
         <div className="rounded-[8px] bg-[var(--brand-yellow)] px-6 py-10 text-center">
-        <h2 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-bold leading-[1.15] text-[#0a0a0b]">
+        <h2 className="font-[var(--font-roboto-condensed)] text-[24px] font-bold leading-[1.15] text-[#0a0a0b]">
           {isHindi
-            ? `${modelData.modelTitle} के साथ अपने प्रोजेक्ट्स को गति देने के लिए तैयार हैं?`
+            ? `${modelData.modelTitle} ?? ??? ???? ??????????? ?? ??? ???? ?? ??? ????? ????`
             : `Ready to power up your projects with ${modelData.modelTitle}?`}
         </h2>
         <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
@@ -576,9 +576,9 @@ export default function ModelDetailContent({
 
       {relatedModels.length > 0 ? (
         <section className="site-container mt-10">
-          <h2 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-bold leading-[1.15] text-[#0a0a0b]">
+          <h2 className="font-[var(--font-roboto-condensed)] text-[24px] font-bold leading-[1.15] text-[#0a0a0b]">
             {isHindi
-              ? `${modelData.series} सीरीज़ में और मॉडल`
+              ? `${modelData.series} ?????? ??? ?? ????`
               : `More Models in ${modelData.series} Series`}
           </h2>
           <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -596,7 +596,7 @@ export default function ModelDetailContent({
                   </div>
                 </div>
                 <p className="mt-4 text-sm uppercase tracking-[0.08em] text-[#5b6572]">{model.machineType}</p>
-                <h3 className="mt-1 align-middle !font-['DaggerSquare','Roboto',Arial,sans-serif] text-[28px] !font-normal uppercase leading-[120%] tracking-[0] text-[#0e1116] [font-style:oblique]">{model.modelNumber}</h3>
+                <h3 className="mt-1 align-middle !font-['DaggerSquare','Roboto',sans-serif] text-[28px] !font-normal uppercase leading-[120%] tracking-[0] text-[#0e1116] [font-style:oblique]">{model.modelNumber}</h3>
                 <p className="mt-1 text-[14px] leading-6 text-[#2f3a47]">{model.modelTitle}</p>
 
                 {model.keyFeatures.length > 0 ? (
@@ -633,7 +633,7 @@ export default function ModelDetailContent({
       <section className="border-t border-black/10 bg-[var(--section-gray)] py-12 lg:py-16">
         <div className="site-container">
           <div className="mx-auto max-w-4xl">
-            <h2 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-bold leading-[1.15] text-[#0a0a0b]">
+            <h2 className="font-[var(--font-roboto-condensed)] text-[24px] font-bold leading-[1.15] text-[#0a0a0b]">
               About the {modelData.modelNumber} from Autocracy Machinery
             </h2>
             <div className="mt-4 space-y-4 text-[14px] leading-6 text-[#384351]">

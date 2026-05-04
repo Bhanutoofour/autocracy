@@ -69,7 +69,7 @@ export default function ModelMediaGallery({ badge, slides }: ModelMediaGalleryPr
     <div>
       <div className="relative overflow-hidden rounded-[8px] border border-black/10 bg-white">
         <div className="relative aspect-[5/4] w-full overflow-hidden">
-          <span className="absolute left-5 top-5 z-20 rounded bg-black px-4 py-2 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-bold uppercase leading-none tracking-normal text-[var(--brand-yellow)]">
+          <span className="absolute left-5 top-5 z-20 rounded bg-black px-4 py-2 font-[var(--font-roboto-condensed)] text-[14px] font-bold uppercase leading-none tracking-normal text-[var(--brand-yellow)]">
             {badge}
           </span>
 

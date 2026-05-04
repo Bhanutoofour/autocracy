@@ -40,7 +40,7 @@ export default async function ProductsListingPage() {
 
   return (
     <main className="site-container py-12">
-      <h1 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-4xl font-bold uppercase text-[#0a0a0b]">
+      <h1 className="font-[var(--font-roboto-condensed)] text-4xl font-bold uppercase text-[#0a0a0b]">
         {tUi(language, "products")}
       </h1>
       {products.length > 0 ? (
@@ -60,7 +60,7 @@ export default async function ProductsListingPage() {
                   src={product.thumbnail}
                 />
               </div>
-              <h2 className="mt-4 align-middle !font-['DaggerSquare','Roboto',Arial,sans-serif] text-[32px] !font-normal uppercase leading-[120%] tracking-[0] text-[#111113] [font-style:oblique]">
+              <h2 className="mt-4 align-middle !font-['DaggerSquare','Roboto',sans-serif] text-[32px] !font-normal uppercase leading-[120%] tracking-[0] text-[#111113] [font-style:oblique]">
                 {product.title}
               </h2>
             </Link>

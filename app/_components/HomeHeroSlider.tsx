@@ -76,14 +76,14 @@ export default function HomeHeroSlider({ slides, ctaLabel, assetBasePath }: Home
 
       <div className="site-container relative flex min-h-[560px] items-end pb-16 pt-20 lg:min-h-[671px] lg:items-center lg:pb-0">
         <div className="flex w-full max-w-[320px] flex-col items-start gap-6 lg:max-w-[760px]">
-          <h1 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[32px] font-black leading-[1.05] tracking-normal text-white lg:text-[56px]">
+          <h1 className="font-[var(--font-roboto-condensed)] text-[32px] font-black leading-[1.05] tracking-normal text-white lg:text-[56px]">
             {activeSlide.title}
           </h1>
           <p className="max-w-[720px] text-base font-normal leading-[1.4] tracking-normal text-white lg:text-[20px]">
             {activeSlide.description}
           </p>
           <Link
-            className="flex h-11 w-[132px] items-center justify-center bg-[var(--brand-yellow)] px-4 text-center font-['Roboto',Arial,Helvetica,sans-serif] text-[16px] font-semibold uppercase leading-5 tracking-normal text-[#0a0a0b] transition hover:brightness-95 lg:h-[60px] lg:w-[204px]"
+            className="flex h-11 w-[132px] items-center justify-center bg-[var(--brand-yellow)] px-4 text-center font-[var(--font-roboto)] text-[16px] font-semibold uppercase leading-5 tracking-normal text-[#0a0a0b] transition hover:brightness-95 lg:h-[60px] lg:w-[204px]"
             href="/in/en/contact-us"
           >
             {ctaLabel}

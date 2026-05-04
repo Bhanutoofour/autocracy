@@ -23,10 +23,10 @@ export default function ExpandableOverview({
 
   return (
     <div className="mt-7 border-y border-black/10 py-6">
-      <h2 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-bold leading-[1.15] tracking-normal text-[#0a0a0b]">
+      <h2 className="font-[var(--font-roboto-condensed)] text-[24px] font-bold leading-[1.15] tracking-normal text-[#0a0a0b]">
         {title}
       </h2>
-      <div className="mt-3 space-y-4 font-['Roboto',Arial,Helvetica,sans-serif] text-[14px] font-normal leading-6 tracking-normal text-[#384351]">
+      <div className="mt-3 space-y-4 font-[var(--font-roboto)] text-[14px] font-normal leading-6 tracking-normal text-[#384351]">
         {initialParagraphs.map((paragraph, index) => (
           <p key={`overview-initial-${index}`}>{paragraph}</p>
         ))}
@@ -41,7 +41,7 @@ export default function ExpandableOverview({
             id={contentId}
           >
             <div className="overflow-hidden">
-              <div className="mt-4 space-y-4 font-['Roboto',Arial,Helvetica,sans-serif] text-[14px] font-normal leading-6 tracking-normal text-[#384351]">
+              <div className="mt-4 space-y-4 font-[var(--font-roboto)] text-[14px] font-normal leading-6 tracking-normal text-[#384351]">
                 {expandedParagraphs.map((paragraph, index) => (
                   <p key={`overview-expanded-${index}`}>{paragraph}</p>
                 ))}
@@ -52,7 +52,7 @@ export default function ExpandableOverview({
           <a
             aria-controls={contentId}
             aria-expanded={isExpanded}
-            className="mt-4 inline-flex font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-bold uppercase leading-5 tracking-normal text-[#0a0a0b] underline decoration-[var(--brand-yellow)] decoration-2 underline-offset-4 transition hover:text-[#5b6572]"
+            className="mt-4 inline-flex font-[var(--font-roboto-condensed)] text-[14px] font-bold uppercase leading-5 tracking-normal text-[#0a0a0b] underline decoration-[var(--brand-yellow)] decoration-2 underline-offset-4 transition hover:text-[#5b6572]"
             href={`#${contentId}`}
             onClick={(event) => {
               event.preventDefault();

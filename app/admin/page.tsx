@@ -14,7 +14,7 @@ export default function AdminHomePage() {
   return (
     <main className="site-container py-10">
       <section className="mx-auto w-full max-w-[900px] rounded border border-[#e5e7eb] bg-white p-6 sm:p-8">
-        <h1 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-3xl font-bold text-[#0a0a0b] sm:text-4xl">
+        <h1 className="font-[var(--font-roboto-condensed)] text-3xl font-bold text-[#0a0a0b] sm:text-4xl">
           Admin Dashboard
         </h1>
         <p className="mt-3 text-[15px] leading-7 text-[#475569]">

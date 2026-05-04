@@ -48,7 +48,7 @@ export default function LegalDocumentPage({
         <div className="mx-auto max-w-4xl">
           <h1
             className="mb-4 text-4xl font-black md:text-5xl lg:text-6xl"
-            style={{ fontFamily: "Roboto Condensed, sans-serif" }}
+            style={{ fontFamily: "var(--font-roboto-condensed), sans-serif" }}
           >
             {data.title}
           </h1>
@@ -76,7 +76,7 @@ export default function LegalDocumentPage({
               <div key={section.heading}>
                 <h2
                   className="mb-4 text-2xl font-bold text-gray-900 md:text-3xl"
-                  style={{ fontFamily: "Roboto Condensed, sans-serif" }}
+                  style={{ fontFamily: "var(--font-roboto-condensed), sans-serif" }}
                 >
                   {sectionIndex + 1}. {section.heading}
                 </h2>
@@ -104,7 +104,7 @@ export default function LegalDocumentPage({
             <div className="mt-8 rounded-lg bg-gray-50 p-6 md:p-8">
               <h2
                 className="mb-4 text-2xl font-bold text-gray-900 md:text-3xl"
-                style={{ fontFamily: "Roboto Condensed, sans-serif" }}
+                style={{ fontFamily: "var(--font-roboto-condensed), sans-serif" }}
               >
                 {contactHeading}
               </h2>

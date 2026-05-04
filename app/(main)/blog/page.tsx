@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { getActiveBlogs } from "@/actions/blogAction";
@@ -128,7 +128,7 @@ export default async function BlogListingPage({ searchParams }: BlogListingPageP
         <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#7a7f87]">
           {messages.common.blogs}
         </p>
-        <h1 className="mt-3 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[44px] font-bold leading-[1.08] text-[#0a0a0b]">
+        <h1 className="mt-3 font-[var(--font-roboto-condensed)] text-[44px] font-bold leading-[1.08] text-[#0a0a0b]">
           Latest Insights
         </h1>
         <p className="mt-4 text-[16px] leading-7 text-[#394150]">
@@ -279,7 +279,7 @@ export default async function BlogListingPage({ searchParams }: BlogListingPageP
                           {publishedOn}
                         </p>
                       ) : null}
-                      <h2 className="mt-3 line-clamp-2 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-bold leading-[1.2] text-[#111113]">
+                      <h2 className="mt-3 line-clamp-2 font-[var(--font-roboto-condensed)] text-[24px] font-bold leading-[1.2] text-[#111113]">
                         <Link href={href}>{blog.title}</Link>
                       </h2>
                       <p className="mt-3 line-clamp-3 text-[15px] leading-7 text-[#4a5565]">

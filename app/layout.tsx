@@ -1,7 +1,22 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
+import { Roboto, Roboto_Condensed } from "next/font/google";
 import JsonLd from "@/app/_components/JsonLd";
 import "./globals.css";
+
+const roboto = Roboto({
+  subsets: ["latin"],
+  variable: "--font-roboto",
+  weight: ["400", "500", "600", "700", "800", "900"],
+  display: "swap",
+});
+
+const robotoCondensed = Roboto_Condensed({
+  subsets: ["latin"],
+  variable: "--font-roboto-condensed",
+  weight: ["400", "500", "600", "700", "800", "900"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.autocracymachinery.com"),
@@ -78,7 +93,11 @@ export default async function RootLayout({
   };
 
   return (
-    <html lang={htmlLang} className="h-full antialiased" data-scroll-behavior="smooth">
+    <html
+      lang={htmlLang}
+      className={`h-full antialiased ${roboto.variable} ${robotoCondensed.variable}`}
+      data-scroll-behavior="smooth"
+    >
       <body className="min-h-full flex flex-col">
         <JsonLd data={websiteSchema} />
         {children}

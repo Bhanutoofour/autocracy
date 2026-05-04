@@ -103,10 +103,10 @@ export default async function UniversalFooter() {
         <div className="site-container">
           <div className="relative z-10 flex translate-y-10 flex-col gap-8 bg-[var(--brand-yellow)] px-8 py-10 text-black sm:translate-y-12 sm:px-10 sm:py-12 lg:flex-row lg:items-center lg:justify-between lg:px-10 lg:py-12">
             <div>
-              <h2 className="max-w-[470px] font-['Roboto',Arial,Helvetica,sans-serif] text-[32px] font-black leading-[1.05] tracking-normal">
+              <h2 className="max-w-[470px] font-[var(--font-roboto)] text-[32px] font-black leading-[1.05] tracking-normal">
                 {messages.footer.ctaHeading}
               </h2>
-              <p className="mt-4 max-w-[470px] font-['Roboto',Arial,Helvetica,sans-serif] text-[16px] font-normal leading-6 tracking-normal text-black/90">
+              <p className="mt-4 max-w-[470px] font-[var(--font-roboto)] text-[16px] font-normal leading-6 tracking-normal text-black/90">
                 {messages.footer.ctaBody}
               </p>
             </div>
@@ -144,7 +144,7 @@ export default async function UniversalFooter() {
                 width={170}
               />
             </Link>
-            <p className="mt-8 max-w-[430px] font-['Roboto',Arial,Helvetica,sans-serif] text-[12px] font-normal leading-[1.5] tracking-normal text-white/85">
+            <p className="mt-8 max-w-[430px] font-[var(--font-roboto)] text-[12px] font-normal leading-[1.5] tracking-normal text-white/85">
               {messages.footer.legal}
             </p>
             <div className="mt-6 flex items-center gap-6 text-[var(--brand-yellow)]">
@@ -185,7 +185,7 @@ export default async function UniversalFooter() {
                 <SocialIcon className="size-5" name="facebook" />
               </a>
             </div>
-            <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3 font-['Roboto',Arial,Helvetica,sans-serif] text-[12px] font-normal leading-[1.5] tracking-normal text-white/95">
+            <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3 font-[var(--font-roboto)] text-[12px] font-normal leading-[1.5] tracking-normal text-white/95">
               <Link
                 className="transition hover:text-[var(--brand-yellow)]"
                 href={toLocalizedHref("/privacy-policy")}
@@ -203,7 +203,7 @@ export default async function UniversalFooter() {
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 lg:gap-10">
             {footerMenus.map((links, columnIndex) => (
               <div
-                className="font-['Roboto',Arial,Helvetica,sans-serif] text-[12px] font-normal leading-[1.5] tracking-normal text-white/90"
+                className="font-[var(--font-roboto)] text-[12px] font-normal leading-[1.5] tracking-normal text-white/90"
                 key={`footer-col-${columnIndex + 1}`}
               >
                 <h3 className="mb-3 text-[13px] font-semibold uppercase tracking-[0.04em] text-white">

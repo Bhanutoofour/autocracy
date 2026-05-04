@@ -92,14 +92,14 @@ export default function HomeProductsSection({
           <h2 className="figma-heading">{messages.home.productsLineups}</h2>
           <div className="flex flex-wrap items-center gap-3 sm:gap-5">
             <Link
-              className="flex h-12 w-full items-center justify-center border border-[var(--ink)] px-5 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-base font-bold uppercase text-[#0a0a0b] sm:h-[62px] sm:min-w-[234px] sm:w-auto sm:px-7 sm:text-lg"
+              className="flex h-12 w-full items-center justify-center border border-[var(--ink)] px-5 font-[var(--font-roboto-condensed)] text-base font-bold uppercase text-[#0a0a0b] sm:h-[62px] sm:min-w-[234px] sm:w-auto sm:px-7 sm:text-lg"
               href={productsHref}
             >
               {messages.home.viewAllProducts}
             </Link>
             <button
               aria-label={messages.common.previousProduct}
-              className={`grid size-11 place-items-center border font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-semibold leading-none transition sm:size-[52px] ${
+              className={`grid size-11 place-items-center border font-[var(--font-roboto-condensed)] text-[24px] font-semibold leading-none transition sm:size-[52px] ${
                 canScrollLeft
                   ? "border-[#0a0a0b] bg-transparent text-[#0a0a0b] hover:bg-[#0a0a0b]/5"
                   : "cursor-not-allowed border-[#c7c7c7] bg-transparent text-[#9ca3af]"
@@ -112,7 +112,7 @@ export default function HomeProductsSection({
             </button>
             <button
               aria-label={messages.common.nextProduct}
-              className={`grid size-11 place-items-center border font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-semibold leading-none transition sm:size-[52px] ${
+              className={`grid size-11 place-items-center border font-[var(--font-roboto-condensed)] text-[24px] font-semibold leading-none transition sm:size-[52px] ${
                 canScrollRight
                   ? "border-[#0a0a0b] bg-transparent text-[#0a0a0b] hover:bg-[#0a0a0b]/5"
                   : "cursor-not-allowed border-[#c7c7c7] bg-transparent text-[#9ca3af]"
@@ -145,7 +145,7 @@ export default function HomeProductsSection({
                   src={resolveImageSrc(product.image)}
                 />
               </div>
-              <h3 className="mx-auto flex min-h-[54px] max-w-[230px] items-center justify-center text-center align-middle font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[22px] font-semibold uppercase leading-[1.2] tracking-normal text-[#111113]">
+              <h3 className="mx-auto flex min-h-[54px] max-w-[230px] items-center justify-center text-center align-middle font-[var(--font-roboto-condensed)] text-[22px] font-semibold uppercase leading-[1.2] tracking-normal text-[#111113]">
                 {translateProductLabel(product.name, language)}
               </h3>
             </Link>

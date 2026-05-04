@@ -497,7 +497,7 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
 
       <div className="border-b border-black/10 bg-[#f5f5f5]">
         <div className="site-container py-4">
-          <nav className="flex flex-wrap items-center gap-2 font-['Roboto',Arial,Helvetica,sans-serif] text-[14px] leading-5 text-[#5b6572]">
+          <nav className="flex flex-wrap items-center gap-2 font-[var(--font-roboto)] text-[14px] leading-5 text-[#5b6572]">
             <Link className="transition hover:text-[#0a0a0b]" href={localizeHref("/", locale)}>
               {pageText.home}
             </Link>
@@ -515,25 +515,25 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
         <div className="absolute inset-x-0 top-0 h-1 bg-[var(--brand-yellow)]" />
         <div className="site-container grid gap-10 py-10 sm:py-14 lg:grid-cols-[minmax(0,0.9fr)_minmax(420px,1fr)] lg:items-center lg:py-18">
           <div className="min-w-0 max-w-[820px]">
-            <p className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-bold uppercase leading-5 tracking-[0.24em] text-[var(--brand-yellow)]">
+            <p className="font-[var(--font-roboto-condensed)] text-[14px] font-bold uppercase leading-5 tracking-[0.24em] text-[var(--brand-yellow)]">
               {industryExperience.eyebrow}
             </p>
-            <h1 className="mt-4 max-w-[780px] break-words font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] !text-[44px] font-black uppercase leading-[0.98] tracking-normal text-white sm:!text-[64px] lg:!text-[72px] xl:!text-[78px]">
+            <h1 className="mt-4 max-w-[780px] break-words font-[var(--font-roboto-condensed)] !text-[44px] font-black uppercase leading-[0.98] tracking-normal text-white sm:!text-[64px] lg:!text-[72px] xl:!text-[78px]">
               {industryData.title}
             </h1>
-            <p className="mt-6 max-w-[760px] font-['Roboto',Arial,Helvetica,sans-serif] text-[16px] font-normal leading-7 tracking-normal text-white/80">
+            <p className="mt-6 max-w-[760px] font-[var(--font-roboto)] text-[16px] font-normal leading-7 tracking-normal text-white/80">
               {contentSummary}
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <Link
-                className="inline-flex min-h-[50px] items-center justify-center gap-2 bg-[var(--brand-yellow)] px-5 py-3 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-bold uppercase tracking-[0.04em] text-black"
+                className="inline-flex min-h-[50px] items-center justify-center gap-2 bg-[var(--brand-yellow)] px-5 py-3 font-[var(--font-roboto-condensed)] text-[14px] font-bold uppercase tracking-[0.04em] text-black"
                 href={localizeHref("/contact-us", locale)}
               >
                 {tUi(language, "contact_us")}
                 <ArrowRightIcon className="h-4 w-4" />
               </Link>
               <Link
-                className="inline-flex min-h-[50px] items-center justify-center border border-white/35 px-5 py-3 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-bold uppercase tracking-[0.04em] text-white"
+                className="inline-flex min-h-[50px] items-center justify-center border border-white/35 px-5 py-3 font-[var(--font-roboto-condensed)] text-[14px] font-bold uppercase tracking-[0.04em] text-white"
                 href="#industry-categories"
               >
                 {pageText.viewCategories}
@@ -542,10 +542,10 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
             <div className="mt-10 grid gap-3 sm:grid-cols-3">
               {industryExperience.heroHighlights.map((item) => (
                 <div className="border-l-2 border-[var(--brand-yellow)] bg-white/[0.06] px-4 py-3" key={item.label}>
-                  <p className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[26px] font-bold leading-none text-white">
+                  <p className="font-[var(--font-roboto-condensed)] text-[26px] font-bold leading-none text-white">
                     {item.value}
                   </p>
-                  <p className="mt-1 font-['Roboto',Arial,Helvetica,sans-serif] text-[13px] font-normal uppercase leading-5 tracking-[0.08em] text-white/60">
+                  <p className="mt-1 font-[var(--font-roboto)] text-[13px] font-normal uppercase leading-5 tracking-[0.08em] text-white/60">
                     {item.label}
                   </p>
                 </div>
@@ -565,10 +565,10 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
               />
               <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,rgba(0,0,0,0.34))]" />
               <div className="absolute bottom-0 left-0 right-0 border-t border-white/15 bg-black/70 px-5 py-4">
-                <p className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[18px] font-bold uppercase leading-6 text-white">
+                <p className="font-[var(--font-roboto-condensed)] text-[18px] font-bold uppercase leading-6 text-white">
                   {pageText.imageCaptionTitle}
                 </p>
-                <p className="mt-1 font-['Roboto',Arial,Helvetica,sans-serif] text-[13px] leading-5 text-white/70">
+                <p className="mt-1 font-[var(--font-roboto)] text-[13px] leading-5 text-white/70">
                   {pageText.imageCaptionBody}
                 </p>
               </div>
@@ -580,15 +580,15 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
       <section className="site-container py-10 sm:py-12 lg:py-16" id="industry-categories">
         <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <h2 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] !text-[34px] font-bold leading-tight text-[#0a0a0b] sm:!text-[40px]">
+            <h2 className="font-[var(--font-roboto-condensed)] !text-[34px] font-bold leading-tight text-[#0a0a0b] sm:!text-[40px]">
               {pageText.equipmentCategories}
             </h2>
-            <p className="mt-2 max-w-[720px] font-['Roboto',Arial,Helvetica,sans-serif] text-[16px] font-normal leading-6 tracking-normal text-[#5b6572]">
+            <p className="mt-2 max-w-[720px] font-[var(--font-roboto)] text-[16px] font-normal leading-6 tracking-normal text-[#5b6572]">
               {pageText.equipmentCategoriesBody}
             </p>
           </div>
           <Link
-            className="inline-flex min-h-[46px] items-center justify-center border border-black/25 px-5 py-3 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-bold uppercase tracking-[0.04em] text-[#0a0a0b] transition hover:border-black hover:bg-black hover:text-[var(--brand-yellow)]"
+            className="inline-flex min-h-[46px] items-center justify-center border border-black/25 px-5 py-3 font-[var(--font-roboto-condensed)] text-[14px] font-bold uppercase tracking-[0.04em] text-[#0a0a0b] transition hover:border-black hover:bg-black hover:text-[var(--brand-yellow)]"
             href={localizeHref("/products", locale)}
           >
             {tUi(language, "view_products")}
@@ -603,7 +603,7 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
                 key={product.id}
               >
                 <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#f3f3f3]">
-                  <span className="absolute left-4 top-4 z-10 bg-black px-3 py-1 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[12px] font-bold uppercase tracking-[0.08em] text-[var(--brand-yellow)]">
+                  <span className="absolute left-4 top-4 z-10 bg-black px-3 py-1 font-[var(--font-roboto-condensed)] text-[12px] font-bold uppercase tracking-[0.08em] text-[var(--brand-yellow)]">
                     {pageText.categoryLabel(index)}
                   </span>
                   <Image
@@ -615,14 +615,14 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
                   />
                 </div>
                 <div className="flex flex-1 flex-col p-5">
-                  <h3 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[26px] font-bold uppercase text-[#0a0a0b]">
+                  <h3 className="font-[var(--font-roboto-condensed)] text-[26px] font-bold uppercase text-[#0a0a0b]">
                     {product.title}
                   </h3>
-                  <p className="mt-2 font-['Roboto',Arial,Helvetica,sans-serif] text-[15px] font-normal leading-6 tracking-normal text-[#384351]">
+                  <p className="mt-2 font-[var(--font-roboto)] text-[15px] font-normal leading-6 tracking-normal text-[#384351]">
                     {pageText.productIntro(product.title ?? tUi(language, "product"))}
                   </p>
                   <div className="mt-auto pt-6">
-                    <span className="inline-flex h-12 items-center justify-center gap-2 bg-[#020406] px-6 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-semibold uppercase leading-5 tracking-[1px] text-[var(--brand-yellow)] transition group-hover:bg-[#1a1a1a]">
+                    <span className="inline-flex h-12 items-center justify-center gap-2 bg-[#020406] px-6 font-[var(--font-roboto-condensed)] text-[14px] font-semibold uppercase leading-5 tracking-[1px] text-[var(--brand-yellow)] transition group-hover:bg-[#1a1a1a]">
                       {tUi(language, "view_products")}
                       <ArrowRightIcon className="h-4 w-4" />
                     </span>
@@ -634,13 +634,13 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
         ) : (
           <div className="mt-6 flex gap-3">
             <Link
-              className="rounded bg-black px-4 py-2 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-semibold uppercase leading-5 tracking-[0.04em] text-[#f9c300]"
+              className="rounded bg-black px-4 py-2 font-[var(--font-roboto-condensed)] text-[14px] font-semibold uppercase leading-5 tracking-[0.04em] text-[#f9c300]"
               href={localizeHref("/industries", locale)}
             >
               {tUi(language, "view_all_industries")}
             </Link>
             <Link
-              className="rounded border border-black/25 px-4 py-2 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-semibold uppercase leading-5 tracking-[0.04em] text-[#0a0a0b]"
+              className="rounded border border-black/25 px-4 py-2 font-[var(--font-roboto-condensed)] text-[14px] font-semibold uppercase leading-5 tracking-[0.04em] text-[#0a0a0b]"
               href={localizeHref("/products", locale)}
             >
               {tUi(language, "view_products")}
@@ -652,13 +652,13 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
       <section className="border-y border-black/10 bg-white">
         <div className="site-container grid gap-8 py-10 sm:py-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-start lg:py-16">
           <div>
-            <p className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-bold uppercase leading-5 tracking-[0.24em] text-[#6b6f76]">
+            <p className="font-[var(--font-roboto-condensed)] text-[14px] font-bold uppercase leading-5 tracking-[0.24em] text-[#6b6f76]">
               {tUi(language, "industry")}
             </p>
-            <h2 className="mt-3 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] !text-[34px] font-bold leading-[1.08] tracking-normal text-[#0a0a0b] sm:!text-[44px]">
+            <h2 className="mt-3 font-[var(--font-roboto-condensed)] !text-[34px] font-bold leading-[1.08] tracking-normal text-[#0a0a0b] sm:!text-[44px]">
               {industryExperience.applicationHeading}
             </h2>
-            <p className="mt-4 max-w-[720px] font-['Roboto',Arial,Helvetica,sans-serif] text-[16px] font-normal leading-7 tracking-normal text-[#384351]">
+            <p className="mt-4 max-w-[720px] font-[var(--font-roboto)] text-[16px] font-normal leading-7 tracking-normal text-[#384351]">
               {industryExperience.applicationSummary}
             </p>
           </div>
@@ -666,10 +666,10 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
             {industryExperience.applicationPillars.map((pillar) => (
               <article className="border border-black/10 bg-[#f7f7f7] p-5" key={pillar.title}>
                 <div className="h-1 w-12 bg-[var(--brand-yellow)]" />
-                <h3 className="mt-5 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[22px] font-bold leading-[1.15] tracking-normal text-[#0a0a0b]">
+                <h3 className="mt-5 font-[var(--font-roboto-condensed)] text-[22px] font-bold leading-[1.15] tracking-normal text-[#0a0a0b]">
                   {pillar.title}
                 </h3>
-                <p className="mt-3 font-['Roboto',Arial,Helvetica,sans-serif] text-[14px] font-normal leading-6 tracking-normal text-[#384351]">
+                <p className="mt-3 font-[var(--font-roboto)] text-[14px] font-normal leading-6 tracking-normal text-[#384351]">
                   {pillar.body}
                 </p>
               </article>
@@ -681,27 +681,27 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
       <section className="border-y border-black/10 bg-[var(--section-gray)]">
         <div className="site-container grid gap-10 py-10 sm:py-12 lg:grid-cols-[0.75fr_1.25fr] lg:py-16">
           <div>
-            <p className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-bold uppercase leading-5 tracking-[0.24em] text-[#6b6f76]">
+            <p className="font-[var(--font-roboto-condensed)] text-[14px] font-bold uppercase leading-5 tracking-[0.24em] text-[#6b6f76]">
               {pageText.selectionWorkflow}
             </p>
-            <h2 className="mt-3 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] !text-[36px] font-bold leading-[1.12] tracking-normal text-[#0a0a0b] sm:!text-[44px]">
+            <h2 className="mt-3 font-[var(--font-roboto-condensed)] !text-[36px] font-bold leading-[1.12] tracking-normal text-[#0a0a0b] sm:!text-[44px]">
               {pageText.selectionHeading}
             </h2>
-            <p className="mt-4 max-w-[620px] font-['Roboto',Arial,Helvetica,sans-serif] text-[16px] font-normal leading-7 tracking-normal text-[#1f2937]">
+            <p className="mt-4 max-w-[620px] font-[var(--font-roboto)] text-[16px] font-normal leading-7 tracking-normal text-[#1f2937]">
               {pageText.selectionBody}
             </p>
           </div>
           <div className="grid gap-4">
             {industryExperience.planningSteps.map((step, index) => (
               <article className="grid gap-4 border border-black/10 bg-white p-5 sm:grid-cols-[74px_1fr] sm:items-start" key={step.title}>
-                <div className="flex h-14 w-14 items-center justify-center bg-[var(--brand-yellow)] font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[26px] font-black leading-none text-black">
+                <div className="flex h-14 w-14 items-center justify-center bg-[var(--brand-yellow)] font-[var(--font-roboto-condensed)] text-[26px] font-black leading-none text-black">
                   {String(index + 1).padStart(2, "0")}
                 </div>
                 <div>
-                  <h3 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[24px] font-bold leading-[1.15] tracking-normal text-[#0a0a0b]">
+                  <h3 className="font-[var(--font-roboto-condensed)] text-[24px] font-bold leading-[1.15] tracking-normal text-[#0a0a0b]">
                     {step.title}
                   </h3>
-                  <p className="mt-2 font-['Roboto',Arial,Helvetica,sans-serif] text-[15px] font-normal leading-7 tracking-normal text-[#384351]">
+                  <p className="mt-2 font-[var(--font-roboto)] text-[15px] font-normal leading-7 tracking-normal text-[#384351]">
                     {step.body}
                   </p>
                 </div>
@@ -714,10 +714,10 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
       <section className="bg-white">
         <div className="site-container grid gap-8 py-10 sm:py-12 lg:grid-cols-[1fr_1fr] lg:items-center lg:py-16">
           <div>
-            <p className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-bold uppercase leading-5 tracking-[0.24em] text-[#6b6f76]">
+            <p className="font-[var(--font-roboto-condensed)] text-[14px] font-bold uppercase leading-5 tracking-[0.24em] text-[#6b6f76]">
               {pageText.advantage}
             </p>
-            <h2 className="mt-3 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] !text-[36px] font-bold leading-[1.12] tracking-normal text-[#0a0a0b] sm:!text-[44px]">
+            <h2 className="mt-3 font-[var(--font-roboto-condensed)] !text-[36px] font-bold leading-[1.12] tracking-normal text-[#0a0a0b] sm:!text-[44px]">
               {pageText.advantageHeading}
             </h2>
           </div>
@@ -727,7 +727,7 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
                 <span className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center bg-black text-[var(--brand-yellow)]">
                   <CheckIcon className="h-4 w-4" />
                 </span>
-                <p className="font-['Roboto',Arial,Helvetica,sans-serif] text-[15px] font-normal leading-7 tracking-normal text-[#2d3642]">
+                <p className="font-[var(--font-roboto)] text-[15px] font-normal leading-7 tracking-normal text-[#2d3642]">
                   {point}
                 </p>
               </div>
@@ -739,23 +739,23 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
       <section className="bg-black py-10 text-white sm:py-12 lg:py-16">
         <div className="site-container grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
           <div>
-            <h2 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] !text-[32px] font-bold uppercase leading-tight tracking-normal sm:!text-[42px]">
+            <h2 className="font-[var(--font-roboto-condensed)] !text-[32px] font-bold uppercase leading-tight tracking-normal sm:!text-[42px]">
               {pageText.ctaHeading}
             </h2>
-            <p className="mt-4 max-w-2xl font-['Roboto',Arial,Helvetica,sans-serif] text-[16px] font-normal leading-7 text-white/75">
+            <p className="mt-4 max-w-2xl font-[var(--font-roboto)] text-[16px] font-normal leading-7 text-white/75">
               {pageText.ctaBody}
             </p>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap lg:justify-end">
             <Link
-              className="inline-flex min-h-[50px] items-center justify-center gap-2 bg-[var(--brand-yellow)] px-5 py-3 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-bold uppercase tracking-[0.04em] text-black"
+              className="inline-flex min-h-[50px] items-center justify-center gap-2 bg-[var(--brand-yellow)] px-5 py-3 font-[var(--font-roboto-condensed)] text-[14px] font-bold uppercase tracking-[0.04em] text-black"
               href={localizeHref("/contact-us", locale)}
             >
               {tUi(language, "contact_us")}
               <ArrowRightIcon className="h-4 w-4" />
             </Link>
             <Link
-              className="inline-flex min-h-[50px] items-center justify-center border border-white/35 px-5 py-3 font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[14px] font-bold uppercase tracking-[0.04em] text-white"
+              className="inline-flex min-h-[50px] items-center justify-center border border-white/35 px-5 py-3 font-[var(--font-roboto-condensed)] text-[14px] font-bold uppercase tracking-[0.04em] text-white"
               href={localizeHref("/products", locale)}
             >
               {tUi(language, "view_products")}
@@ -766,16 +766,16 @@ export default async function IndustryPage({ params }: IndustryPageProps) {
 
       <section className="border-y border-black/10 bg-[var(--section-gray)] py-10 sm:py-14 lg:py-20">
         <div className="site-container">
-          <h2 className="text-center font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] !text-[30px] font-bold leading-[1.15] tracking-normal text-[#0a0a0b] sm:!text-[36px]">
+          <h2 className="text-center font-[var(--font-roboto-condensed)] !text-[30px] font-bold leading-[1.15] tracking-normal text-[#0a0a0b] sm:!text-[36px]">
             {pageText.faqHeading}
           </h2>
           <div className="mx-auto mt-10 grid max-w-[1120px] gap-6">
             {faqs.map((faq, index) => (
               <article className="rounded-[8px] border border-black/10 bg-white p-7" key={`industry-faq-${index}`}>
-                <h3 className="font-['Roboto_Condensed','Arial_Narrow',Arial,sans-serif] text-[22px] font-bold leading-[1.2] tracking-normal text-[#050506]">
+                <h3 className="font-[var(--font-roboto-condensed)] text-[22px] font-bold leading-[1.2] tracking-normal text-[#050506]">
                   {faq.question}
                 </h3>
-                <p className="mt-4 font-['Roboto',Arial,Helvetica,sans-serif] text-[16px] font-normal leading-7 tracking-normal text-[#384351]">
+                <p className="mt-4 font-[var(--font-roboto)] text-[16px] font-normal leading-7 tracking-normal text-[#384351]">
                   {faq.answer}
                 </p>
               </article>
