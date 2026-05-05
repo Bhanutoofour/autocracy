@@ -9,6 +9,7 @@ import { buildLocalizedAlternates, localizeHref, toAbsoluteUrl } from "@/app/_li
 import { tUi } from "@/app/_lib/i18n";
 import { getProductLongformContent } from "@/app/_lib/product-longform-content";
 import JsonLd from "@/app/_components/JsonLd";
+import trenchersStyles from "./trenchersListing.module.scss";
 
 type ProductPageProps = {
   params: Promise<{ slug: string }>;
@@ -450,6 +451,118 @@ export default async function ProductPage({ params }: ProductPageProps) {
       },
     })),
   };
+  const isTrenchersListingPage = slug === "trenchers";
+
+  if (isTrenchersListingPage) {
+    return (
+      <main className={trenchersStyles.page}>
+        <JsonLd data={breadcrumbSchema} />
+        <JsonLd data={productGroupSchema} />
+        <JsonLd data={faqSchema} />
+
+        <section className={`site-container ${trenchersStyles.section}`}>
+          <div className={trenchersStyles.intro}>
+            <h1 className={trenchersStyles.title}>
+              {productData.title}
+            </h1>
+            <p className={trenchersStyles.description}>
+              {productData.description || pageContent.heroDescription}
+            </p>
+            {productData.industries.length > 0 ? (
+              <div className={trenchersStyles.industryTags}>
+                {productData.industries.map((industry) => (
+                  <span
+                    className={trenchersStyles.industryChip}
+                    key={industry}
+                  >
+                    {industry}
+                  </span>
+                ))}
+              </div>
+            ) : null}
+          </div>
+
+          <div className={trenchersStyles.modelHeading}>
+            <h2 className={trenchersStyles.modelHeadingText}>
+              Model
+            </h2>
+            <div className={trenchersStyles.filters}>
+              {[pageText.allSeries, pageText.allModels].map((label) => (
+                <button
+                  className={trenchersStyles.filterButton}
+                  key={label}
+                  type="button"
+                >
+                  {label}
+                  <span className={trenchersStyles.filterChevron} />
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {productData.models.length > 0 ? (
+            <div className={trenchersStyles.modelList}>
+              {productData.models.map((model) => (
+                <Link
+                  className={trenchersStyles.modelCard}
+                  href={localizeHref(`/products/${slug}/${modelNumberSlug(model.modelNumber)}`, locale)}
+                  key={model.id}
+                >
+                  <span className={trenchersStyles.seriesTag}>
+                    {model.series} Series
+                  </span>
+                  <div className={trenchersStyles.mediaColumn}>
+                    <div className={trenchersStyles.imageFrame}>
+                      <Image
+                        alt={model.thumbnailAltText || model.modelTitle}
+                        className={trenchersStyles.modelImage}
+                        height={152}
+                        sizes="240px"
+                        src={model.thumbnail}
+                        width={240}
+                      />
+                    </div>
+                  </div>
+                  <div className={trenchersStyles.details}>
+                    <div className={trenchersStyles.titleBlock}>
+                      <h3 className={trenchersStyles.modelName}>
+                        {model.modelNumber}
+                      </h3>
+                      <p className={trenchersStyles.subtitle}>
+                        {model.modelTitle} | {model.machineType}
+                      </p>
+                    </div>
+
+                    {model.keyFeatures.length > 0 ? (
+                      <div className={trenchersStyles.specs}>
+                        {model.keyFeatures.slice(0, 3).map((feature, index) => (
+                          <div className={trenchersStyles.specItem} key={`${model.id}-${feature.name}-${index}`}>
+                            <p className={trenchersStyles.specLabel}>
+                              {feature.name}
+                            </p>
+                            <p className={trenchersStyles.specValue}>
+                              {feature.value}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    ) : null}
+                  </div>
+                  <div className={trenchersStyles.ctaColumn}>
+                    <span className={trenchersStyles.cta}>
+                      VIEW DETAILS
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <p className={trenchersStyles.emptyState}>{tUi(language, "no_models_product")}</p>
+          )}
+        </section>
+      </main>
+    );
+  }
 
   return (
     <main className="category-template overflow-x-hidden bg-white">
@@ -485,14 +598,18 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <p className="mt-5 max-w-[880px] font-[var(--font-roboto-condensed)] !text-[14px] !font-normal leading-[1.5] tracking-normal text-[#1f2937] sm:mt-6">
               {pageContent.heroDescription}
             </p>
-            <div className="mt-6 flex flex-wrap gap-2 sm:mt-7 sm:gap-3">
-              <span className="max-w-full break-words rounded-full bg-[var(--brand-yellow)] px-3 py-2 font-[var(--font-roboto-condensed)] text-[14px] font-bold text-black sm:px-4">
-                {productData.title}
-              </span>
-              <span className="rounded-full border border-black/15 bg-white px-4 py-2 font-[var(--font-roboto-condensed)] text-[14px] font-semibold text-[#0a0a0b]">
-                {modelCount} {tUi(language, "models")}
-              </span>
-            </div>
+            {productData.industries.length > 0 ? (
+              <div className="mt-6 flex flex-wrap gap-2 sm:mt-7 sm:gap-3">
+                {productData.industries.map((industry) => (
+                  <span
+                    className="max-w-full break-words rounded-full bg-[#e9e9e9] px-5 py-2.5 font-[var(--font-roboto-condensed)] text-[16px] font-semibold leading-none text-[#0a0a0b] sm:px-7"
+                    key={industry}
+                  >
+                    {industry}
+                  </span>
+                ))}
+              </div>
+            ) : null}
           </div>
           <div className="min-w-0 overflow-hidden rounded-[8px] border border-black/10 bg-[#f7f7f7]">
             <div className="relative aspect-[4/3] min-h-[180px] w-full sm:min-h-[220px] lg:min-h-0">
@@ -510,66 +627,74 @@ export default async function ProductPage({ params }: ProductPageProps) {
       </section>
 
       <section className="site-container py-10 sm:py-12 lg:py-16">
-        <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
-          <div>
-            <h2 className="break-words font-[var(--font-roboto-condensed)] text-[28px] font-bold leading-[1.15] tracking-normal text-[#0a0a0b] sm:text-[36px]">
-              {pageText.availableModels}
-            </h2>
-            <p className="mt-2 font-[var(--font-roboto-condensed)] text-[16px] font-normal leading-6 tracking-normal text-[#5b6572]">
-              {pageText.modelCount}
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-3">
-            <div className="rounded border border-black/15 bg-white px-3 py-2 font-[var(--font-roboto-condensed)] text-[14px] font-normal leading-5 text-[#2d3642] sm:px-4">{pageText.allSeries}</div>
-            <div className="rounded border border-black/15 bg-white px-3 py-2 font-[var(--font-roboto-condensed)] text-[14px] font-normal leading-5 text-[#2d3642] sm:px-4">{pageText.allModels}</div>
+        <div className="flex flex-col gap-4 border-b border-[#0a0a0b] pb-4 sm:flex-row sm:items-end sm:justify-between">
+          <h2 className="break-words font-[var(--font-roboto-condensed)] text-[30px] font-bold leading-none tracking-normal text-[#0a0a0b] sm:text-[34px]">
+            Model
+          </h2>
+          <div className="flex flex-wrap items-center gap-8">
+            {[pageText.allSeries, pageText.allModels].map((label) => (
+              <button
+                className="inline-flex items-center gap-8 font-[var(--font-roboto-condensed)] text-[18px] font-bold leading-none text-[#0a0a0b]"
+                key={label}
+                type="button"
+              >
+                {label}
+                <span className="mt-[-4px] h-3 w-3 rotate-45 border-b-2 border-r-2 border-[#0a0a0b]" />
+              </button>
+            ))}
           </div>
         </div>
         {productData.models.length > 0 ? (
-          <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {productData.models.map((model) => (
-              <Link
-                className="group flex min-w-0 flex-col overflow-hidden rounded-[8px] border border-black/10 bg-white transition hover:-translate-y-1 hover:border-[#f9c300] hover:shadow-xl"
-                key={model.id}
-                href={localizeHref(`/products/${slug}/${modelNumberSlug(model.modelNumber)}`, locale)}
-              >
-                <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#f7f7f7]">
-                  <span className="absolute left-4 top-4 z-10 rounded bg-black px-3 py-1 text-xs font-semibold uppercase tracking-[0.05em] text-[#f9c300]">
-                    {model.series}
+          <div className="mt-5">
+            <div className="grid gap-4 py-3">
+              {productData.models.map((model) => (
+                <Link
+                  className="group relative grid min-h-[160px] min-w-0 items-center gap-6 border border-[#dddddd] bg-white px-5 py-1 transition hover:border-[#0a0a0b] md:grid-cols-[430px_minmax(0,1fr)_220px]"
+                  key={model.id}
+                  href={localizeHref(`/products/${slug}/${modelNumberSlug(model.modelNumber)}`, locale)}
+                >
+                  <span className="absolute left-4 top-3 z-10 rounded-full bg-[#e7e7e7] px-4 py-1 font-[var(--font-roboto-condensed)] text-[14px] font-semibold leading-[1.2] text-[#333333]">
+                    {model.series} Series
                   </span>
-                  <Image
-                    alt={model.thumbnailAltText || model.modelTitle}
-                    className="object-contain p-4 transition duration-500 group-hover:scale-105 sm:p-6"
-                    fill
-                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                    src={model.thumbnail}
-                  />
-                </div>
-                <div className="flex min-w-0 flex-1 flex-col p-4 sm:p-5">
-                  <p className="font-[var(--font-roboto-condensed)] text-[14px] font-normal uppercase leading-5 tracking-normal text-[#6b6f76]">{model.machineType}</p>
-                  <h3 className="mt-1 break-words align-middle !font-['DaggerSquare',var(--font-roboto-condensed),sans-serif] text-[24px] !font-normal uppercase leading-[120%] tracking-[0] text-[#0a0a0b] [font-style:oblique] sm:text-[28px]">
-                    {model.modelNumber}
-                  </h3>
-                  <p className="mt-1 font-[var(--font-roboto-condensed)] text-[15px] font-normal leading-6 tracking-normal text-[#2d3642]">{model.modelTitle}</p>
-
-                  {model.keyFeatures.length > 0 ? (
-                    <div className="mt-5 grid gap-3 min-[440px]:grid-cols-2">
-                      {model.keyFeatures.slice(0, 2).map((feature, index) => (
-                        <div className="rounded bg-[#f5f5f5] p-3" key={`${model.id}-${feature.name}-${index}`}>
-                          <p className="font-[var(--font-roboto-condensed)] text-[12px] font-normal leading-4 tracking-normal text-[#68717d]">{feature.name}</p>
-                          <p className="mt-1 font-[var(--font-roboto-condensed)] text-[14px] font-semibold leading-5 tracking-normal text-[#0e1116]">{feature.value}</p>
-                        </div>
-                      ))}
+                  <div className="relative flex min-h-[150px] items-center justify-center bg-white pt-8 md:pt-0">
+                    <Image
+                      alt={model.thumbnailAltText || model.modelTitle}
+                      className="h-auto max-h-[150px] w-auto max-w-[300px] object-contain transition duration-300 group-hover:scale-105"
+                      height={150}
+                      sizes="300px"
+                      src={model.thumbnail}
+                      width={300}
+                    />
+                  </div>
+                  <div className="flex min-w-0 flex-col gap-6">
+                    <div className="flex flex-col gap-2">
+                      <h3 className="break-words align-middle !font-['DaggerSquare',var(--font-roboto-condensed),sans-serif] text-[28px] !font-normal uppercase leading-[1.2] tracking-[0] text-[#000000] [font-style:oblique]">
+                      {model.modelNumber}
+                      </h3>
+                      <p className="font-[var(--font-roboto-condensed)] text-[14px] font-normal leading-[1.2] tracking-normal text-[#444444]">
+                        {model.modelTitle} | {model.machineType}
+                      </p>
                     </div>
-                  ) : null}
 
-                  <div className="mt-auto pt-6">
-                    <span className="inline-flex min-h-11 w-full items-center justify-center bg-[#020406] px-5 py-3 font-[var(--font-roboto-condensed)] text-[14px] font-semibold uppercase leading-5 tracking-[1px] text-[var(--brand-yellow)] transition group-hover:bg-[#1a1a1a] min-[440px]:w-auto">
-                      {tUi(language, "view_model")}
+                    {model.keyFeatures.length > 0 ? (
+                      <div className="flex flex-wrap gap-x-8 gap-y-3">
+                        {model.keyFeatures.slice(0, 3).map((feature, index) => (
+                          <div className="min-w-[120px]" key={`${model.id}-${feature.name}-${index}`}>
+                            <p className="font-[var(--font-roboto-condensed)] text-[12px] font-normal leading-[1.2] tracking-normal text-[#777777]">{feature.name}</p>
+                            <p className="mt-1 font-[var(--font-roboto-condensed)] text-[16px] font-bold leading-[1.2] tracking-normal text-[#000000]">{feature.value}</p>
+                          </div>
+                        ))}
+                      </div>
+                    ) : null}
+                  </div>
+                  <div className="flex items-center md:justify-end">
+                    <span className="inline-flex h-[60px] min-w-[208px] items-center justify-center bg-[#020406] px-6 font-[var(--font-roboto-condensed)] text-[18px] font-semibold uppercase leading-none tracking-[1px] text-[var(--brand-yellow)] transition group-hover:bg-[#111111]">
+                      VIEW DETAILS
                     </span>
                   </div>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              ))}
+            </div>
           </div>
         ) : (
           <p className="mt-4 text-[#555]">{tUi(language, "no_models_product")}</p>
