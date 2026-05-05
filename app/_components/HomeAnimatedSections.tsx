@@ -244,7 +244,7 @@ export function AnimatedTestimonialsSection({
                     {testimonial.name[0]}
                   </span>
                   <div>
-                    <p className="font-[var(--font-roboto-condensed)] text-[20px] font-semibold leading-6 tracking-normal text-[#111113]">
+                    <p className="font-[var(--font-roboto-condensed)] text-[22px] font-bold leading-6 tracking-normal text-[#111113]">
                       {testimonial.name}
                     </p>
                     <p className="mt-1 font-[var(--font-roboto-condensed)] text-[14px] font-semibold leading-6 tracking-normal text-[#9a9a9a]">
