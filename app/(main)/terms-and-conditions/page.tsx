@@ -1,18 +1,19 @@
 import { TERMS_AND_CONDITIONS } from "@/data/termsCondition";
 import type { Metadata } from "next";
-import { buildLocalizedAlternates } from "@/app/_lib/locale-path";
 import LegalDocumentPage from "@/app/_components/LegalDocumentPage";
 
 export const metadata: Metadata = {
   title: "Terms And Conditions - Autocracy Machinery",
   description:
     "This website is owned, operated, and maintained by Autocracy Machinery Pvt. Ltd. Browsing or using our website means you accept our terms and conditions.",
-  alternates: buildLocalizedAlternates("/terms-and-conditions"),
+  alternates: {
+    canonical: "/terms-and-conditions",
+  },
   openGraph: {
     title: "Terms and Conditions – Autocracy Machinery",
     description:
       "This website is owned, operated, and maintained by Autocracy Machinery Pvt. Ltd. Browsing or using our website means you accept our terms and conditions.",
-    url: "/in/en/terms-and-conditions",
+    url: "/terms-and-conditions",
     type: "website",
   },
   twitter: {

@@ -7,25 +7,29 @@ import { getRequestContentLanguage, getRequestLocale } from "@/app/_lib/i18n-ser
 import { tUi } from "@/app/_lib/i18n";
 import { buildLocalizedAlternates, localizeHref } from "@/app/_lib/locale-path";
 
-export const metadata: Metadata = {
-  title: "Industries | Autocracy Machinery",
-  description:
-    "Discover industries served by Autocracy Machinery, from telecom and water projects to agriculture, solar, and infrastructure development.",
-  alternates: buildLocalizedAlternates("/industries"),
-  openGraph: {
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+
+  return {
     title: "Industries | Autocracy Machinery",
     description:
-      "Discover industries served by Autocracy Machinery, from telecom and water projects to agriculture and infrastructure.",
-    url: "/in/en/industries",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Industries | Autocracy Machinery",
-    description:
-      "Discover industries served by Autocracy Machinery, from telecom and water projects to agriculture and infrastructure.",
-  },
-};
+      "Discover industries served by Autocracy Machinery, from telecom and water projects to agriculture, solar, and infrastructure development.",
+    alternates: buildLocalizedAlternates("/industries", locale),
+    openGraph: {
+      title: "Industries | Autocracy Machinery",
+      description:
+        "Discover industries served by Autocracy Machinery, from telecom and water projects to agriculture and infrastructure.",
+      url: localizeHref("/industries", locale),
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "Industries | Autocracy Machinery",
+      description:
+        "Discover industries served by Autocracy Machinery, from telecom and water projects to agriculture and infrastructure.",
+    },
+  };
+}
 
 export default async function IndustriesListingPage() {
   const language = await getRequestContentLanguage();

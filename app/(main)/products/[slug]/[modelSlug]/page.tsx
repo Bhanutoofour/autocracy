@@ -17,13 +17,15 @@ type ProductModelPageProps = {
 
 export async function generateMetadata({ params }: ProductModelPageProps): Promise<Metadata> {
   const { slug, modelSlug } = await params;
+  const locale = await getRequestLocale();
+  const pagePath = `/products/${slug}/${modelSlug}`;
   const resolved = await getModelByProductSlugAndModelNumberSlug(slug, modelSlug);
 
   if (!resolved) {
     return {
       title: "Model | Autocracy Machinery",
       description: "View model specifications, features, and brochure details from Autocracy Machinery.",
-      alternates: buildLocalizedAlternates(`/products/${slug}/${modelSlug}`),
+      alternates: buildLocalizedAlternates(pagePath, locale),
     };
   }
 
@@ -40,11 +42,11 @@ export async function generateMetadata({ params }: ProductModelPageProps): Promi
     title: seoTitle,
     description: seoDescription,
     keywords: modelData.seoMetadata?.pageKeywords?.trim() || undefined,
-    alternates: buildLocalizedAlternates(`/products/${slug}/${modelSlug}`),
+    alternates: buildLocalizedAlternates(pagePath, locale),
     openGraph: {
       title: modelData.seoMetadata?.socialTitle?.trim() || seoTitle,
       description: modelData.seoMetadata?.socialDescription?.trim() || seoDescription,
-      url: `/in/en/products/${slug}/${modelSlug}`,
+      url: localizeHref(pagePath, locale),
       type: "website",
       images: socialImage ? [{ url: socialImage }] : undefined,
     },

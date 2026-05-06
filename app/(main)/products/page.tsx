@@ -7,25 +7,29 @@ import { getRequestContentLanguage, getRequestLocale } from "@/app/_lib/i18n-ser
 import { tUi } from "@/app/_lib/i18n";
 import { buildLocalizedAlternates, localizeHref } from "@/app/_lib/locale-path";
 
-export const metadata: Metadata = {
-  title: "Products | Autocracy Machinery",
-  description:
-    "Explore Autocracy Machinery product categories including trenchers, attachments, and field-ready utility equipment for infrastructure and industrial work.",
-  alternates: buildLocalizedAlternates("/products"),
-  openGraph: {
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+
+  return {
     title: "Products | Autocracy Machinery",
     description:
-      "Explore Autocracy Machinery product categories including trenchers, attachments, and field-ready utility equipment.",
-    url: "/in/en/products",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Products | Autocracy Machinery",
-    description:
-      "Explore Autocracy Machinery product categories including trenchers, attachments, and field-ready utility equipment.",
-  },
-};
+      "Explore Autocracy Machinery product categories including trenchers, attachments, and field-ready utility equipment for infrastructure and industrial work.",
+    alternates: buildLocalizedAlternates("/products", locale),
+    openGraph: {
+      title: "Products | Autocracy Machinery",
+      description:
+        "Explore Autocracy Machinery product categories including trenchers, attachments, and field-ready utility equipment.",
+      url: localizeHref("/products", locale),
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "Products | Autocracy Machinery",
+      description:
+        "Explore Autocracy Machinery product categories including trenchers, attachments, and field-ready utility equipment.",
+    },
+  };
+}
 
 export default async function ProductsListingPage() {
   const language = await getRequestContentLanguage();

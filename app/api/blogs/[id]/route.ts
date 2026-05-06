@@ -198,6 +198,8 @@ export async function PUT(req: NextRequest, context: any) {
     }
 
     // Revalidate pages
+    revalidatePath("/blogs");
+    revalidatePath(`/blogs/${blog.slug}`);
     revalidatePath("/blog");
     revalidatePath(`/blog/${blog.slug}`);
 
@@ -213,4 +215,3 @@ export async function PUT(req: NextRequest, context: any) {
     );
   }
 }
-

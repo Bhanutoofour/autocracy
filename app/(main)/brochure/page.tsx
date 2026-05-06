@@ -1,11 +1,14 @@
 import React from "react";
 import BrochureClient from "./BrochureClient";
 import { Metadata } from "next";
-import { getRequestContentLanguage } from "@/app/_lib/i18n-server";
+import { getRequestContentLanguage, getRequestLocale } from "@/app/_lib/i18n-server";
 import { tUi } from "@/app/_lib/i18n";
-import { buildLocalizedAlternates } from "@/app/_lib/locale-path";
+import { buildLocalizedAlternates, localizeHref } from "@/app/_lib/locale-path";
 
-export const metadata: Metadata = {
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+
+  return {
   title:
     "Download Autocracy Machinery Brochure – Industrial & Infrastructure Machines",
   description:
@@ -17,12 +20,12 @@ export const metadata: Metadata = {
     "infrastructure equipment India",
     "construction & agri machines PDF",
   ],
-  alternates: buildLocalizedAlternates("/brochure"),
+  alternates: buildLocalizedAlternates("/brochure", locale),
   openGraph: {
     title: "Download Brochure – Autocracy Machinery",
     description:
       "Get the latest brochure from Autocracy Machinery – India's manufacturer of trenchers, multi-utility machines & industrial solutions.",
-    url: "/in/en/brochure",
+    url: localizeHref("/brochure", locale),
     type: "website",
   },
   twitter: {
@@ -31,7 +34,8 @@ export const metadata: Metadata = {
     description:
       "Get the latest brochure from Autocracy Machinery – India's manufacturer of trenchers, multi-utility machines & industrial solutions.",
   },
-};
+  };
+}
 
 const BrochurePage = async () => {
   const language = await getRequestContentLanguage();

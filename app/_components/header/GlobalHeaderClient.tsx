@@ -3,8 +3,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import CountrySwitcherButton from "../CountrySwitcherButton";
-import LanguageSwitcherButton from "../LanguageSwitcherButton";
 import {
   type ContentLanguage,
   getMessages,
@@ -285,26 +283,21 @@ export default function GlobalHeaderClient({ language, locale }: GlobalHeaderCli
   }, [activeIndustry]);
 
   const navLinks = [
-    { label: messages.common.aboutUs, href: toLocalizedHref("/about-us") },
-    { label: messages.common.blogs, href: toLocalizedHref("/blog") },
-    { label: messages.common.contactUs, href: toLocalizedHref("/contact-us") },
+    { label: messages.common.aboutUs, href: "/about-us" },
+    { label: messages.common.blogs, href: "/blogs" },
+    { label: messages.common.contactUs, href: "/contact-us" },
   ];
   const mobileMainMenu: MobileMainMenuItem[] = [
     { label: messages.common.industry, panel: "industries", showArrow: true },
     { label: messages.common.product, panel: "products", showArrow: true },
-    { label: messages.common.aboutUs, href: toLocalizedHref("/about-us"), showArrow: false },
-    { label: messages.common.blogs, href: toLocalizedHref("/blog"), showArrow: false },
-    { label: messages.common.contactUs, href: toLocalizedHref("/contact-us"), showArrow: false },
+    { label: messages.common.aboutUs, href: "/about-us", showArrow: false },
+    { label: messages.common.blogs, href: "/blogs", showArrow: false },
+    { label: messages.common.contactUs, href: "/contact-us", showArrow: false },
   ];
   const navItemClass =
     "flex items-center justify-center gap-1 text-center font-[var(--font-roboto-condensed)] text-[17px] font-semibold leading-[105%] tracking-[0] text-[#000000] [font-stretch:75%] transition";
   const topBarItemClass =
     "hidden items-center gap-2 font-[var(--font-roboto-condensed)] text-[14px] font-semibold uppercase leading-[105%] tracking-[0]";
-  const topBarSwitcherClass =
-    "inline-flex h-8 min-w-[52px] items-center justify-center gap-1 rounded bg-transparent px-1 font-[var(--font-roboto-condensed)] text-[14px] font-semibold uppercase leading-[105%] tracking-[0] text-[#0a0a0b]";
-  const topBarLanguageClass =
-    "relative inline-flex h-8 min-w-[38px] items-center rounded bg-transparent px-1 font-[var(--font-roboto-condensed)] text-[14px] font-semibold uppercase leading-[105%] tracking-[0] text-[#0a0a0b]";
-
   useEffect(() => {
     document.body.style.overflow = mobileMenuOpen ? "hidden" : "";
     return () => {
@@ -340,8 +333,6 @@ export default function GlobalHeaderClient({ language, locale }: GlobalHeaderCli
               <Icon className="size-4" name="search" />
               {messages.common.findDealer}
             </a>
-            <CountrySwitcherButton className={topBarSwitcherClass} />
-            <LanguageSwitcherButton className={topBarLanguageClass} />
           </div>
         </div>
       </div>
@@ -399,7 +390,7 @@ export default function GlobalHeaderClient({ language, locale }: GlobalHeaderCli
             </a>
             <a
               className="button-gold-text flex h-10 items-center justify-center bg-[var(--ink)] px-6 text-center font-[var(--font-roboto-condensed)] text-[14px] font-semibold uppercase leading-5 tracking-normal transition hover:bg-[#2d2d2d]"
-              href={toLocalizedHref("/contact-us")}
+              href="/contact-us"
               style={{ color: "#f9c300" }}
             >
               {messages.common.getQuote}
@@ -477,8 +468,6 @@ export default function GlobalHeaderClient({ language, locale }: GlobalHeaderCli
             <Icon className="size-7" name={mobileMenuOpen ? "close" : "menu"} />
           </button>
           <div className="flex h-full items-center justify-end gap-2 border-l border-black/15 px-2">
-            <CountrySwitcherButton className="inline-flex h-8 min-w-[52px] items-center justify-center gap-1 rounded bg-transparent px-1 text-[11px] font-semibold uppercase text-[#0a0a0b]" />
-            <LanguageSwitcherButton className="relative inline-flex h-8 min-w-[38px] items-center rounded bg-transparent px-1 text-[11px] font-semibold uppercase text-[#0a0a0b]" />
             <button
               aria-label="Search"
               className="grid size-8 place-items-center text-[var(--ink)]"
@@ -540,10 +529,6 @@ export default function GlobalHeaderClient({ language, locale }: GlobalHeaderCli
                   </div>
 
                   <div className="mt-auto px-4 pb-[calc(1.5rem+env(safe-area-inset-bottom))] min-[360px]:px-6 min-[360px]:pb-[calc(2rem+env(safe-area-inset-bottom))]">
-                    <div className="mb-4 flex items-center justify-between rounded border border-black/20 px-3 py-2">
-                      <CountrySwitcherButton />
-                      <LanguageSwitcherButton />
-                    </div>
                     <a
                       className="mb-6 inline-flex items-center gap-2 font-[var(--font-roboto-condensed)] text-[16px] font-semibold text-[#0a0a0b]"
                       href="tel:+918790473345"
@@ -554,7 +539,7 @@ export default function GlobalHeaderClient({ language, locale }: GlobalHeaderCli
                     <div className="grid grid-cols-2 gap-2 min-[360px]:gap-4">
                       <a
                         className="flex h-14 min-w-0 items-center justify-center bg-[var(--brand-yellow)] px-2 text-center font-[var(--font-roboto-condensed)] text-[12px] font-bold uppercase leading-none text-[#0a0a0b] min-[360px]:h-[62px] min-[360px]:text-[14px]"
-                        href={toLocalizedHref("/contact-us")}
+                        href="/contact-us"
                         onClick={closeMobileMenu}
                       >
                         {messages.common.getQuote}

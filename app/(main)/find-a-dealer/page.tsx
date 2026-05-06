@@ -1,21 +1,24 @@
 import React from "react";
 import DealerClient from "./DealerClient";
 import { Metadata } from "next";
-import { getRequestContentLanguage } from "@/app/_lib/i18n-server";
+import { getRequestContentLanguage, getRequestLocale } from "@/app/_lib/i18n-server";
 import { tUi } from "@/app/_lib/i18n";
-import { buildLocalizedAlternates } from "@/app/_lib/locale-path";
+import { buildLocalizedAlternates, localizeHref } from "@/app/_lib/locale-path";
 
-export const metadata: Metadata = {
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+
+  return {
   title:
     "Find Authorized Dealers for Trenchers & Utility Equipment - Autocracy Machinery",
   description:
     "Use our dealer locator to connect with certified sales and service partners for trenchers, utility, and infrastructure equipment. Get reliable support, genuine parts, and expert assistance near you.",
-  alternates: buildLocalizedAlternates("/find-a-dealer"),
+  alternates: buildLocalizedAlternates("/find-a-dealer", locale),
   openGraph: {
     title: "Find a Dealer – Autocracy Machinery",
     description:
       "Use our dealer locator to connect with certified sales and service partners for trenchers, utility, and infrastructure equipment.",
-    url: "/in/en/find-a-dealer",
+    url: localizeHref("/find-a-dealer", locale),
     type: "website",
   },
   twitter: {
@@ -24,7 +27,8 @@ export const metadata: Metadata = {
     description:
       "Use our dealer locator to connect with certified sales and service partners for trenchers, utility, and infrastructure equipment.",
   },
-};
+  };
+}
 
 const DealerPage = async () => {
   const language = await getRequestContentLanguage();

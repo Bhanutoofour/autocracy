@@ -80,7 +80,7 @@ export default async function UniversalFooter() {
     [
       { label: messages.footer.products, href: "/products" },
       { label: messages.footer.brochure, href: "/brochure" },
-      { label: messages.footer.blog, href: "/blog" },
+      { label: messages.footer.blog, href: "/blogs" },
       { label: messages.footer.videos, href: "/#stories" },
     ],
     [
@@ -212,13 +212,17 @@ export default async function UniversalFooter() {
                 <ul className="space-y-3">
                   {links.map((link) => {
                     const isInternal = link.href.startsWith("/");
+                    const isCountryAgnostic =
+                      link.href === "/about-us" ||
+                      link.href === "/contact-us" ||
+                      link.href === "/blogs";
 
                     return (
                       <li key={link.label}>
                         {isInternal ? (
                           <Link
                             className="transition hover:text-[var(--brand-yellow)]"
-                            href={toLocalizedHref(link.href)}
+                            href={isCountryAgnostic ? link.href : toLocalizedHref(link.href)}
                           >
                             {link.label}
                           </Link>

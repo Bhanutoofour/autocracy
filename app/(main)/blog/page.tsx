@@ -6,8 +6,7 @@ import { getActiveIndustries } from "@/actions/industryAction";
 import { getActiveModels } from "@/actions/modelAction";
 import { getActiveProducts } from "@/actions/productAction";
 import { getMessages } from "@/app/_lib/i18n";
-import { getRequestContentLanguage, getRequestLocale } from "@/app/_lib/i18n-server";
-import { buildLocalizedAlternates, localizeHref } from "@/app/_lib/locale-path";
+import { getRequestContentLanguage } from "@/app/_lib/i18n-server";
 import {
   formatBlogDate,
   resolveBlogImageSrc,
@@ -21,12 +20,14 @@ export const metadata: Metadata = {
   title: "Blog | Autocracy Machinery",
   description:
     "Read the latest updates from Autocracy Machinery on equipment, infrastructure execution, and field-ready engineering practices.",
-  alternates: buildLocalizedAlternates("/blog"),
+  alternates: {
+    canonical: "/blogs",
+  },
   openGraph: {
     title: "Blog | Autocracy Machinery",
     description:
       "Read the latest updates from Autocracy Machinery on equipment, infrastructure execution, and field-ready engineering practices.",
-    url: "/in/en/blog",
+    url: "/blogs",
     type: "website",
   },
   twitter: {
@@ -57,7 +58,6 @@ type BlogListingPageProps = {
 
 export default async function BlogListingPage({ searchParams }: BlogListingPageProps) {
   const language = await getRequestContentLanguage();
-  const locale = await getRequestLocale();
   const messages = getMessages(language);
   const params = (await searchParams) ?? {};
 
@@ -151,7 +151,7 @@ export default async function BlogListingPage({ searchParams }: BlogListingPageP
       ) : (
         <>
           <form
-            action={localizeHref("/blog", locale)}
+            action="/blogs"
             className="mt-8 rounded-lg border border-black/10 bg-[#f8f9fb] p-4 sm:p-5"
             method="get"
           >
@@ -238,7 +238,7 @@ export default async function BlogListingPage({ searchParams }: BlogListingPageP
               {hasActiveFilters ? (
                 <Link
                   className="inline-flex h-10 items-center rounded border border-black/20 bg-white px-4 text-sm font-semibold uppercase tracking-[0.04em] text-[#0a0a0b]"
-                  href={localizeHref("/blog", locale)}
+                  href="/blogs"
                 >
                   Clear Filters
                 </Link>
@@ -255,7 +255,7 @@ export default async function BlogListingPage({ searchParams }: BlogListingPageP
           ) : (
             <section className="mt-10 grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
               {filteredBlogs.map((blog) => {
-                const href = localizeHref(`/blog/${blog.slug}`, locale);
+                const href = `/blogs/${blog.slug}`;
                 const excerpt = toExcerpt(blog.description || blog.content, 150);
                 const publishedOn = formatBlogDate(blog.updatedAt || blog.createdAt);
 

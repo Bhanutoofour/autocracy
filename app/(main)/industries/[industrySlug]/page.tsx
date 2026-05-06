@@ -343,6 +343,8 @@ function buildIndustryFaqs(industryTitle: string, language: string) {
 
 export async function generateMetadata({ params }: IndustryPageProps): Promise<Metadata> {
   const { industrySlug } = await params;
+  const locale = await getRequestLocale();
+  const pagePath = `/industries/${industrySlug}`;
   const resolved = await getIndustryBySlug(industrySlug);
 
   if (!resolved) {
@@ -350,7 +352,7 @@ export async function generateMetadata({ params }: IndustryPageProps): Promise<M
       title: "Industry | Autocracy Machinery",
       description:
         "Explore Autocracy Machinery industry-specific solutions and equipment categories.",
-      alternates: buildLocalizedAlternates(`/industries/${industrySlug}`),
+      alternates: buildLocalizedAlternates(pagePath, locale),
     };
   }
 
@@ -371,11 +373,11 @@ export async function generateMetadata({ params }: IndustryPageProps): Promise<M
     title: seoTitle,
     description: seoDescription,
     keywords: industryData.seoMetadata?.pageKeywords?.trim() || undefined,
-    alternates: buildLocalizedAlternates(`/industries/${industrySlug}`),
+    alternates: buildLocalizedAlternates(pagePath, locale),
     openGraph: {
       title: industryData.seoMetadata?.socialTitle?.trim() || seoTitle,
       description: industryData.seoMetadata?.socialDescription?.trim() || seoDescription,
-      url: `/in/en/industries/${industrySlug}`,
+      url: localizeHref(pagePath, locale),
       type: "website",
       images: socialImage ? [{ url: socialImage }] : undefined,
     },

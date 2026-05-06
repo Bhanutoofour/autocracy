@@ -1,22 +1,25 @@
 import React from "react";
 import type { Metadata } from "next";
 import FaqClient from "./FaqClient";
-import { getRequestContentLanguage } from "@/app/_lib/i18n-server";
+import { getRequestContentLanguage, getRequestLocale } from "@/app/_lib/i18n-server";
 import { tUi } from "@/app/_lib/i18n";
-import { buildLocalizedAlternates, toAbsoluteUrl } from "@/app/_lib/locale-path";
+import { buildLocalizedAlternates, localizeHref, toAbsoluteUrl } from "@/app/_lib/locale-path";
 import { FAQs } from "@/data/qnaForFaq";
 import JsonLd from "@/app/_components/JsonLd";
 
-export const metadata: Metadata = {
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+
+  return {
   title: "Frequently Asked Questions - FAQs – Autocracy Machinery",
   description:
     "Quick answers to common questions about Autocracy Machinery products and services.",
-  alternates: buildLocalizedAlternates("/faqs"),
+  alternates: buildLocalizedAlternates("/faqs", locale),
   openGraph: {
     title: "FAQs – Autocracy Machinery",
     description:
       "Quick answers to common questions about Autocracy Machinery products and services.",
-    url: "/in/en/faqs",
+    url: localizeHref("/faqs", locale),
     type: "website",
   },
   twitter: {
@@ -25,10 +28,12 @@ export const metadata: Metadata = {
     description:
       "Quick answers to common questions about Autocracy Machinery products and services.",
   },
-};
+  };
+}
 
 export default async function FaqPage() {
   const language = await getRequestContentLanguage();
+  const locale = await getRequestLocale();
   if (language !== "en") {
     return (
       <main className="site-container py-12">
@@ -50,7 +55,7 @@ export default async function FaqPage() {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     mainEntity: faqEntities,
-    url: toAbsoluteUrl("/in/en/faqs"),
+    url: toAbsoluteUrl(localizeHref("/faqs", locale)),
   };
 
   return (

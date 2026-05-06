@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     title: "Infrastructure & Environmental Machines Manufacturer India | Autocracy Machinery",
     description:
       "Purpose-built heavy machinery, trenchers, and environmental equipment engineered for infrastructure, telecom, agri, water management, solar, and defence projects.",
-    url: "/in/en",
+    url: "/",
     siteName: "Autocracy Machinery",
     type: "website",
     images: [
@@ -87,7 +87,7 @@ export default async function RootLayout({
     url: "https://www.autocracymachinery.com/",
     potentialAction: {
       "@type": "SearchAction",
-      target: "https://www.autocracymachinery.com/in/en/blog?q={search_term_string}",
+      target: "https://www.autocracymachinery.com/blogs?q={search_term_string}",
       "query-input": "required name=search_term_string",
     },
   };

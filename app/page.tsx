@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 import CountrySwitcherButton from "./_components/CountrySwitcherButton";
-import LocationGate from "./_components/LocationGate";
 import GlobalHeader from "./_components/GlobalHeader";
 import HomeProductsSection from "./_components/HomeProductsSection";
 import HomeHeroSlider from "./_components/HomeHeroSlider";
@@ -31,12 +30,16 @@ import {
   localizeHref,
 } from "@/app/_lib/locale-path";
 
-export const metadata: Metadata = {
-  alternates: buildLocalizedAlternates("/"),
-  openGraph: {
-    url: "/in/en",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+
+  return {
+    alternates: buildLocalizedAlternates("/", locale),
+    openGraph: {
+      url: localizeHref("/", locale),
+    },
+  };
+}
 
 const asset = "/home-assets/imports/Final-1/";
 
@@ -463,10 +466,10 @@ function Header() {
   const nav = [
     { label: "Industries", href: "/in/en#industries" },
     { label: "Products", href: "/in/en#products" },
-    { label: "Company", href: "/in/en/about-us" },
-    { label: "About Us", href: "/in/en/about-us" },
-    { label: "Blogs", href: "/in/en/blog" },
-    { label: "Contact Us", href: "/in/en/contact-us" },
+    { label: "Company", href: "/about-us" },
+    { label: "About Us", href: "/about-us" },
+    { label: "Blogs", href: "/blogs" },
+    { label: "Contact Us", href: "/contact-us" },
   ];
 
   return (
@@ -852,7 +855,6 @@ export default async function Home() {
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-white text-[#01060a]">
-      <LocationGate />
       <script
         dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
         type="application/ld+json"

@@ -26,6 +26,8 @@ export async function generateMetadata({
   params,
 }: IndustryProductModelPageProps): Promise<Metadata> {
   const { industrySlug, productSlug, modelSlug } = await params;
+  const locale = await getRequestLocale();
+  const pagePath = `/industries/${industrySlug}/${productSlug}/${modelSlug}`;
   const resolved = await getModelByIndustryProductAndModelNumberSlug(
     industrySlug,
     productSlug,
@@ -36,9 +38,7 @@ export async function generateMetadata({
     return {
       title: "Industry Model | Autocracy Machinery",
       description: "Explore model details and specifications for industry-specific applications.",
-      alternates: buildLocalizedAlternates(
-        `/industries/${industrySlug}/${productSlug}/${modelSlug}`,
-      ),
+      alternates: buildLocalizedAlternates(pagePath, locale),
     };
   }
 
@@ -53,11 +53,11 @@ export async function generateMetadata({
     title: seoTitle,
     description: seoDescription,
     keywords: modelData.seoMetadata?.pageKeywords?.trim() || undefined,
-    alternates: buildLocalizedAlternates(`/industries/${industrySlug}/${productSlug}/${modelSlug}`),
+    alternates: buildLocalizedAlternates(pagePath, locale),
     openGraph: {
       title: seoTitle,
       description: seoDescription,
-      url: `/in/en/industries/${industrySlug}/${productSlug}/${modelSlug}`,
+      url: localizeHref(pagePath, locale),
       type: "website",
       images: socialImage ? [{ url: socialImage }] : undefined,
     },

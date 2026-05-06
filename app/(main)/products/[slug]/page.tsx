@@ -299,13 +299,15 @@ function getCategoryContent(
 
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
   const { slug } = await params;
+  const locale = await getRequestLocale();
+  const pagePath = `/products/${slug}`;
   const resolved = await getProductBySlug(slug);
 
   if (!resolved) {
     return {
       title: "Product | Autocracy Machinery",
       description: "Explore product specifications and available models from Autocracy Machinery.",
-      alternates: buildLocalizedAlternates(`/products/${slug}`),
+      alternates: buildLocalizedAlternates(pagePath, locale),
     };
   }
 
@@ -324,11 +326,11 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
     title: seoTitle,
     description: seoDescription,
     keywords: productData.seoMetadata?.pageKeywords?.trim() || undefined,
-    alternates: buildLocalizedAlternates(`/products/${slug}`),
+    alternates: buildLocalizedAlternates(pagePath, locale),
     openGraph: {
       title: productData.seoMetadata?.socialTitle?.trim() || seoTitle,
       description: productData.seoMetadata?.socialDescription?.trim() || seoDescription,
-      url: `/in/en/products/${slug}`,
+      url: localizeHref(pagePath, locale),
       type: "website",
       images: socialImage ? [{ url: socialImage }] : undefined,
     },

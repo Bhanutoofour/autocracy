@@ -9,7 +9,6 @@ import {
 import { getMessages } from "@/app/_lib/i18n";
 import { getRequestContentLanguage, getRequestLocale } from "@/app/_lib/i18n-server";
 import {
-  buildLocalizedAlternates,
   localizeHref,
   toAbsoluteUrl,
 } from "@/app/_lib/locale-path";
@@ -37,7 +36,9 @@ export async function generateMetadata({
   if (!blog) {
     return {
       title: "Blog | Autocracy Machinery",
-      alternates: buildLocalizedAlternates(`/blog/${slug}`),
+      alternates: {
+        canonical: `/blogs/${slug}`,
+      },
     };
   }
 
@@ -51,11 +52,13 @@ export async function generateMetadata({
   return {
     title: seoTitle,
     description: seoDescription,
-    alternates: buildLocalizedAlternates(`/blog/${slug}`),
+    alternates: {
+      canonical: `/blogs/${slug}`,
+    },
     openGraph: {
       title: blog.seoMetadata?.socialTitle?.trim() || seoTitle,
       description: blog.seoMetadata?.socialDescription?.trim() || seoDescription,
-      url: `/in/en/blog/${slug}`,
+      url: `/blogs/${slug}`,
       type: "article",
       images: socialImage ? [{ url: socialImage }] : undefined,
     },
@@ -87,7 +90,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
   );
   const publishedOn = formatBlogDate(blog.updatedAt || blog.createdAt);
   const blogImage = resolveBlogImageSrc(blog.banner);
-  const blogPath = localizeHref(`/blog/${slug}`, locale);
+  const blogPath = `/blogs/${slug}`;
   const blogUrl = toAbsoluteUrl(blogPath);
   const blogSchema = {
     "@context": "https://schema.org",
@@ -128,7 +131,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
         "@type": "ListItem",
         position: 2,
         name: "Blog",
-        item: toAbsoluteUrl(localizeHref("/blog", locale)),
+        item: toAbsoluteUrl("/blogs"),
       },
       {
         "@type": "ListItem",
@@ -145,7 +148,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
       <JsonLd data={breadcrumbSchema} />
       <Link
         className="inline-flex items-center text-sm font-semibold uppercase tracking-[0.12em] text-[#2f64b7]"
-        href={localizeHref("/blog", locale)}
+        href="/blogs"
       >
         {messages.common.blogs}
       </Link>
@@ -196,7 +199,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
           </h2>
           <div className="mt-6 grid gap-6 md:grid-cols-3">
             {relatedBlogs.map((related) => {
-              const href = localizeHref(`/blog/${related.slug}`, locale);
+              const href = `/blogs/${related.slug}`;
               return (
                 <article
                   className="flex h-full flex-col overflow-hidden rounded border border-black/10 bg-white"

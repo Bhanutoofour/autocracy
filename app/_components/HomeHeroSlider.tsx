@@ -91,7 +91,7 @@ export default function HomeHeroSlider({
             </p>
             <Link
               className="mt-6 flex h-[44px] w-[136px] items-center justify-center bg-[var(--brand-yellow)] px-4 text-center font-[var(--font-roboto-condensed)] text-[15px] font-bold uppercase leading-5 tracking-normal text-[#0a0a0b] transition hover:brightness-95 sm:h-[46px] sm:w-[144px] lg:h-[46px] lg:w-[150px]"
-              href="/in/en/contact-us"
+              href="/contact-us"
             >
               {ctaLabel}
             </Link>

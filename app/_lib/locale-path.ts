@@ -1,7 +1,8 @@
-import { CONTENT_LANGUAGES, type ContentLanguage } from "./i18n";
+import { type ContentLanguage } from "./i18n";
 import {
   DEFAULT_COUNTRY,
   DEFAULT_LANGUAGE,
+  getCountryLanguageOptions,
   isSupportedCountry,
   isSupportedLanguage,
   type SupportedCountry,
@@ -13,6 +14,7 @@ export const SITE_ORIGIN = "https://www.autocracymachinery.com";
 export type LocaleContext = {
   country: SupportedCountry;
   language: SupportedLanguage;
+  scope?: "country" | "global";
 };
 
 function normalizePath(path: string): string {
@@ -29,10 +31,14 @@ export function parseLocaleFromPathname(pathname: string): LocaleContext {
   const segments = normalized.split("/").filter(Boolean);
   const country = segments[0]?.toLowerCase();
   const language = segments[1]?.toLowerCase();
+  const hasLocalePrefix = Boolean(
+    country && isSupportedCountry(country) && language && isSupportedLanguage(language),
+  );
 
   return {
     country: country && isSupportedCountry(country) ? country : DEFAULT_COUNTRY,
     language: language && isSupportedLanguage(language) ? language : DEFAULT_LANGUAGE,
+    scope: hasLocalePrefix ? "country" : "global",
   };
 }
 
@@ -46,6 +52,7 @@ export function withLocalePath(path: string, locale: LocaleContext): string {
   );
 
   if (alreadyLocalized) return normalized;
+  if (locale.scope === "global") return normalized;
   if (normalized === "/") return `/${locale.country}/${locale.language}`;
   return `/${locale.country}/${locale.language}${normalized}`;
 }
@@ -64,22 +71,38 @@ export function buildLanguageAlternates(
   path: string,
   country: SupportedCountry = DEFAULT_COUNTRY,
 ): Record<string, string> {
-  const alternates = Object.fromEntries(
-    CONTENT_LANGUAGES.map((language) => [
-      language,
-      withLocalePath(path, { country, language: language as SupportedLanguage }),
+  const normalized = normalizePath(path);
+  const countryAlternates = Object.fromEntries(
+    getCountryLanguageOptions(country).map((language) => [
+      `${language}-${country.toUpperCase()}`,
+      withLocalePath(normalized, { country, language, scope: "country" }),
     ]),
   );
 
   return {
-    ...alternates,
-    "x-default": withLocalePath(path, { country, language: DEFAULT_LANGUAGE }),
+    "x-default": normalized,
+    ...countryAlternates,
   };
 }
 
-export function buildLocalizedAlternates(path: string, country: SupportedCountry = DEFAULT_COUNTRY) {
+export function buildLocalizedAlternates(
+  path: string,
+  countryOrLocale: SupportedCountry | LocaleContext = DEFAULT_COUNTRY,
+  locale?: LocaleContext,
+) {
+  const country =
+    typeof countryOrLocale === "string" ? countryOrLocale : countryOrLocale.country;
+  const currentLocale =
+    typeof countryOrLocale === "string"
+      ? locale ?? {
+          country: DEFAULT_COUNTRY,
+          language: DEFAULT_LANGUAGE,
+          scope: "global",
+        }
+      : countryOrLocale;
+
   return {
-    canonical: withLocalePath(path, { country, language: DEFAULT_LANGUAGE }),
+    canonical: withLocalePath(path, currentLocale),
     languages: buildLanguageAlternates(path, country),
   };
 }
@@ -90,7 +113,11 @@ export function toAbsoluteUrl(path: string): string {
 
 export function toLocalizedAbsoluteUrl(
   path: string,
-  locale: LocaleContext = { country: DEFAULT_COUNTRY, language: DEFAULT_LANGUAGE },
+  locale: LocaleContext = {
+    country: DEFAULT_COUNTRY,
+    language: DEFAULT_LANGUAGE,
+    scope: "global",
+  },
 ): string {
   return toAbsoluteUrl(withLocalePath(path, locale));
 }

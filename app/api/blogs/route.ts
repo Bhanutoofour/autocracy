@@ -193,6 +193,8 @@ export async function POST(req: NextRequest) {
     }
 
     // Revalidate pages
+    revalidatePath("/blogs");
+    revalidatePath(`/blogs/${blog.slug}`);
     revalidatePath("/blog");
     revalidatePath(`/blog/${blog.slug}`);
 
@@ -313,6 +315,8 @@ export async function PUT(req: NextRequest) {
       .where(eq(blogModels.blogId, id));
 
     // Revalidate pages
+    revalidatePath("/blogs");
+    revalidatePath(`/blogs/${blog.slug}`);
     revalidatePath("/blog");
     revalidatePath(`/blog/${blog.slug}`);
 
@@ -371,6 +375,7 @@ export async function DELETE(req: NextRequest) {
     }
 
     // Revalidate pages
+    revalidatePath("/blogs");
     revalidatePath("/blog");
 
     return NextResponse.json({ success: true });

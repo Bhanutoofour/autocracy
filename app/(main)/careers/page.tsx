@@ -1,11 +1,14 @@
 import React from "react";
 import type { Metadata } from "next";
 import CareersClient from "./CareersClient";
-import { getRequestContentLanguage } from "@/app/_lib/i18n-server";
+import { getRequestContentLanguage, getRequestLocale } from "@/app/_lib/i18n-server";
 import { tUi } from "@/app/_lib/i18n";
-import { buildLocalizedAlternates } from "@/app/_lib/locale-path";
+import { buildLocalizedAlternates, localizeHref } from "@/app/_lib/locale-path";
 
-export const metadata: Metadata = {
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+
+  return {
   title: "Careers at Autocracy Machinery | Join India's Industrial Innovation Team",
   description:
     "Explore exciting career opportunities at Autocracy Machinery – a leading Indian industrial & infrastructure machinery manufacturer. Grow with us in engineering, design, production, sales and support.",
@@ -21,12 +24,12 @@ export const metadata: Metadata = {
     "infrastructure machinery jobs",
     "manufacturing company jobs India",
   ],
-  alternates: buildLocalizedAlternates("/careers"),
+  alternates: buildLocalizedAlternates("/careers", locale),
   openGraph: {
     title: "Careers – Autocracy Machinery",
     description:
       "Explore exciting career opportunities at Autocracy Machinery – a leading Indian industrial & infrastructure machinery manufacturer.",
-    url: "/in/en/careers",
+    url: localizeHref("/careers", locale),
     type: "website",
   },
   twitter: {
@@ -35,7 +38,8 @@ export const metadata: Metadata = {
     description:
       "Explore exciting career opportunities at Autocracy Machinery – a leading Indian industrial & infrastructure machinery manufacturer.",
   },
-};
+  };
+}
 
 const CareersPage = async () => {
   const language = await getRequestContentLanguage();
