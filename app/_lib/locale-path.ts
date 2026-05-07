@@ -2,9 +2,12 @@ import { type ContentLanguage } from "./i18n";
 import {
   DEFAULT_COUNTRY,
   DEFAULT_LANGUAGE,
+  getLocalePrefix,
   getCountryLanguageOptions,
+  isSupportedLocalePair,
   isSupportedCountry,
   isSupportedLanguage,
+  parseLocalePrefix,
   type SupportedCountry,
   type SupportedLanguage,
 } from "./locale-config";
@@ -29,32 +32,60 @@ function normalizePath(path: string): string {
 export function parseLocaleFromPathname(pathname: string): LocaleContext {
   const normalized = normalizePath(pathname);
   const segments = normalized.split("/").filter(Boolean);
-  const country = segments[0]?.toLowerCase();
-  const language = segments[1]?.toLowerCase();
-  const hasLocalePrefix = Boolean(
-    country && isSupportedCountry(country) && language && isSupportedLanguage(language),
+  const localePrefix = parseLocalePrefix(segments[0]);
+
+  if (localePrefix) {
+    return {
+      ...localePrefix,
+      scope: "country",
+    };
+  }
+
+  const legacyCountry = segments[0]?.toLowerCase();
+  const legacyLanguage = segments[1]?.toLowerCase();
+  const hasLegacyLocalePrefix = Boolean(
+    legacyCountry &&
+      legacyLanguage &&
+      isSupportedLocalePair(legacyCountry, legacyLanguage),
   );
 
   return {
-    country: country && isSupportedCountry(country) ? country : DEFAULT_COUNTRY,
-    language: language && isSupportedLanguage(language) ? language : DEFAULT_LANGUAGE,
-    scope: hasLocalePrefix ? "country" : "global",
+    country: legacyCountry && isSupportedCountry(legacyCountry) ? legacyCountry : DEFAULT_COUNTRY,
+    language:
+      legacyLanguage && isSupportedLanguage(legacyLanguage)
+        ? legacyLanguage
+        : DEFAULT_LANGUAGE,
+    scope: hasLegacyLocalePrefix ? "country" : "global",
   };
 }
 
 export function withLocalePath(path: string, locale: LocaleContext): string {
   const normalized = normalizePath(path);
   const segments = normalized.split("/").filter(Boolean);
-  const first = segments[0]?.toLowerCase();
-  const second = segments[1]?.toLowerCase();
-  const alreadyLocalized = Boolean(
-    first && isSupportedCountry(first) && second && isSupportedLanguage(second),
+  const localePrefix = parseLocalePrefix(segments[0]);
+
+  if (localePrefix) return normalized;
+
+  const legacyCountry = segments[0]?.toLowerCase();
+  const legacyLanguage = segments[1]?.toLowerCase();
+  const hasLegacyLocalePrefix = Boolean(
+    legacyCountry &&
+      legacyLanguage &&
+      isSupportedLocalePair(legacyCountry, legacyLanguage),
   );
 
-  if (alreadyLocalized) return normalized;
+  if (hasLegacyLocalePrefix) {
+    const remainder = segments.slice(2).join("/");
+    return `/${getLocalePrefix(
+      legacyCountry as SupportedCountry,
+      legacyLanguage as SupportedLanguage,
+    )}${remainder ? `/${remainder}` : ""}`;
+  }
+
   if (locale.scope === "global") return normalized;
-  if (normalized === "/") return `/${locale.country}/${locale.language}`;
-  return `/${locale.country}/${locale.language}${normalized}`;
+  const prefix = getLocalePrefix(locale.country, locale.language);
+  if (normalized === "/") return `/${prefix}`;
+  return `/${prefix}${normalized}`;
 }
 
 export function localizeHref(href: string, locale: LocaleContext): string {

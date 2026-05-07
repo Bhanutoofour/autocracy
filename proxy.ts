@@ -2,16 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import {
   DEFAULT_COUNTRY,
   DEFAULT_LANGUAGE,
+  getLocalePrefix,
+  isSupportedLocalePair,
   isSupportedCountry,
   isSupportedLanguage,
+  parseLocalePrefix,
+  type SupportedLanguage,
 } from "@/app/_lib/locale-config";
-
-const COUNTRY_DETECTION_HEADERS = [
-  "x-vercel-ip-country",
-  "cf-ipcountry",
-  "cloudfront-viewer-country",
-  "x-country-code",
-];
 
 function isPublicAsset(pathname: string): boolean {
   return /\.[^/]+$/.test(pathname);
@@ -41,15 +38,6 @@ function toCountryAgnosticCanonical(pathname: string): string {
   return pathname;
 }
 
-function getDetectedCountry(request: NextRequest): string | null {
-  for (const header of COUNTRY_DETECTION_HEADERS) {
-    const value = request.headers.get(header)?.trim().toLowerCase();
-    if (value && value !== "xx") return value;
-  }
-
-  return null;
-}
-
 function createLocaleHeaders(
   request: NextRequest,
   scope: "country" | "global",
@@ -61,26 +49,6 @@ function createLocaleHeaders(
   requestHeaders.set("x-country", country);
   requestHeaders.set("x-lang", language);
   return requestHeaders;
-}
-
-function appendVary(response: NextResponse, headerNames: readonly string[]): NextResponse {
-  const existing = response.headers.get("Vary");
-  const values = new Set(
-    existing
-      ?.split(",")
-      .map((value) => value.trim())
-      .filter(Boolean),
-  );
-
-  headerNames.forEach((header) => values.add(header));
-  response.headers.set("Vary", Array.from(values).join(", "));
-  return response;
-}
-
-function geoRedirect(url: URL): NextResponse {
-  const response = NextResponse.redirect(url, 307);
-  response.headers.set("Cache-Control", "private, no-store");
-  return appendVary(response, COUNTRY_DETECTION_HEADERS);
 }
 
 function handleLocaleProxy(request: NextRequest) {
@@ -98,13 +66,13 @@ function handleLocaleProxy(request: NextRequest) {
   }
 
   const segments = pathname.split("/").filter(Boolean);
-  const country = segments[0]?.toLowerCase();
-  const language = segments[1]?.toLowerCase();
+  const localePrefix = parseLocalePrefix(segments[0]);
 
-  // Canonical locale-prefixed URLs: /{country}/{lang}/*
+  // Canonical locale-prefixed URLs: /{lang}-{country}/*
   // Rewrite internally to existing app routes so we don't duplicate files.
-  if (country && isSupportedCountry(country) && language && isSupportedLanguage(language)) {
-    const internalPath = `/${segments.slice(2).join("/")}`;
+  if (localePrefix) {
+    const { country, language } = localePrefix;
+    const internalPath = `/${segments.slice(1).join("/")}`;
 
     // These pages are country-agnostic. Keep them on a single direct URL.
     if (isCountryAgnosticPath(internalPath)) {
@@ -128,17 +96,43 @@ function handleLocaleProxy(request: NextRequest) {
     return response;
   }
 
-  // /{country}/* => /{country}/en/*
-  if (country && isSupportedCountry(country) && !language) {
+  const legacyCountry = segments[0]?.toLowerCase();
+  const legacyLanguage = segments[1]?.toLowerCase();
+
+  // Legacy /{country}/{lang}/* URLs permanently move to /{lang}-{country}/*.
+  if (
+    legacyCountry &&
+    legacyLanguage &&
+    isSupportedLocalePair(legacyCountry, legacyLanguage)
+  ) {
     const redirectUrl = request.nextUrl.clone();
-    redirectUrl.pathname = `/${country}/${DEFAULT_LANGUAGE}`;
+    const remainder = segments.slice(2).join("/");
+    redirectUrl.pathname = `/${getLocalePrefix(
+      legacyCountry,
+      legacyLanguage as SupportedLanguage,
+    )}${remainder ? `/${remainder}` : ""}`;
     return NextResponse.redirect(redirectUrl, 301);
   }
 
-  // /{country}/{non-lang}/* => /{country}/en/{non-lang}/*
-  if (country && isSupportedCountry(country) && language && !isSupportedLanguage(language)) {
+  // Legacy /{country}/* URLs permanently move to /{default-lang}-{country}/*.
+  if (legacyCountry && isSupportedCountry(legacyCountry) && !legacyLanguage) {
     const redirectUrl = request.nextUrl.clone();
-    redirectUrl.pathname = `/${country}/${DEFAULT_LANGUAGE}/${segments.slice(1).join("/")}`;
+    redirectUrl.pathname = `/${getLocalePrefix(legacyCountry, DEFAULT_LANGUAGE)}`;
+    return NextResponse.redirect(redirectUrl, 301);
+  }
+
+  if (
+    legacyCountry &&
+    isSupportedCountry(legacyCountry) &&
+    legacyLanguage &&
+    !isSupportedLanguage(legacyLanguage)
+  ) {
+    const redirectUrl = request.nextUrl.clone();
+    const remainder = segments.slice(1).join("/");
+    redirectUrl.pathname = `/${getLocalePrefix(
+      legacyCountry,
+      DEFAULT_LANGUAGE,
+    )}${remainder ? `/${remainder}` : ""}`;
     return NextResponse.redirect(redirectUrl, 301);
   }
 
@@ -156,16 +150,6 @@ function handleLocaleProxy(request: NextRequest) {
         headers: requestHeaders,
       },
     });
-  }
-
-  const detectedCountry = getDetectedCountry(request);
-  if (detectedCountry === DEFAULT_COUNTRY) {
-    const redirectUrl = request.nextUrl.clone();
-    redirectUrl.pathname =
-      pathname === "/"
-        ? `/${DEFAULT_COUNTRY}/${DEFAULT_LANGUAGE}`
-        : `/${DEFAULT_COUNTRY}/${DEFAULT_LANGUAGE}${pathname}`;
-    return geoRedirect(redirectUrl);
   }
 
   const requestHeaders = createLocaleHeaders(request, "global");

@@ -1,4 +1,4 @@
-﻿import { DEFAULT_LANGUAGE } from "./locale-config";
+﻿import { DEFAULT_LANGUAGE, parseLocalePrefix } from "./locale-config";
 
 export const CONTENT_LANGUAGES = ["en", "hi", "fr", "es", "de", "ar", "zh", "ja", "bn"] as const;
 export type ContentLanguage = (typeof CONTENT_LANGUAGES)[number];
@@ -15,6 +15,9 @@ export function getContentLanguage(value?: string | null): ContentLanguage {
 
 export function getContentLanguageFromPath(pathname: string): ContentLanguage {
   const segments = pathname.split("/").filter(Boolean);
+  const localePrefix = parseLocalePrefix(segments[0]);
+  if (localePrefix) return getContentLanguage(localePrefix.language);
+
   return getContentLanguage(segments[1] ?? DEFAULT_LANGUAGE);
 }
 

@@ -4,10 +4,12 @@ import { useMemo, useTransition } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   DEFAULT_COUNTRY,
+  getLocalePrefix,
   getCountryLanguageOptions,
   getNormalizedLanguageForCountry,
   isSupportedCountry,
   isSupportedLanguage,
+  parseLocalePrefix,
   type SupportedCountry,
 } from "@/app/_lib/locale-config";
 import {
@@ -31,6 +33,15 @@ const LANGUAGE_CODES: Record<ContentLanguage, string> = {
 
 function parsePath(pathname: string) {
   const segments = pathname.split("/").filter(Boolean);
+  const localePrefix = parseLocalePrefix(segments[0]);
+
+  if (localePrefix) {
+    return {
+      ...localePrefix,
+      remainder: segments.slice(1),
+    };
+  }
+
   const country = segments[0]?.toLowerCase();
   const language = segments[1]?.toLowerCase();
   const hasCountry = Boolean(country && isSupportedCountry(country));
@@ -66,7 +77,7 @@ export default function LanguageSwitcherButton({
       country,
       nextLanguage,
     );
-    const nextPath = `/${country}/${normalizedLanguage}${remainder.length ? `/${remainder.join("/")}` : ""}`;
+    const nextPath = `/${getLocalePrefix(country, normalizedLanguage)}${remainder.length ? `/${remainder.join("/")}` : ""}`;
     const query = searchParams.toString();
     const nextUrl = query ? `${nextPath}?${query}` : nextPath;
     const browserCurrentUrl =

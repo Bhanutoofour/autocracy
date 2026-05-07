@@ -3,11 +3,13 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   getDefaultLanguageForCountry,
+  getLocalePrefix,
   getCountryLanguageOptions,
   getNormalizedLanguageForCountry,
   isLiveCountry,
   isSupportedCountry,
   isSupportedLanguage,
+  parseLocalePrefix,
   type SupportedCountry,
 } from "@/app/_lib/locale-config";
 import {
@@ -27,6 +29,8 @@ type LanguageOption = {
   label: string;
   hindiLabel: string;
 };
+
+type GateMode = "suggestion" | "selector" | "global";
 
 const COUNTRY_OPTIONS: CountryOption[] = [
   { code: "in", label: "India" },
@@ -52,6 +56,8 @@ const LANGUAGE_LABELS: Record<ContentLanguage, LanguageOption> = {
 
 const STORAGE_KEY = "autocracy:selected-country";
 const LANGUAGE_STORAGE_KEY = "autocracy:selected-language";
+const PROMPT_STORAGE_KEY = "autocracy:geo-site-prompt-dismissed:v2";
+const SUGGESTION_COUNTRIES = new Set<SupportedCountry>(["in", "us"]);
 
 function normalizeCountryCode(value: string | null | undefined): SupportedCountry | null {
   const normalized = (value ?? "").trim().toLowerCase();
@@ -107,8 +113,70 @@ function writeLocalStorage(key: string, value: string) {
   }
 }
 
+function isLegacyLocalePath(segments: string[]): boolean {
+  const country = segments[0]?.toLowerCase();
+  const language = segments[1]?.toLowerCase();
+  return Boolean(
+    country &&
+      language &&
+      isSupportedCountry(country) &&
+      isSupportedLanguage(language),
+  );
+}
+
+function isCountryAgnosticPath(pathname: string): boolean {
+  return (
+    pathname === "/about-us" ||
+    pathname === "/contact-us" ||
+    pathname === "/privacy-policy" ||
+    pathname === "/terms-and-conditions" ||
+    pathname === "/blogs" ||
+    pathname.startsWith("/blogs/") ||
+    pathname === "/blog" ||
+    pathname.startsWith("/blog/")
+  );
+}
+
+function shouldSkipAutoPrompt(pathname: string): boolean {
+  const segments = pathname.split("/").filter(Boolean);
+  return (
+    pathname.startsWith("/admin") ||
+    parseLocalePrefix(segments[0]) !== null ||
+    isLegacyLocalePath(segments) ||
+    isCountryAgnosticPath(pathname)
+  );
+}
+
+function getPromptCopy(mode: GateMode, country: SupportedCountry) {
+  if (mode === "global") {
+    return {
+      title: "You're viewing our global site",
+      body: "We export worldwide. Continue with the global site, or choose a market when you need a local experience.",
+      primary: "Continue global",
+      secondary: "Choose country",
+    };
+  }
+
+  if (country === "us") {
+    return {
+      title: "View USA site?",
+      body: "We noticed you may be visiting from the United States. Open the USA site for market-specific pages when available.",
+      primary: "View USA site",
+      secondary: "Stay global",
+    };
+  }
+
+  return {
+    title: "View India site?",
+    body: "We noticed you may be visiting from India. Open the India site for local products, dealer info, and support.",
+    primary: "View India site",
+    secondary: "Stay global",
+  };
+}
+
 export default function LocationGate() {
   const [open, setOpen] = useState(false);
+  const [mode, setMode] = useState<GateMode>("suggestion");
   const [selectedCountry, setSelectedCountry] = useState<SupportedCountry>("in");
   const [language, setLanguage] = useState<ContentLanguage>("en");
 
@@ -122,6 +190,11 @@ export default function LocationGate() {
   );
   const selectedLanguage = normalizeLanguageForCountry(selectedCountry, language);
   const isSelectedCountryLive = isLiveCountry(selectedCountry);
+  const canConfirmCountry =
+    mode === "suggestion"
+      ? SUGGESTION_COUNTRIES.has(selectedCountry)
+      : isSelectedCountryLive;
+  const promptCopy = getPromptCopy(mode, selectedCountry);
   const messages = getMessages(selectedLanguage);
 
   useEffect(() => {
@@ -131,9 +204,11 @@ export default function LocationGate() {
       if (typeof window === "undefined") return;
 
       const savedCountry = normalizeCountryCode(readLocalStorage(STORAGE_KEY));
-      const hasSavedCountry = Boolean(savedCountry);
+      const hasDismissedPrompt = readLocalStorage(PROMPT_STORAGE_KEY) === "true";
       const currentPathSegments = window.location.pathname.split("/").filter(Boolean);
-      const pathLanguage = currentPathSegments[1]?.toLowerCase();
+      const pathLocale = parseLocalePrefix(currentPathSegments[0]);
+      const legacyPathLanguage = currentPathSegments[1]?.toLowerCase();
+      const pathLanguage = pathLocale?.language ?? legacyPathLanguage;
       const savedLanguage = (readLocalStorage(LANGUAGE_STORAGE_KEY) ?? "").toLowerCase();
       const preferredLanguage =
         (pathLanguage && isSupportedLanguage(pathLanguage) && pathLanguage) ||
@@ -147,29 +222,47 @@ export default function LocationGate() {
         setSelectedCountry(savedCountry);
       }
 
-      if (!hasSavedCountry) {
-        setOpen(true);
+      if (
+        hasDismissedPrompt ||
+        shouldSkipAutoPrompt(window.location.pathname)
+      ) {
+        return;
       }
-
-      if (hasSavedCountry) return;
 
       try {
         const response = await fetch("https://ipapi.co/json/", {
           cache: "no-store",
         });
-        if (!response.ok) return;
+        if (!response.ok) {
+          setMode("global");
+          setOpen(true);
+          return;
+        }
 
         const data = (await response.json()) as { country_code?: string };
         const code = normalizeCountryCode(data.country_code);
 
-        if (active && code) {
-          setSelectedCountry(code);
+        if (!active) return;
+
+        if (code) {
           setLanguage((currentLanguage) =>
             normalizeLanguageForCountry(code, currentLanguage),
           );
+          setSelectedCountry(code);
         }
+
+        if (code && SUGGESTION_COUNTRIES.has(code)) {
+          setMode("suggestion");
+          setOpen(true);
+          return;
+        }
+
+        setMode("global");
+        setOpen(true);
       } catch {
-        // Keep India as fallback if IP country detection fails.
+        if (!active) return;
+        setMode("global");
+        setOpen(true);
       }
     };
 
@@ -193,6 +286,7 @@ export default function LocationGate() {
           savedLanguage && isSupportedLanguage(savedLanguage) ? savedLanguage : pathLanguage,
         ),
       );
+      setMode("selector");
       setOpen(true);
     };
 
@@ -203,7 +297,13 @@ export default function LocationGate() {
   }, [selectedCountry]);
 
   const handleConfirm = () => {
-    if (!isSelectedCountryLive) {
+    if (mode === "global") {
+      writeLocalStorage(PROMPT_STORAGE_KEY, "true");
+      setOpen(false);
+      return;
+    }
+
+    if (!canConfirmCountry) {
       return;
     }
 
@@ -216,20 +316,23 @@ export default function LocationGate() {
     const pathSegments = current.split("/").filter(Boolean);
     const firstSegment = pathSegments[0]?.toLowerCase();
     const secondSegment = pathSegments[1]?.toLowerCase();
+    const pathLocale = parseLocalePrefix(firstSegment);
     const nextLanguage = getNormalizedLanguageForCountry(
       nextCountry,
       selectedLanguage,
     );
 
     writeLocalStorage(LANGUAGE_STORAGE_KEY, nextLanguage);
-    const hasCountryPrefix = Boolean(firstSegment && isSupportedCountry(firstSegment));
-    const baseSegments = hasCountryPrefix
+    const hasLegacyCountryPrefix = Boolean(firstSegment && isSupportedCountry(firstSegment));
+    const baseSegments = pathLocale
+      ? pathSegments.slice(1)
+      : hasLegacyCountryPrefix
       ? (secondSegment && isSupportedLanguage(secondSegment)
           ? pathSegments.slice(2)
           : pathSegments.slice(1))
       : pathSegments;
     const remainderPath = baseSegments.length > 0 ? `/${baseSegments.join("/")}` : "";
-    const targetPath = `/${nextCountry}/${nextLanguage}${remainderPath}`;
+    const targetPath = `/${getLocalePrefix(nextCountry, nextLanguage)}${remainderPath}`;
     const targetUrl = `${targetPath}${window.location.search}${window.location.hash}`;
 
     if (targetUrl !== `${window.location.pathname}${window.location.search}${window.location.hash}`) {
@@ -238,10 +341,18 @@ export default function LocationGate() {
   };
 
   const handleCancel = () => {
-    if (!isSelectedCountryLive) {
+    if (mode !== "selector") {
+      writeLocalStorage(PROMPT_STORAGE_KEY, "true");
+    }
+
+    if (!isSelectedCountryLive && mode === "selector") {
       setSelectedCountry("in");
     }
     setOpen(false);
+  };
+
+  const handleChooseCountry = () => {
+    setMode("selector");
   };
 
   return (
@@ -251,125 +362,152 @@ export default function LocationGate() {
           <div className="w-full max-w-[560px] overflow-hidden rounded-md bg-[#f1f1f1] shadow-[0_16px_40px_rgba(0,0,0,0.28)]">
             <div className="bg-[var(--brand-yellow)] px-5 py-4 sm:px-7">
               <h2 className="font-[var(--font-roboto-condensed)] text-[20px] font-extrabold leading-[1.15] text-[#0a0a0b] sm:text-[24px]">
-                {messages.locationGate.title}
+                {mode === "selector" ? messages.locationGate.title : promptCopy.title}
               </h2>
             </div>
 
             <div className="px-5 py-5 sm:px-7 sm:py-6">
-              <label
-                className="mb-2 block font-[var(--font-roboto-condensed)] text-[14px] font-normal text-[#20242a] sm:text-[15px]"
-                htmlFor="country-select"
-              >
-                {messages.locationGate.selectCountry}
-              </label>
-              <div className="relative">
-                <select
-                  className="h-[48px] w-full appearance-none rounded-lg border border-black/20 bg-white px-4 pr-11 font-[var(--font-roboto-condensed)] text-[17px] font-normal text-[#0a0a0b] outline-none focus:border-black/35 sm:text-[18px]"
-                  id="country-select"
-                  onChange={(event) => {
-                    const value = normalizeCountryCode(event.target.value);
-                    if (value) {
-                      setSelectedCountry(value);
-                      setLanguage((currentLanguage) =>
-                        normalizeLanguageForCountry(value, currentLanguage),
-                      );
-                    }
-                  }}
-                  value={selectedCountry}
-                >
-                  {COUNTRY_OPTIONS.map((country) => (
-                    <option key={country.code} value={country.code}>
-                      {country.label}
-                    </option>
-                  ))}
-                </select>
-                <span className="pointer-events-none absolute inset-y-0 right-4 grid place-items-center text-[#2f3237]">
-                  <svg
-                    aria-hidden="true"
-                    className="h-4 w-4"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2.25"
-                    viewBox="0 0 24 24"
+              {mode === "selector" ? (
+                <>
+                  <label
+                    className="mb-2 block font-[var(--font-roboto-condensed)] text-[14px] font-normal text-[#20242a] sm:text-[15px]"
+                    htmlFor="country-select"
                   >
-                    <path d="m6 9 6 6 6-6" />
-                  </svg>
-                </span>
-              </div>
+                    {messages.locationGate.selectCountry}
+                  </label>
+                  <div className="relative">
+                    <select
+                      className="h-[48px] w-full appearance-none rounded-lg border border-black/20 bg-white px-4 pr-11 font-[var(--font-roboto-condensed)] text-[17px] font-normal text-[#0a0a0b] outline-none focus:border-black/35 sm:text-[18px]"
+                      id="country-select"
+                      onChange={(event) => {
+                        const value = normalizeCountryCode(event.target.value);
+                        if (value) {
+                          setSelectedCountry(value);
+                          setLanguage((currentLanguage) =>
+                            normalizeLanguageForCountry(value, currentLanguage),
+                          );
+                        }
+                      }}
+                      value={selectedCountry}
+                    >
+                      {COUNTRY_OPTIONS.map((country) => (
+                        <option key={country.code} value={country.code}>
+                          {country.label}
+                        </option>
+                      ))}
+                    </select>
+                    <span className="pointer-events-none absolute inset-y-0 right-4 grid place-items-center text-[#2f3237]">
+                      <svg
+                        aria-hidden="true"
+                        className="h-4 w-4"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2.25"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="m6 9 6 6 6-6" />
+                      </svg>
+                    </span>
+                  </div>
 
-              <label
-                className="mb-2 mt-4 block font-[var(--font-roboto-condensed)] text-[14px] font-normal text-[#20242a] sm:text-[15px]"
-                htmlFor="language-select"
-              >
-                {getSelectLanguageLabel(selectedLanguage)}
-              </label>
-              <div className="relative">
-                <select
-                  className="h-[48px] w-full appearance-none rounded-lg border border-black/20 bg-white px-4 pr-11 font-[var(--font-roboto-condensed)] text-[17px] font-normal text-[#0a0a0b] outline-none focus:border-black/35 sm:text-[18px]"
-                  id="language-select"
-                  onChange={(event) => {
-                    const next = event.target.value.toLowerCase();
-                    if (isSupportedLanguage(next)) {
-                      setLanguage(normalizeLanguageForCountry(selectedCountry, next));
-                    }
-                  }}
-                  value={selectedLanguage}
-                >
-                  {languageOptions.map((option) => (
-                    <option key={option.code} value={option.code}>
-                      {getLanguageLabel(option, selectedLanguage)}
-                    </option>
-                  ))}
-                </select>
-                <span className="pointer-events-none absolute inset-y-0 right-4 grid place-items-center text-[#2f3237]">
-                  <svg
-                    aria-hidden="true"
-                    className="h-4 w-4"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2.25"
-                    viewBox="0 0 24 24"
+                  <label
+                    className="mb-2 mt-4 block font-[var(--font-roboto-condensed)] text-[14px] font-normal text-[#20242a] sm:text-[15px]"
+                    htmlFor="language-select"
                   >
-                    <path d="m6 9 6 6 6-6" />
-                  </svg>
-                </span>
-              </div>
+                    {getSelectLanguageLabel(selectedLanguage)}
+                  </label>
+                  <div className="relative">
+                    <select
+                      className="h-[48px] w-full appearance-none rounded-lg border border-black/20 bg-white px-4 pr-11 font-[var(--font-roboto-condensed)] text-[17px] font-normal text-[#0a0a0b] outline-none focus:border-black/35 sm:text-[18px]"
+                      id="language-select"
+                      onChange={(event) => {
+                        const next = event.target.value.toLowerCase();
+                        if (isSupportedLanguage(next)) {
+                          setLanguage(normalizeLanguageForCountry(selectedCountry, next));
+                        }
+                      }}
+                      value={selectedLanguage}
+                    >
+                      {languageOptions.map((option) => (
+                        <option key={option.code} value={option.code}>
+                          {getLanguageLabel(option, selectedLanguage)}
+                        </option>
+                      ))}
+                    </select>
+                    <span className="pointer-events-none absolute inset-y-0 right-4 grid place-items-center text-[#2f3237]">
+                      <svg
+                        aria-hidden="true"
+                        className="h-4 w-4"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2.25"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="m6 9 6 6 6-6" />
+                      </svg>
+                    </span>
+                  </div>
 
-              <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                <button
-                  className={`h-[46px] rounded-md font-[var(--font-roboto-condensed)] text-[17px] font-extrabold text-[#0a0a0b] transition sm:text-[18px] ${
-                    isSelectedCountryLive
-                      ? "bg-[#f7b322] hover:brightness-95"
-                      : "cursor-not-allowed bg-[#d6d6d6]"
-                  }`}
-                  disabled={!isSelectedCountryLive}
-                  onClick={handleConfirm}
-                  type="button"
-                >
-                  {isSelectedCountryLive ? messages.locationGate.confirm : "Coming Soon"}
-                </button>
-                <button
-                  className="h-[46px] rounded-md border border-black/35 bg-transparent font-[var(--font-roboto-condensed)] text-[17px] font-bold text-[#0a0a0b] transition hover:bg-black/5 sm:text-[18px]"
-                  onClick={handleCancel}
-                  type="button"
-                >
-                  {messages.locationGate.cancel}
-                </button>
-              </div>
+                  <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    <button
+                      className={`h-[46px] rounded-md font-[var(--font-roboto-condensed)] text-[17px] font-extrabold text-[#0a0a0b] transition sm:text-[18px] ${
+                        canConfirmCountry
+                          ? "bg-[#f7b322] hover:brightness-95"
+                          : "cursor-not-allowed bg-[#d6d6d6]"
+                      }`}
+                      disabled={!canConfirmCountry}
+                      onClick={handleConfirm}
+                      type="button"
+                    >
+                      {canConfirmCountry ? messages.locationGate.confirm : "Coming Soon"}
+                    </button>
+                    <button
+                      className="h-[46px] rounded-md border border-black/35 bg-transparent font-[var(--font-roboto-condensed)] text-[17px] font-bold text-[#0a0a0b] transition hover:bg-black/5 sm:text-[18px]"
+                      onClick={handleCancel}
+                      type="button"
+                    >
+                      {messages.locationGate.cancel}
+                    </button>
+                  </div>
 
-              <p className="mt-3 text-sm text-[#444]">
-                {messages.locationGate.autoDetected}{" "}
-                <span className="font-semibold">{selectedLabel}</span>
-              </p>
-              {!isSelectedCountryLive ? (
-                <p className="mt-3 rounded-md border border-[#f0c36d] bg-[#fff3d9] px-3 py-2 text-sm font-semibold text-[#8a5b00]">
-                  We are coming soon in {selectedLabel}. Please continue with India for now.
-                </p>
-              ) : null}
+                  <p className="mt-3 text-sm text-[#444]">
+                    {messages.locationGate.autoDetected}{" "}
+                    <span className="font-semibold">{selectedLabel}</span>
+                  </p>
+                  {!isSelectedCountryLive ? (
+                    <p className="mt-3 rounded-md border border-[#f0c36d] bg-[#fff3d9] px-3 py-2 text-sm font-semibold text-[#8a5b00]">
+                      We are coming soon in {selectedLabel}. Please continue with India for now.
+                    </p>
+                  ) : null}
+                </>
+              ) : (
+                <>
+                  <p className="max-w-[440px] text-[15px] font-normal leading-[1.55] text-[#20242a]">
+                    {promptCopy.body}
+                  </p>
+
+                  <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    <button
+                      className="h-[46px] rounded-md bg-[#f7b322] font-[var(--font-roboto-condensed)] text-[17px] font-extrabold text-[#0a0a0b] transition hover:brightness-95 sm:text-[18px]"
+                      onClick={handleConfirm}
+                      type="button"
+                    >
+                      {promptCopy.primary}
+                    </button>
+                    <button
+                      className="h-[46px] rounded-md border border-black/35 bg-transparent font-[var(--font-roboto-condensed)] text-[17px] font-bold text-[#0a0a0b] transition hover:bg-black/5 sm:text-[18px]"
+                      onClick={mode === "global" ? handleChooseCountry : handleCancel}
+                      type="button"
+                    >
+                      {promptCopy.secondary}
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>

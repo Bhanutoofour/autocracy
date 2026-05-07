@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { Roboto, Roboto_Condensed } from "next/font/google";
 import JsonLd from "@/app/_components/JsonLd";
+import LocationGate from "@/app/_components/LocationGate";
 import "./globals.css";
 
 const robotoCondensed = Roboto_Condensed({
@@ -101,6 +102,7 @@ export default async function RootLayout({
       <body className="min-h-full flex flex-col">
         <JsonLd data={websiteSchema} />
         {children}
+        <LocationGate />
       </body>
     </html>
   );

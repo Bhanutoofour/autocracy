@@ -52,6 +52,17 @@ export function isSupportedLanguage(value: string): value is SupportedLanguage {
   return SUPPORTED_LANGUAGES.includes(value as SupportedLanguage);
 }
 
+export function isSupportedLocalePair(
+  country: string,
+  language: string,
+): country is SupportedCountry {
+  return (
+    isSupportedCountry(country) &&
+    isSupportedLanguage(language) &&
+    getCountryLanguageOptions(country).includes(language as SupportedLanguage)
+  );
+}
+
 export function getCountryLanguageOptions(
   country: SupportedCountry,
 ): readonly SupportedLanguage[] {
@@ -80,4 +91,24 @@ export function getNormalizedLanguageForCountry(
 
 export function isLiveCountry(country: string): country is SupportedCountry {
   return LIVE_COUNTRIES.includes(country as SupportedCountry);
+}
+
+export function getLocalePrefix(
+  country: SupportedCountry,
+  language: SupportedLanguage,
+): string {
+  return `${language}-${country}`;
+}
+
+export function parseLocalePrefix(
+  value?: string | null,
+): { country: SupportedCountry; language: SupportedLanguage } | null {
+  const normalized = (value ?? "").trim().toLowerCase();
+  const [language, country, extra] = normalized.split("-");
+
+  if (extra || !country || !language) return null;
+  if (!isSupportedCountry(country) || !isSupportedLanguage(language)) return null;
+  if (!getCountryLanguageOptions(country).includes(language)) return null;
+
+  return { country, language };
 }

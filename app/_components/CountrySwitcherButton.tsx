@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { parseLocalePrefix } from "@/app/_lib/locale-config";
 
 const STORAGE_KEY = "autocracy:selected-country";
 const SUPPORTED_COUNTRIES = new Set(["IN", "AE", "US", "CA", "AU", "DE", "LK"]);
@@ -28,17 +29,25 @@ export default function CountrySwitcherButton({
 }: {
   className?: string;
 }) {
-  const [countryCode, setCountryCode] = useState("IN");
+  const [countryCode, setCountryCode] = useState("GLOBAL");
 
   useEffect(() => {
     const syncCountry = () => {
-      const segment = window.location.pathname.split("/").filter(Boolean)[0]?.toUpperCase();
+      const firstSegment = window.location.pathname.split("/").filter(Boolean)[0];
+      const pathLocale = parseLocalePrefix(firstSegment);
+
+      if (pathLocale) {
+        setCountryCode(pathLocale.country.toUpperCase());
+        return;
+      }
+
+      const segment = firstSegment?.toUpperCase();
       if (segment && SUPPORTED_COUNTRIES.has(segment)) {
         setCountryCode(segment);
         return;
       }
-      const saved = (readStoredCountry() ?? "in").toUpperCase();
-      setCountryCode(COUNTRY_LABELS[saved] ?? "IN");
+      const saved = readStoredCountry()?.toUpperCase();
+      setCountryCode(saved ? COUNTRY_LABELS[saved] ?? saved : "GLOBAL");
     };
 
     syncCountry();

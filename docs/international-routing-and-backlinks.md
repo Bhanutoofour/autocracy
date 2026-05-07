@@ -8,36 +8,30 @@ Autocracy Machinery should keep the root domain as the global brand entry point:
 https://www.autocracymachinery.com/
 ```
 
-India-specific visitors can be sent to the India experience:
+Country and language versions should use one clean locale segment:
 
 ```text
-https://www.autocracymachinery.com/in/en
+https://www.autocracymachinery.com/en-in/
 ```
 
-Future country versions can be added without changing the domain:
-
-```text
-https://www.autocracymachinery.com/us/en
-https://www.autocracymachinery.com/uk/en
-https://www.autocracymachinery.com/ae/en
-```
-
-This keeps one strong brand domain while allowing country-specific content, SEO, and campaigns.
+This keeps one strong domain while allowing market-specific copy, metadata, dealer pages, campaigns, and backlinks.
 
 ## Recommended URL Policy
 
-Use subfolders for countries and languages:
+Use language-country locale folders:
 
 | Audience | URL |
 | --- | --- |
-| Global/default | `/` |
-| India English | `/in/en` |
-| India Hindi | `/in/hi` |
-| United States, later | `/us/en` |
-| United Kingdom, later | `/uk/en` or `/gb/en` |
-| UAE, later | `/ae/en` |
+| Global/default English | `/` |
+| India English | `/en-in` |
+| India Hindi, later | `/hi-in` |
+| United States English, later | `/en-us` |
+| United Arab Emirates English, later | `/en-ae` |
+| United Kingdom English, later | `/en-gb` |
 
-Root should not permanently redirect for everyone. It should remain a crawlable global fallback page.
+Use `/en-gb` for the UK because Google hreflang uses the ISO region code `GB`, not `UK`.
+
+Root should remain crawlable as the global fallback page. It should not permanently redirect for everyone.
 
 ## Visitor Routing
 
@@ -45,46 +39,50 @@ Recommended behavior:
 
 | Visitor | Behavior |
 | --- | --- |
-| India IP visiting `/` | Temporarily redirect to `/in/en` |
+| India IP visiting `/` or a global product page | Show `View India site?` popup |
+| US IP visiting `/` or a global product page | Show `View USA site?` popup |
 | Non-India IP visiting `/` | Stay on `/` |
-| India IP visiting `/products/trenchers/rudra-100` | Temporarily redirect to `/in/en/products/trenchers/rudra-100` |
-| Non-India IP visiting `/products/trenchers/rudra-100` | Stay on `/products/trenchers/rudra-100` |
-| Anyone visiting `/in/en` | Allow access |
-| Anyone visiting future `/us/en` | Allow access when live |
-| IP detection fails | Stay on `/` |
-| User manually chooses country | Save preference and send to selected locale |
+| Anyone visiting `/products/trenchers/rudra-100` | Stay on the global product URL |
+| Anyone visiting `/en-in/products/trenchers/rudra-100` | See India English content |
+| Anyone visiting old `/in/en/...` | Permanent `301` redirect to `/en-in/...` |
+| Other countries | Stay global, optionally show `You're viewing our global site. We export worldwide.` |
+| IP detection fails | Stay on the current global URL |
+| User manually chooses country/language | Save preference and send to the selected locale |
 
-Use a temporary redirect status such as `307` or `302` for IP-based routing.
+Do not force IP redirects on product and blog pages. Product backlinks and search results should be able to reach the exact URL they target.
 
-Do not use `301` from `/` to `/in/en`, because that tells search engines that the root has permanently moved to the India URL.
+The country popup should be a soft suggestion, not a forced routing decision. If the user dismisses it, store that preference so the prompt does not appear repeatedly.
+
+Do not use a `301` redirect from `/` to `/en-in`, because that tells search engines that the global root has permanently moved to the India URL.
 
 ## SEO Rules
 
 1. Keep `/` crawlable as the global fallback.
-2. Keep `/in/en` crawlable as the India English page.
-3. Add canonical URLs to each page.
-4. Add `hreflang` alternates for localized versions.
+2. Keep `/en-in` crawlable as the India English page.
+3. Give each page a self canonical.
+4. Add `hreflang` alternates for equivalent localized pages.
 5. Use `x-default` for the root/global fallback page.
-6. Include localized URLs in the sitemap.
-7. Do not block Googlebot from any country version that should rank.
-8. Make country selection available to users in the UI.
+6. Include global and localized URLs in the sitemap.
+7. Do not block Googlebot from locale versions that should rank.
+8. Keep a visible country/language selector.
 
 Example `hreflang` for the homepage:
 
 ```html
 <link rel="alternate" hreflang="x-default" href="https://www.autocracymachinery.com/" />
-<link rel="alternate" hreflang="en-IN" href="https://www.autocracymachinery.com/in/en" />
-<link rel="alternate" hreflang="hi-IN" href="https://www.autocracymachinery.com/in/hi" />
+<link rel="alternate" hreflang="en-IN" href="https://www.autocracymachinery.com/en-in" />
+<link rel="alternate" hreflang="hi-IN" href="https://www.autocracymachinery.com/hi-in" />
 ```
 
-Later, when US and UK pages are live:
+Later, when US, UAE, and UK pages are live:
 
 ```html
-<link rel="alternate" hreflang="en-US" href="https://www.autocracymachinery.com/us/en" />
-<link rel="alternate" hreflang="en-GB" href="https://www.autocracymachinery.com/uk/en" />
+<link rel="alternate" hreflang="en-US" href="https://www.autocracymachinery.com/en-us" />
+<link rel="alternate" hreflang="en-AE" href="https://www.autocracymachinery.com/en-ae" />
+<link rel="alternate" hreflang="en-GB" href="https://www.autocracymachinery.com/en-gb" />
 ```
 
-Each localized version should reference itself and the other related versions.
+Each localized version should reference itself and the other equivalent versions.
 
 ## Backlink Strategy
 
@@ -94,80 +92,73 @@ Backlinks should point to the page that matches the intent of the referring site
 | --- | --- |
 | Brand/company profile | `https://www.autocracymachinery.com/` |
 | Global export article | `https://www.autocracymachinery.com/` |
-| Indian directory listing | `https://www.autocracymachinery.com/in/en` |
-| India dealer/distributor listing | `https://www.autocracymachinery.com/in/en/find-a-dealer` |
+| Indian directory listing | `https://www.autocracymachinery.com/en-in` |
+| India dealer/distributor listing | `https://www.autocracymachinery.com/en-in/find-a-dealer` |
 | Global trenchers article | `https://www.autocracymachinery.com/products/trenchers` |
-| India trenchers article | `https://www.autocracymachinery.com/in/en/products/trenchers` |
+| India trenchers article | `https://www.autocracymachinery.com/en-in/products/trenchers` |
 | Global product model article | `https://www.autocracymachinery.com/products/trenchers/rudra-100` |
-| India product model article | `https://www.autocracymachinery.com/in/en/products/trenchers/rudra-100` |
-| Future US campaign | `https://www.autocracymachinery.com/us/en` |
-| Future UK campaign | `https://www.autocracymachinery.com/uk/en` |
+| India product model article | `https://www.autocracymachinery.com/en-in/products/trenchers/rudra-100` |
+| Future US campaign | `https://www.autocracymachinery.com/en-us` |
+| Future UAE campaign | `https://www.autocracymachinery.com/en-ae` |
+| Future UK campaign | `https://www.autocracymachinery.com/en-gb` |
 
 Simple rule:
 
 ```text
-Global backlink -> root
-India backlink -> /in/en
-Global product backlink -> exact global product page
-India product backlink -> exact India product page
+Global backlink -> root or exact global page
+India backlink -> /en-in or exact India page
 Future country backlink -> exact country page
 ```
-
-This gives the root domain authority for the brand while helping country and product pages rank for their own searches.
 
 ## Pros
 
 - Keeps one strong global brand domain.
-- Gives India users a relevant local experience.
-- Supports clean future expansion into US, UK, UAE, and other markets.
-- Makes SEO structure easier to understand.
-- Allows better country-specific pages, metadata, sitemaps, and campaigns.
-- Makes backlink targeting clearer.
-- Prevents international users from being forced into an India-only experience.
+- Uses URL structure that mirrors hreflang codes.
+- Gives India users and search engines a clear India page.
+- Supports future country/language expansion cleanly.
+- Makes backlink targeting easier.
+- Avoids making international users feel like they landed on an India-only website.
 
 ## Cons and Risks
 
-- IP detection is not always accurate.
-- VPNs and corporate networks may route users to the wrong country version.
-- A wrong `301` redirect from root to `/in/en` could hurt global SEO.
-- Country-specific pages need more maintenance as the site expands.
-- Backlink authority may be distributed across root and country URLs.
-- CDN caching must be configured carefully so one country's redirect is not cached for all users.
-- Googlebot may crawl from different countries, so locale URLs must be directly accessible and linked with `hreflang`.
+- Country-specific pages need more content maintenance.
+- Backlink authority can spread across global and locale URLs.
+- Wrong forced redirects can prevent search engines from seeing the correct page.
+- VPNs and corporate networks can make IP detection inaccurate.
+- CDN caching must not cache an India redirect for all countries.
 
 ## Implementation Checklist
 
 1. Keep `/` as the global fallback page.
-2. Update `proxy.ts` so only India IPs visiting `/` get a temporary redirect to `/in/en`.
-3. Use `307` or `302` for IP-based redirects.
-4. Never use `301` for IP-based country redirects from `/`.
-5. Keep direct paths like `/in/en/products/trenchers` available to everyone.
+2. Use `/en-in` as the India English page.
+3. Redirect old `/in/en/...` URLs to `/en-in/...`.
+4. Use a soft country popup instead of IP-based forced redirects.
+5. Do not force product/blog IP redirects.
 6. Add or verify canonical URLs for root and localized pages.
 7. Add `hreflang` alternates with `x-default`.
 8. Add localized URLs to sitemap.
 9. Keep a visible country/language selector.
 10. Store the user's selected country/language preference.
-11. Test from India and non-India IP locations.
+11. Test `/`, `/en-in`, `/products/...`, and `/en-in/products/...`.
 12. Check Google Search Console after deployment.
 
 ## Future Expansion Plan
 
 When a new country is ready:
 
-1. Add the country to the live country list.
-2. Add its language options.
-3. Create or adapt country-specific content.
-4. Add country-specific metadata.
-5. Add sitemap entries.
-6. Add `hreflang` alternates.
-7. Start pointing country-specific backlinks to the new country URL.
+1. Add the locale to supported/live options.
+2. Create country-specific content.
+3. Add country-specific metadata.
+4. Add sitemap entries.
+5. Add `hreflang` alternates.
+6. Point country-specific backlinks to the new locale URL.
 
 Example:
 
 ```text
-US goes live -> add /us/en
-US backlinks -> https://www.autocracymachinery.com/us/en
-US product campaigns -> https://www.autocracymachinery.com/us/en/products/trenchers
+US goes live -> add /en-us
+US backlinks -> https://www.autocracymachinery.com/en-us
+US product campaigns -> https://www.autocracymachinery.com/en-us/products/trenchers
 ```
 
 ## Reference Links
@@ -178,5 +169,5 @@ US product campaigns -> https://www.autocracymachinery.com/us/en/products/trench
 - Google Search Central: Localized versions and hreflang
   https://developers.google.com/search/docs/specialty/international/localized-versions
 
-- Google Search Central: Redirects and canonical signals
-  https://developers.google.com/search/docs/crawling-indexing/301-redirects
+- Google Search Central: Managing multi-regional and multilingual sites
+  https://developers.google.com/search/docs/specialty/international/managing-multi-regional-sites

@@ -143,7 +143,7 @@ export default function IndustryModelImageOverrideAdminClient({
         <p className="mt-2 text-[14px] leading-6 text-[#4b5563]">
           Product pages keep DB/default images. Use this screen only for industry routes like
           <code className="mx-1 rounded bg-[#f3f4f6] px-1 py-[1px] text-[12px]">
-            /in/en/industries/agriculture/trenchers/rudra-100
+            /en-in/industries/agriculture/trenchers/rudra-100
           </code>
           .
         </p>
@@ -333,7 +333,7 @@ export default function IndustryModelImageOverrideAdminClient({
             {selectedIndustry && selectedProduct && selectedModel ? (
               <Link
                 className="text-sm font-medium text-[#111827] underline underline-offset-2"
-                href={`/in/en/industries/${selectedIndustry.slug}/${selectedProduct.slug}/${selectedModel.modelSlug}`}
+                href={`/en-in/industries/${selectedIndustry.slug}/${selectedProduct.slug}/${selectedModel.modelSlug}`}
                 target="_blank"
               >
                 Open Industry Model Page
@@ -380,7 +380,7 @@ export default function IndustryModelImageOverrideAdminClient({
                     <td className="px-3 py-2">
                       <Link
                         className="text-[#111827] underline underline-offset-2"
-                        href={`/in/en/industries/${item.industrySlug}/${item.productSlug}/${item.modelSlug}`}
+                        href={`/en-in/industries/${item.industrySlug}/${item.productSlug}/${item.modelSlug}`}
                         target="_blank"
                       >
                         View

@@ -316,7 +316,7 @@ function Logo() {
     <Link
       aria-label="Autocracy Machinery home"
       className="block w-[168px] sm:w-[190px]"
-      href="/in/en"
+      href="/en-in"
     >
       <Image
         alt="Autocracy Machinery"
@@ -464,8 +464,8 @@ function Icon({
 
 function Header() {
   const nav = [
-    { label: "Industries", href: "/in/en#industries" },
-    { label: "Products", href: "/in/en#products" },
+    { label: "Industries", href: "/en-in#industries" },
+    { label: "Products", href: "/en-in#products" },
     { label: "Company", href: "/about-us" },
     { label: "About Us", href: "/about-us" },
     { label: "Blogs", href: "/blogs" },
@@ -484,7 +484,7 @@ function Header() {
               <Icon className="size-4" name="phone" />
               Call +91 87904 73345
             </a>
-            <a className="hidden items-center gap-2 md:flex" href="/in/en/find-a-dealer">
+            <a className="hidden items-center gap-2 md:flex" href="/en-in/find-a-dealer">
               <Icon className="size-4" name="search" />
               Find a dealer
             </a>
@@ -512,7 +512,7 @@ function Header() {
         <div className="hidden items-center gap-3 lg:flex">
           <a
             className="flex h-10 items-center justify-center gap-2 border border-[var(--ink)] px-4 text-center font-[var(--font-roboto-condensed)] text-[14px] font-semibold uppercase leading-5 tracking-normal text-[#0a0a0b] transition hover:bg-black/5"
-            href="/in/en/brochure"
+            href="/en-in/brochure"
           >
             <Icon className="size-5" name="download" />
             Brochure
